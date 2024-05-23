@@ -1,7 +1,7 @@
-<strong>Document management system (DMS)<strong> is designed to allow the organization to manage company documentation and its publication to employees.
+Document management system (DMS) is designed to allow the organization to manage company documentation and its publication to employees.
 
 It includes following functions:<br>
-<strong>1 As ADMIN:<strong><br>
+1 As ADMIN:<br>
 1.1 Log in to DMS as ADMIN <br>
 1.2 To create accounts with role EMPLOYEE or ADMIN <br>
 1.3 To edit accounts details<br>
@@ -20,7 +20,7 @@ It includes following functions:<br>
 1.15 Share documents to persons outside of company for certain period<br>
 
 <br>
-<strong>2 As EMPLOYEE:<strong><br>
+2 As EMPLOYEE:<br>
 2.1 Log in to DMS as EMPLOYEE<br>
 2.2 To change account's password<br>
 2.3 Search for required documents<br>
@@ -31,5 +31,5 @@ It includes following functions:<br>
 2.8 Get acknowledge with new document or new revision of existing document<br>
 2.9 Make comments on documents<br>
 <br>
-<strong>3 As GUEST:<strong><br>
+3 As GUEST:<br>
 3.1 Open and download documents to which he received direct link<br>
