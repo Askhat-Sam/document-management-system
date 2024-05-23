@@ -1,13 +1,13 @@
 Document management system (DMS) is designed to allow the organization to manage company documentation and its publication to employees.
 
-It includes following functions:
-1 As ADMIN:
-1.1 Log in to DMS as ADMIN
-1.2 To create accounts with role EMPLOYEE or ADMIN
-1.3 To edit accounts details
-1.4 To delete accounts
-1.5 Upload new document into DMS
-1.6 Edit document details in DMS
+It includes following functions:<br>
+1 As ADMIN:<br>
+1.1 Log in to DMS as ADMIN <br>
+1.2 To create accounts with role EMPLOYEE or ADMIN <br>
+1.3 To edit accounts details<br>
+1.4 To delete accounts<br>
+1.5 Upload new document into DMS<br>
+1.6 Edit document details in DMS<br>
 1.7 Add new version of existing documents in DMS
 1.8 To see audit log of account creation/update/delete
 1.9 To see audit log of document upload/update/delete
