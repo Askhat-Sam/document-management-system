@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService{
             theUser = result.get();
             System.out.println("result.get(): " + theUser);
         } else {
-            throw new RuntimeException("Did not find user id ^_^"+ theId);
+            throw new RuntimeException("Did not find user id: "+ theId);
         }
         return theUser;
 
