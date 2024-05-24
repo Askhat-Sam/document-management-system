@@ -57,6 +57,28 @@ public class UserController {
         return "User with id: " + id + " has been deleted";
     }
 
+    @PostMapping("/updateUser")
+    public String updateUser(@RequestParam(name="id", required = false) int id,
+                             @RequestParam(name="userId", required = false) String userId,
+                             @RequestParam(name="firstName", required = false) String firstName,
+                             @RequestParam(name="lastName", required = false) String lastName,
+                             @RequestParam(name="email", required = false) String email,
+                             @RequestParam(name="password", required = false) String password,
+                             @RequestParam(name = "active", required = false) Integer active,
+                             @RequestParam(name="roleId", required = false) String roleId,
+                             @RequestParam(name="userRole", required = false) String userRole){
+
+        User user = userService.findById(id);
+        if (userId!=null){
+            user.setUserId(userId);
+        }
+
+        userService.update(user);
+
+        return "User with id: " + id + " has been updated";
+    }
+
+
 //    @PostMapping("/addNewUser")
 //    public String addNewUser(@RequestBody User user){
 ////        // Generate bcrypt hash
