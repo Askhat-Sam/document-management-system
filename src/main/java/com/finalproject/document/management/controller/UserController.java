@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/document-management")
+@RequestMapping("/document-management/users")
 public class UserController {
     private UserService userService;
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @RequestMapping("/users")
+    @RequestMapping("/getUsers")
     public List<User> showUsers(){
         return userService.findAll();
     }
