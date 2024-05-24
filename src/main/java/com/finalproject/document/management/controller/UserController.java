@@ -3,7 +3,6 @@ package com.finalproject.document.management.controller;
 import com.finalproject.document.management.entity.Role;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.UserService;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,7 +46,15 @@ public class UserController {
 
         userService.update(newUser);
 
-        return "redirect:/document-management/users";
+        return "User with user id: " + userId + " has been added";
+    }
+
+    @GetMapping("/deleteUser")
+    public String deleteUser(@RequestParam int id){
+        // Get user by id
+        User user = userService.findById(id);
+        userService.deleteUserById(user);
+        return "User with id: " + id + " has been deleted";
     }
 
 //    @PostMapping("/addNewUser")
