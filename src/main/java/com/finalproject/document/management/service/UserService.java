@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserService {
     List<User> findAll();
 
-    void save(User theUser);\
+    void save(User theUser);
 
     void update(User theUser);
 
