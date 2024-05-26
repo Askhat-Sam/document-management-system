@@ -65,33 +65,29 @@ public class DocumentController {
             @RequestParam(name = "issueDate", required = false) String issueDate,
             @RequestParam(name = "revisionDate", required = false) String revisionDate,
             @RequestParam(name = "revisionInterval", required = false) Integer revisionInterval,
-            @RequestParam(name = "processOwner", required = false) String processOwner) {
+            @RequestParam(name = "processOwner", required = false) String processOwner,
+            @RequestParam(name = "link", required = false) String link) {
 
 
         Document document = documentService.findById(id);
         if (documentReference != null) {
             document.setDocumentReference(documentReference);
-        }
-        if (type != null) {
+        } else if (type != null) {
             document.setType(type);
-        }
-        if (name != null) {
+        } else if (name != null) {
             document.setName(name);
-        }
-        if (revision != null) {
+        } else if (revision != null) {
             document.setRevision(revision);
-        }
-        if (status != null) {
+        } else if (status != null) {
             document.setStatus(status);
-        }
-        if (issueDate != null) {
+        } else if (issueDate != null) {
             document.setIssueDate(issueDate);
-        }
-        if (revisionInterval != null) {
+        } else if (revisionInterval != null) {
             document.setRevisionInterval(revisionInterval);
-        }
-        if (processOwner != null) {
+        } else if (processOwner != null) {
             document.setProcessOwner(processOwner);
+        } else if (link != null) {
+            document.setLink(link);
         }
 
         documentService.update(document);

@@ -33,7 +33,7 @@ http://localhost:8080/document-management/documents/getDocument/3
 http://localhost:8080/document-management/documents/addNewDocument?documentReference=POL_008&type=Policy&name=OHS policy&status=In progress&revision=2&issueDate=02.05.2022&revisionDate=04.09.2022&revisionInterval=365&processOwner=OHS department
 
 //Updating the document by id
-http://localhost:8080/document-management/documents/updateDocument?id=3&documentReference=POL-6666
+http://localhost:8080/document-management/documents/updateDocument?id=3&documentReference=INS-002
 
 //Deleting the document by id
 http://localhost:8080/document-management/documents/deleteDocument?id=7
