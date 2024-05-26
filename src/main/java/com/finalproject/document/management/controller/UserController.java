@@ -3,6 +3,9 @@ package com.finalproject.document.management.controller;
 import com.finalproject.document.management.entity.Role;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.UserService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,8 +20,10 @@ public class UserController {
     }
 
     @RequestMapping("/getUsers")
-    public List<User> showUsers(){
-        return userService.findAll();
+    public List<User> showUsers(@RequestParam(name="page", required = false) Integer page,
+                                @RequestParam(name="size", required = false) Integer size,
+                                @RequestParam(name="sortBy", required = false) String sortBy){
+        return userService.findAll(page, size, sortBy);
     }
 
     @RequestMapping("/getUser/{id}")
@@ -97,6 +102,8 @@ public class UserController {
 
         return "User with id: " + id + " has been updated";
     }
+
+
 
 
 //    @PostMapping("/addNewUser")

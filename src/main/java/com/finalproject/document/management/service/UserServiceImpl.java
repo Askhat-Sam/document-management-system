@@ -2,6 +2,9 @@ package com.finalproject.document.management.service;
 
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.repository.UserRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +19,15 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<User> findAll(Integer page, Integer size, String sortBy) {
+        Pageable pageable = doPagingAndSorting(page,  size, sortBy);
+        List<User> users;
+        if (pageable!=null){
+            users = userRepository.findAll(pageable).toList();
+        } else {
+            users = userRepository.findAll();
+        }
+        return users;
     }
 
 
@@ -48,6 +58,22 @@ public class UserServiceImpl implements UserService{
         }
         return theUser;
 
+    }
+
+    private static Pageable doPagingAndSorting(Integer page, Integer size, String sortBy){
+        if (sortBy != null) {
+            Sort sort = Sort.by(sortBy);
+
+            Pageable pageable;
+            if (page != null) {
+                pageable = PageRequest.of(page, size, sort);
+            } else {
+                pageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
+            }
+            return pageable;
+        } else {
+            return null;
+        }
     }
 
 }
