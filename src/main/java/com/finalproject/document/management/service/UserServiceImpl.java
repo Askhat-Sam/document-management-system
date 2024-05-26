@@ -20,10 +20,6 @@ public class UserServiceImpl implements UserService{
         return userRepository.findAll();
     }
 
-    @Override
-    public void save(User theUser) {
-        userRepository.save(theUser);
-    }
 
     @Override
     public void update(User theUser) {
@@ -52,11 +48,6 @@ public class UserServiceImpl implements UserService{
         }
         return theUser;
 
-    }
-
-    @Override
-    public long getUserCount() {
-        return userRepository.count();
     }
 
 }

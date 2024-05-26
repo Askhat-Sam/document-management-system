@@ -47,4 +47,10 @@ public class DocumentController {
         return "Document with reference: " + documentReference + " has been added into database";
     }
 
+    @GetMapping("/deleteDocument")
+    public String deleteDocument(@RequestParam int id){
+        documentService.deleteDocumentById(id);
+        return "Document with id: " + id + " has been successfully deleted from database";
+    }
+
 }
