@@ -70,8 +70,27 @@ public class UserController {
                              @RequestParam(name="userRole", required = false) String userRole){
 
         User user = userService.findById(id);
+
         if (userId!=null){
             user.setUserId(userId);
+        }
+        if (firstName!=null){
+            user.setFirstName(firstName);
+        }
+        if (lastName!=null){
+            user.setLastName(lastName);
+        }
+        if (email!=null){
+            user.setUserId(email);
+        }
+        if (password!=null){
+            user.setPassword(password);
+        }
+        if (active!=null){
+            user.setActive(active);
+        }
+        if (roleId!=null){
+            user.setRoles((List<Role>) new Role(roleId, userRole));
         }
 
         userService.update(user);
