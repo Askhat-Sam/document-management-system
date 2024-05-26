@@ -16,10 +16,10 @@ public class DocumentServiceImpl implements DocumentService{
     public List<Document> findAll() {
         return documentRepository.findAll();
     }
-
+    //Issue with using OPTIONAL ????
     @Override
-    public Optional<Document> findById(int id) {
-        return documentRepository.findById(id);
+    public Document findById(int id) {
+        return documentRepository.getById(id);
     }
 
     @Override

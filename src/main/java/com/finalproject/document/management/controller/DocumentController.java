@@ -1,14 +1,11 @@
 package com.finalproject.document.management.controller;
 
 import com.finalproject.document.management.entity.Document;
-import com.finalproject.document.management.entity.Role;
-import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.DocumentService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/document-management/documents")
@@ -23,7 +20,7 @@ public class DocumentController {
     }
 
     @GetMapping("/getDocument/{id}")
-    public Optional<Document> getDocument(@PathVariable("id") int id){
+    public Document getDocument(@PathVariable("id") int id){
         return documentService.findById(id);
     }
 
@@ -51,6 +48,51 @@ public class DocumentController {
     public String deleteDocument(@RequestParam int id){
         documentService.deleteDocumentById(id);
         return "Document with id: " + id + " has been successfully deleted from database";
+    }
+
+    @PostMapping("/updateDocument")
+    public String updateDocument(
+            @RequestParam(name="id", required = false) int id,
+            @RequestParam(name="documentReference", required = false) String documentReference,
+            @RequestParam(name="type", required = false) String type,
+            @RequestParam(name="name", required = false) String name,
+            @RequestParam(name="revision", required = false) Integer revision,
+            @RequestParam(name="status", required = false) String status,
+            @RequestParam(name="issueDate", required = false) String issueDate,
+            @RequestParam(name="revisionDate", required = false) String revisionDate,
+            @RequestParam(name="revisionInterval", required = false) Integer revisionInterval,
+            @RequestParam(name="processOwner", required = false) String processOwner){
+
+
+        Document document = documentService.findById(id);
+        if (documentReference != null) {
+            document.setDocumentReference(documentReference);
+        }
+        if (type != null) {
+            document.setType(type);
+        }
+        if (name != null) {
+            document.setName(name);
+        }
+        if (revision != null) {
+            document.setRevision(revision);
+        }
+        if (status != null) {
+            document.setStatus(status);
+        }
+        if (issueDate != null) {
+            document.setIssueDate(issueDate);
+        }
+        if (revisionInterval != null) {
+            document.setRevisionInterval(revisionInterval);
+        }
+        if (processOwner != null) {
+            document.setProcessOwner(processOwner);
+        }
+
+        documentService.update(document);
+
+        return "Document with id: " + id + " has been successfully updated in database";
     }
 
 }

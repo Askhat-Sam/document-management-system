@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface DocumentService {
     List<Document> findAll();
-    Optional<Document> findById(int id);
+    Document findById(int id);
     void update(Document document);
     void deleteDocumentById(int id);
 }
