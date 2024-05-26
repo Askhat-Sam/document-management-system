@@ -21,4 +21,9 @@ public class DocumentServiceImpl implements DocumentService{
     public Optional<Document> findById(int id) {
         return documentRepository.findById(id);
     }
+
+    @Override
+    public void update(Document document) {
+        documentRepository.save(document);
+    }
 }
