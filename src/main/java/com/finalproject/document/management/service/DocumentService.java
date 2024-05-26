@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DocumentService {
-    List<Document> findAll();
+    List<Document> findAll(Integer page, Integer size, String sortBy);
     Document findById(int id);
     void update(Document document);
     void deleteDocumentById(int id);
