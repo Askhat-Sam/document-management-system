@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class DocumentServiceImpl implements DocumentService{
@@ -13,5 +15,10 @@ public class DocumentServiceImpl implements DocumentService{
     @Override
     public List<Document> findAll() {
         return documentRepository.findAll();
+    }
+
+    @Override
+    public Optional<Document> findById(int id) {
+        return documentRepository.findById(id);
     }
 }
