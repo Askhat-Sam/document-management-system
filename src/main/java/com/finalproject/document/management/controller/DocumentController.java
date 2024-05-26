@@ -37,10 +37,11 @@ public class DocumentController {
             @RequestParam("issueDate") String issueDate,
             @RequestParam("revisionDate") String revisionDate,
             @RequestParam("revisionInterval") int revisionInterval,
-            @RequestParam("processOwner") String processOwner) {
+            @RequestParam("processOwner") String processOwner,
+            @RequestParam("link") String link) {
 
         // Create a new document
-        Document document = new Document(documentReference, type, name, revision, status, issueDate, revisionDate, revisionInterval, processOwner);
+        Document document = new Document(documentReference, type, name, revision, status, issueDate, revisionDate, revisionInterval, processOwner, link);
 
         documentService.update(document);
 

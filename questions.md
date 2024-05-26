@@ -7,6 +7,7 @@
 #Documents:
 - sorting (by different columns) - DONE
 - reverse sorting
+- add link field to document
 
 ---------------------------------------------------------------------------------------------------------------------
 

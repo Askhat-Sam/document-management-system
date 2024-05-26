@@ -35,8 +35,10 @@ public class Document {
     private int revisionInterval;
     @Column(name="process_owner")
     private String processOwner;
+    @Column(name="link")
+    private String link;
 
-    public Document(String documentReference, String type, String name, int revision, String status, String issueDate, String revisionDate, int revisionInterval, String processOwner) {
+    public Document(String documentReference, String type, String name, int revision, String status, String issueDate, String revisionDate, int revisionInterval, String processOwner, String link) {
         this.documentReference = documentReference;
         this.type = type;
         this.name = name;
@@ -46,5 +48,6 @@ public class Document {
         this.revisionDate = revisionDate;
         this.revisionInterval = revisionInterval;
         this.processOwner = processOwner;
+        this.link= link;
     }
 }
