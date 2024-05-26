@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DocumentService {
-    List<Document> findAll(Integer page, Integer size, String sortBy);
+    List<Document> findAll(Integer page, Integer size, String sortBy, String sortDirection);
+
     Document findById(int id);
+
     void update(Document document);
+
     void deleteDocumentById(int id);
 }

@@ -15,14 +15,15 @@ public class DocumentController {
 
 
     @GetMapping("/getDocuments")
-    public List<Document> getDocuments(@RequestParam(name="page", required = false) Integer page,
-                                       @RequestParam(name="size", required = false) Integer size,
-                                       @RequestParam(name="sortBy", required = false) String sortBy){
-        return documentService.findAll(page, size, sortBy);
+    public List<Document> getDocuments(@RequestParam(name = "page", required = false) Integer page,
+                                       @RequestParam(name = "size", required = false) Integer size,
+                                       @RequestParam(name = "sortBy", required = false) String sortBy,
+                                       @RequestParam(name = "sortDirection", required = false) String sortDirection) {
+        return documentService.findAll(page, size, sortBy, sortDirection);
     }
 
     @GetMapping("/getDocument/{id}")
-    public Document getDocument(@PathVariable("id") int id){
+    public Document getDocument(@PathVariable("id") int id) {
         return documentService.findById(id);
     }
 
@@ -36,10 +37,10 @@ public class DocumentController {
             @RequestParam("issueDate") String issueDate,
             @RequestParam("revisionDate") String revisionDate,
             @RequestParam("revisionInterval") int revisionInterval,
-            @RequestParam("processOwner") String processOwner){
+            @RequestParam("processOwner") String processOwner) {
 
         // Create a new document
-        Document document = new Document(documentReference,type,name, revision,status, issueDate, revisionDate,revisionInterval,processOwner);
+        Document document = new Document(documentReference, type, name, revision, status, issueDate, revisionDate, revisionInterval, processOwner);
 
         documentService.update(document);
 
@@ -47,23 +48,23 @@ public class DocumentController {
     }
 
     @GetMapping("/deleteDocument")
-    public String deleteDocument(@RequestParam int id){
+    public String deleteDocument(@RequestParam int id) {
         documentService.deleteDocumentById(id);
         return "Document with id: " + id + " has been successfully deleted from database";
     }
 
     @PostMapping("/updateDocument")
     public String updateDocument(
-            @RequestParam(name="id", required = false) int id,
-            @RequestParam(name="documentReference", required = false) String documentReference,
-            @RequestParam(name="type", required = false) String type,
-            @RequestParam(name="name", required = false) String name,
-            @RequestParam(name="revision", required = false) Integer revision,
-            @RequestParam(name="status", required = false) String status,
-            @RequestParam(name="issueDate", required = false) String issueDate,
-            @RequestParam(name="revisionDate", required = false) String revisionDate,
-            @RequestParam(name="revisionInterval", required = false) Integer revisionInterval,
-            @RequestParam(name="processOwner", required = false) String processOwner){
+            @RequestParam(name = "id", required = false) int id,
+            @RequestParam(name = "documentReference", required = false) String documentReference,
+            @RequestParam(name = "type", required = false) String type,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "revision", required = false) Integer revision,
+            @RequestParam(name = "status", required = false) String status,
+            @RequestParam(name = "issueDate", required = false) String issueDate,
+            @RequestParam(name = "revisionDate", required = false) String revisionDate,
+            @RequestParam(name = "revisionInterval", required = false) Integer revisionInterval,
+            @RequestParam(name = "processOwner", required = false) String processOwner) {
 
 
         Document document = documentService.findById(id);

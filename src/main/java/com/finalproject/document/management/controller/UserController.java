@@ -3,27 +3,25 @@ package com.finalproject.document.management.controller;
 import com.finalproject.document.management.entity.Role;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.UserService;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/document-management/users")
 public class UserController {
     private UserService userService;
+
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @RequestMapping("/getUsers")
-    public List<User> showUsers(@RequestParam(name="page", required = false) Integer page,
-                                @RequestParam(name="size", required = false) Integer size,
-                                @RequestParam(name="sortBy", required = false) String sortBy){
-        return userService.findAll(page, size, sortBy);
+    public List<User> showUsers(@RequestParam(name = "page", required = false) Integer page,
+                                @RequestParam(name = "size", required = false) Integer size,
+                                @RequestParam(name = "sortBy", required = false) String sortBy,
+                                @RequestParam(name = "sortDirection", required = false) String sortDirection) {
+        return userService.findAll(page, size, sortBy, sortDirection);
     }
 
     @RequestMapping("/getUser/{id}")
@@ -33,14 +31,14 @@ public class UserController {
 
     @PostMapping("/addNewUser")
     public String addNewUser(
-                             @RequestParam("userId") String userId,
-                             @RequestParam("firstName") String firstName,
-                             @RequestParam("lastName") String lastName,
-                             @RequestParam("email") String email,
-                             @RequestParam("password") String password,
-                             @RequestParam("active") int active,
-                             @RequestParam("roleId") String roleId,
-                             @RequestParam("userRole") String userRole){
+            @RequestParam("userId") String userId,
+            @RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
+            @RequestParam("active") int active,
+            @RequestParam("roleId") String roleId,
+            @RequestParam("userRole") String userRole) {
         // Generate bcrypt hash
 //        String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
 
@@ -48,7 +46,7 @@ public class UserController {
         User newUser = new User(userId, firstName, lastName, email, password, 1);
 
         // Add role to use
-        newUser.add(new Role(roleId,userRole));
+        newUser.add(new Role(roleId, userRole));
 
         userService.update(newUser);
 
@@ -56,7 +54,7 @@ public class UserController {
     }
 
     @GetMapping("/deleteUser")
-    public String deleteUser(@RequestParam int id){
+    public String deleteUser(@RequestParam int id) {
         // Get user by id
         User user = userService.findById(id);
         userService.deleteUserById(user);
@@ -64,37 +62,37 @@ public class UserController {
     }
 
     @PostMapping("/updateUser")
-    public String updateUser(@RequestParam(name="id", required = false) int id,
-                             @RequestParam(name="userId", required = false) String userId,
-                             @RequestParam(name="firstName", required = false) String firstName,
-                             @RequestParam(name="lastName", required = false) String lastName,
-                             @RequestParam(name="email", required = false) String email,
-                             @RequestParam(name="password", required = false) String password,
+    public String updateUser(@RequestParam(name = "id", required = false) int id,
+                             @RequestParam(name = "userId", required = false) String userId,
+                             @RequestParam(name = "firstName", required = false) String firstName,
+                             @RequestParam(name = "lastName", required = false) String lastName,
+                             @RequestParam(name = "email", required = false) String email,
+                             @RequestParam(name = "password", required = false) String password,
                              @RequestParam(name = "active", required = false) Integer active,
-                             @RequestParam(name="roleId", required = false) String roleId,
-                             @RequestParam(name="userRole", required = false) String userRole){
+                             @RequestParam(name = "roleId", required = false) String roleId,
+                             @RequestParam(name = "userRole", required = false) String userRole) {
 
         User user = userService.findById(id);
 
-        if (userId!=null){
+        if (userId != null) {
             user.setUserId(userId);
         }
-        if (firstName!=null){
+        if (firstName != null) {
             user.setFirstName(firstName);
         }
-        if (lastName!=null){
+        if (lastName != null) {
             user.setLastName(lastName);
         }
-        if (email!=null){
+        if (email != null) {
             user.setUserId(email);
         }
-        if (password!=null){
+        if (password != null) {
             user.setPassword(password);
         }
-        if (active!=null){
+        if (active != null) {
             user.setActive(active);
         }
-        if (roleId!=null){
+        if (roleId != null) {
             user.setRoles((List<Role>) new Role(roleId, userRole));
         }
 
@@ -102,8 +100,6 @@ public class UserController {
 
         return "User with id: " + id + " has been updated";
     }
-
-
 
 
 //    @PostMapping("/addNewUser")
