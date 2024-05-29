@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @Getter
@@ -37,6 +39,8 @@ public class Document {
     private String processOwner;
     @Column(name="link")
     private String link;
+    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private List<DocumentComment> comments;
 
     public Document(String documentReference, String type, String name, int revision, String status, String issueDate, String revisionDate, int revisionInterval, String processOwner, String link) {
         this.documentReference = documentReference;
