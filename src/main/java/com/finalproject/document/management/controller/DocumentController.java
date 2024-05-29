@@ -43,7 +43,11 @@ public class DocumentController {
         // Create a new document
         Document document = new Document(documentReference, type, name, revision, status, issueDate, revisionDate, revisionInterval, processOwner, link);
 
+        // Add document into database
         documentService.update(document);
+
+        // Move the file into "documentsUploaded" folder
+        documentService.uploadDocument(link, "upload");
 
         return "Document with reference: " + documentReference + " has been added into database";
     }
@@ -94,5 +98,6 @@ public class DocumentController {
 
         return "Document with id: " + id + " has been successfully updated in database";
     }
+
 
 }
