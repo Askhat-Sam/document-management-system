@@ -55,7 +55,7 @@ public class DocumentServiceImpl implements DocumentService {
             document = result.get();
             System.out.println("result.get(): " + document);
         } else {
-            throw new RuntimeException("Did not find user id: " + id);
+            throw new RuntimeException("Did not find document with id: " + id);
         }
         return document;
     }
@@ -71,8 +71,8 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public void uploadDocument(String path, String actionType) {
-        moveFile(path, actionType);
+    public String uploadDocument(String path, String actionType) {
+        return moveFile(path, actionType);
     }
 
     private static Pageable doPagingAndSorting(Integer page, Integer size, String sortBy, String sortDirection) {
@@ -105,28 +105,37 @@ public class DocumentServiceImpl implements DocumentService {
         }
     }
 
-    private static void moveFile(String filePath, String actionType) {
+    private static String moveFile(String filePath, String actionType) {
 
-        File tempFile = new File(filePath);
-        // Check if file is exist. Do we need such check if we are uploading file?
-        if (!tempFile.exists()) {
-            logger.log(Level.SEVERE, String.format("No such file: %s", filePath));
+        Path oldFilePath = Paths.get(filePath);
+
+        String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
+
+        String newPath = "src/main/resources/documentsUploaded/" + fileName;
+
+        Path newFilePath = Paths.get(newPath);
+
+        File file = actionType.equals("upload") ? new File(filePath): new File(newPath);
+
+        if (!file.exists()){
+            logger.log(Level.SEVERE, "File cannot be found");
         } else {
-            Path oldFilePath = Paths.get(filePath);
-
-            String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
-
-            Path newFilePath = Paths.get("src/main/resources/documentsUploaded/" + fileName);
-
-            try {
-                Files.copy(oldFilePath, newFilePath, StandardCopyOption.REPLACE_EXISTING);
-                Files.delete(oldFilePath);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (actionType.equals("upload")) {
+                try {
+                    Files.copy(oldFilePath, newFilePath, StandardCopyOption.REPLACE_EXISTING);
+                    Files.delete(oldFilePath);
+                    return "src/main/resources/documentsUploaded/" + fileName;
+                } catch (IOException e) {
+                    logger.log(Level.SEVERE, "File cannot be uploaded");
+                }
+            } else if (actionType.equals("delete")) {
+                try {
+                    Files.delete(newFilePath);
+                } catch (IOException e) {
+                    logger.log(Level.SEVERE, "File cannot be deleted");
+                }
             }
         }
-
-
-
+        return null;
     }
 }

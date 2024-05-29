@@ -13,5 +13,5 @@ public interface DocumentService {
 
     void deleteDocumentById(int id);
 
-    void uploadDocument(String path, String actionType);
+    String uploadDocument(String path, String actionType);
 }

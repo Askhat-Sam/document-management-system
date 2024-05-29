@@ -40,21 +40,29 @@ public class DocumentController {
             @RequestParam("processOwner") String processOwner,
             @RequestParam("link") String link) {
 
+        // Move the file into "documentsUploaded" folder
+        String newLink = documentService.uploadDocument(link, "upload");
+
         // Create a new document
-        Document document = new Document(documentReference, type, name, revision, status, issueDate, revisionDate, revisionInterval, processOwner, link);
+        Document document = new Document(documentReference, type, name, revision, status, issueDate, revisionDate, revisionInterval, processOwner, newLink);
 
         // Add document into database
         documentService.update(document);
-
-        // Move the file into "documentsUploaded" folder
-        documentService.uploadDocument(link, "upload");
-
         return "Document with reference: " + documentReference + " has been added into database";
     }
 
     @GetMapping("/deleteDocument")
     public String deleteDocument(@RequestParam int id) {
+
+        Document document = documentService.findById(id);
+
+        System.out.println(document);
+
+        // Delete the file from "documentsUploaded" folder
+        documentService.uploadDocument(document.getLink(), "delete");
+
         documentService.deleteDocumentById(id);
+
         return "Document with id: " + id + " has been successfully deleted from database";
     }
 
