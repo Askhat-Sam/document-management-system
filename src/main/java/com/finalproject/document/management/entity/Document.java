@@ -1,5 +1,6 @@
 package com.finalproject.document.management.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,10 +40,12 @@ public class Document {
     private String processOwner;
     @Column(name="link")
     private String link;
+    @JsonManagedReference
     @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private List<DocumentComment> comments;
 
-    public Document(String documentReference, String type, String name, int revision, String status, String issueDate, String revisionDate, int revisionInterval, String processOwner, String link) {
+    public Document(String documentReference, String type, String name, int revision, String status, String issueDate,
+                    String revisionDate, int revisionInterval, String processOwner, String link) {
         this.documentReference = documentReference;
         this.type = type;
         this.name = name;

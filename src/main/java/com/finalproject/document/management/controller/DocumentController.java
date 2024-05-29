@@ -1,6 +1,7 @@
 package com.finalproject.document.management.controller;
 
 import com.finalproject.document.management.entity.Document;
+import com.finalproject.document.management.entity.DocumentComment;
 import com.finalproject.document.management.service.DocumentService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,7 @@ public class DocumentController {
 
         // Move the file into "documentsUploaded" folder
         String newLink = documentService.uploadDocument(link, "upload");
+
 
         // Create a new document
         Document document = new Document(documentReference, type, name, revision, status, issueDate, revisionDate, revisionInterval, processOwner, newLink);
