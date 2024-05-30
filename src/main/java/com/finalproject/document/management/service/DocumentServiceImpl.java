@@ -45,7 +45,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public Document findById(int id) {
 
-        Optional<Document> result = documentRepository.findById(id);
+        Optional<Document> result =documentRepository.findById(id);
 
         System.out.println("result: " + result);
 

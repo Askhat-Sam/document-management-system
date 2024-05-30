@@ -5,15 +5,15 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+
 @Table(name="document")
 public class Document {
     @Id
@@ -56,5 +56,30 @@ public class Document {
         this.revisionInterval = revisionInterval;
         this.processOwner = processOwner;
         this.link= link;
+    }
+
+    @Override
+    public String toString() {
+        return "Document{" +
+                "id=" + id +
+                ", documentReference='" + documentReference + '\'' +
+                ", type='" + type + '\'' +
+                ", name='" + name + '\'' +
+                ", revision=" + revision +
+                ", status='" + status + '\'' +
+                ", issueDate='" + issueDate + '\'' +
+                ", revisionDate='" + revisionDate + '\'' +
+                ", revisionInterval=" + revisionInterval +
+                ", processOwner='" + processOwner + '\'' +
+                ", link='" + link + '\'' +
+                '}';
+    }
+
+    public void add(DocumentComment comment){
+        if(comment==null){
+            comments = new ArrayList<>();
+        }
+        comments.add(comment);
+        comment.setDocument(this);
     }
 }

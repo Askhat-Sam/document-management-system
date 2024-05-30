@@ -96,6 +96,8 @@ public class DocumentController {
             document.setStatus(status);
         } else if (issueDate != null) {
             document.setIssueDate(issueDate);
+        } else if (revisionDate != null) {
+            document.setIssueDate(revisionDate);
         } else if (revisionInterval != null) {
             document.setRevisionInterval(revisionInterval);
         } else if (processOwner != null) {
@@ -107,6 +109,18 @@ public class DocumentController {
         documentService.update(document);
 
         return "Document with id: " + id + " has been successfully updated in database";
+    }
+
+    @PostMapping("/addComment")
+    public String addComment(@RequestParam int documentId,
+                           @RequestParam String userId,
+                           @RequestParam String comment){
+        Document document = documentService.findById(documentId);
+        // Add comment to the document
+        document.add(new DocumentComment(userId, comment, documentId));
+
+        documentService.update(document);
+        return "Comment has been added into document with id " + documentId;
     }
 
 
