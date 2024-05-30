@@ -14,10 +14,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -30,13 +32,44 @@ public class DocumentServiceImpl implements DocumentService {
     private static final Logger logger = Logger.getLogger(DocumentServiceImpl.class.getName());
 
     @Override
-    public List<Document> findAll(Integer pageNo, Integer pageSize, String sortBy, String sortDirection) {
+    public List<Document> findAll(Integer pageNo, Integer pageSize, String sortBy, String sortDirection,  String  keyword, String column) {
         Pageable pageable = doPagingAndSorting(pageNo, pageSize, sortBy, sortDirection);
         List<Document> documents;
+        System.out.println("___________________");
+        System.out.println(keyword);
+        System.out.println(column);
         if (pageable != null) {
             documents = documentRepository.findAll(pageable).toList();
         } else {
             documents = documentRepository.findAll();
+        }
+
+        List<Document> documentsFiltered = new ArrayList<>();
+
+        //if searching by keyword in certain column. Uses "contains" to search by the part of word.
+        if (keyword!=null&&column!=null){
+            switch(column) {
+                case "id": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getId()).equals(keyword)).collect(Collectors.toList());
+                    return documentsFiltered;
+                case "documentReference": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getDocumentReference()).equals(keyword)).collect(Collectors.toList());
+                    return documentsFiltered;
+                case "type": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getType()).contains(keyword)).collect(Collectors.toList());
+                    return documentsFiltered;
+                case "name": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getName()).equals(keyword)).collect(Collectors.toList());
+                    return documentsFiltered;
+                case "status": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getStatus()).equals(keyword)).collect(Collectors.toList());
+                    return documentsFiltered;
+                case "issueDate": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getIssueDate()).equals(keyword)).collect(Collectors.toList());
+                    return documentsFiltered;
+                case "revisionDate": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getRevisionDate()).equals(keyword)).collect(Collectors.toList());
+                    return documentsFiltered;
+                case "revisionInterval": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getRevisionInterval()).equals(keyword)).collect(Collectors.toList());
+                    return documentsFiltered;
+                case "processOwner": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getProcessOwner()).equals(keyword)).collect(Collectors.toList());
+                    return documentsFiltered;
+                case "link": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getRevisionInterval()).equals(keyword)).collect(Collectors.toList());
+            }
+            return documentsFiltered;
         }
         return documents;
     }

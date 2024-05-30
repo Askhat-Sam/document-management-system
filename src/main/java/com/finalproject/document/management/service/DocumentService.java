@@ -5,7 +5,7 @@ import com.finalproject.document.management.entity.Document;
 import java.util.List;
 
 public interface DocumentService {
-    List<Document> findAll(Integer page, Integer size, String sortBy, String sortDirection);
+    List<Document> findAll(Integer page, Integer size, String sortBy, String sortDirection, String  keyword, String column);
 
     Document findById(int id);
 
