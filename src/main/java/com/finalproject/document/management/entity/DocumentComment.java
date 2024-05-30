@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Entity
 @NoArgsConstructor
 @Getter
@@ -18,6 +21,8 @@ public class DocumentComment {
     private int id;
     @Column(name="user_id")
     private String userId;
+    @Column(name="date")
+    private String date;
     @Column(name="comment")
     private String comment;
     @JsonBackReference
@@ -31,6 +36,13 @@ public class DocumentComment {
     public DocumentComment(String userId, String comment) {
         this.userId = userId;
         this.comment = comment;
+    }
+
+    public DocumentComment(String userId, String date, String comment, int documentId) {
+        this.userId = userId;
+        this.date = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
+        this.comment = comment;
+        this.documentId = documentId;
     }
 
     public DocumentComment(String userId, String comment, int documentId) {

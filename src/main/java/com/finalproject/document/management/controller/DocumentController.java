@@ -6,6 +6,8 @@ import com.finalproject.document.management.service.DocumentService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -119,7 +121,8 @@ public class DocumentController {
                            @RequestParam String comment){
         Document document = documentService.findById(documentId);
         // Add comment to the document
-        document.add(new DocumentComment(userId, comment, documentId));
+
+        document.add(new DocumentComment(userId, new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()), comment, documentId));
 
         documentService.update(document);
         return "Comment has been added into document with id " + documentId;
