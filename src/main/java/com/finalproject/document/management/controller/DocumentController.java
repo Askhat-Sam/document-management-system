@@ -2,20 +2,11 @@ package com.finalproject.document.management.controller;
 
 import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.DocumentComment;
-import com.finalproject.document.management.entity.Lists;
 import com.finalproject.document.management.service.DocumentService;
 import lombok.AllArgsConstructor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -138,6 +129,4 @@ public class DocumentController {
         List<Document> documents = documentService.findAll();
         return documentService.downloadList(documents);
     }
-
-
 }

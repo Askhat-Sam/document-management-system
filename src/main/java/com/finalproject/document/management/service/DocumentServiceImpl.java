@@ -39,9 +39,6 @@ public class DocumentServiceImpl implements DocumentService {
     public List<Document> findAll(Integer pageNo, Integer pageSize, String sortBy, String sortDirection,  String  keyword, String column) {
         Pageable pageable = doPagingAndSorting(pageNo, pageSize, sortBy, sortDirection);
         List<Document> documents;
-        System.out.println("___________________");
-        System.out.println(keyword);
-        System.out.println(column);
         if (pageable != null) {
             documents = documentRepository.findAll(pageable).toList();
         } else {
