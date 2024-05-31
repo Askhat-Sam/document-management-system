@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 
 @Table(name="document")
-public class Document {
+public class Document{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")

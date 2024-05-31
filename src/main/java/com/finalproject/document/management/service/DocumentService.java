@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface DocumentService {
     List<Document> findAll(Integer page, Integer size, String sortBy, String sortDirection, String  keyword, String column);
+    List<Document> findAll();
 
     Document findById(int id);
 
@@ -14,4 +15,6 @@ public interface DocumentService {
     void deleteDocumentById(int id);
 
     String uploadDocument(String path, String actionType);
+
+     <T> String downloadList(List<T> list);
 }

@@ -2,10 +2,20 @@ package com.finalproject.document.management.controller;
 
 import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.DocumentComment;
+import com.finalproject.document.management.entity.Lists;
 import com.finalproject.document.management.service.DocumentService;
 import lombok.AllArgsConstructor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -62,7 +72,6 @@ public class DocumentController {
 
         Document document = documentService.findById(id);
 
-        System.out.println(document);
 
         // Delete the file from "documentsUploaded" folder
         documentService.uploadDocument(document.getLink(), "delete");
@@ -86,7 +95,6 @@ public class DocumentController {
             @RequestParam(name = "processOwner", required = false) String processOwner,
             @RequestParam(name = "link", required = false) String link) {
 
-
         Document document = documentService.findById(id);
         if (documentReference != null) {
             document.setDocumentReference(documentReference);
@@ -109,23 +117,26 @@ public class DocumentController {
         } else if (link != null) {
             document.setLink(link);
         }
-
         documentService.update(document);
-
         return "Document with id: " + id + " has been successfully updated in database";
     }
 
     @PostMapping("/addComment")
     public String addComment(@RequestParam int documentId,
-                           @RequestParam String userId,
-                           @RequestParam String comment){
+                             @RequestParam String userId,
+                             @RequestParam String comment) {
         Document document = documentService.findById(documentId);
-        // Add comment to the document
 
+        // Add comment to the document
         document.add(new DocumentComment(userId, new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()), comment, documentId));
 
         documentService.update(document);
         return "Comment has been added into document with id " + documentId;
+    }
+    @GetMapping("/downloadList")
+    public String downloadList() throws IOException, IllegalAccessException {
+        List<Document> documents = documentService.findAll();
+        return documentService.downloadList(documents);
     }
 
 

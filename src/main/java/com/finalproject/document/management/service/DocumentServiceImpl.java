@@ -3,12 +3,16 @@ package com.finalproject.document.management.service;
 import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.repository.DocumentRepository;
 import lombok.AllArgsConstructor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -74,6 +78,11 @@ public class DocumentServiceImpl implements DocumentService {
         return documents;
     }
 
+    @Override
+    public List<Document> findAll() {
+        return documentRepository.findAll();
+    }
+
     //Issue with using OPTIONAL ????
     @Override
     public Document findById(int id) {
@@ -106,6 +115,101 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public String uploadDocument(String path, String actionType) {
         return moveFile(path, actionType);
+    }
+
+    public <T> String downloadList(List<T> documentsList) {
+        List<Document> documents =documentRepository.findAll();
+        String excelFilePath = "src/main/resources/donwloads/list.xlsx";
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("List");
+
+        // Set style for table body
+        CellStyle styleBody = workbook.createCellStyle();
+        styleBody.setBorderTop(BorderStyle.THIN);
+        styleBody.setBorderBottom(BorderStyle.THIN);
+        styleBody.setBorderLeft(BorderStyle.THIN);
+        styleBody.setBorderRight(BorderStyle.THIN);
+        styleBody.setAlignment(HorizontalAlignment.LEFT);
+
+        int rowIndex = 1;
+        // Add header values
+        Row rowHeader = sheet.createRow(rowIndex-1);
+        Cell cellHeader = rowHeader.createCell(0);
+        cellHeader.setCellValue("Id");
+        Cell cellHeader1 = rowHeader.createCell(1);
+        cellHeader1.setCellValue("Document reference");
+        Cell cellHeader2 = rowHeader.createCell(2);
+        cellHeader2.setCellValue("Type");
+        Cell cellHeader3 = rowHeader.createCell(3);
+        cellHeader3.setCellValue("Name");
+        Cell cellHeader4 = rowHeader.createCell(4);
+        cellHeader4.setCellValue("Revision");
+        Cell cellHeader5 = rowHeader.createCell(5);
+        cellHeader5.setCellValue("Status");
+        Cell cellHeader6 = rowHeader.createCell(6);
+        cellHeader6.setCellValue("Issue date");
+        Cell cellHeader7 = rowHeader.createCell(7);
+        cellHeader7.setCellValue("Revision date");
+        Cell cellHeader8 = rowHeader.createCell(8);
+        cellHeader8.setCellValue("Revision date");
+        Cell cellHeader9 = rowHeader.createCell(9);
+        cellHeader9.setCellValue("Process owner");
+        Cell cellHeader10 = rowHeader.createCell(10);
+        cellHeader10.setCellValue("Link");
+
+        // Add table body values
+        for (Document d:documents) {
+            Row row = sheet.createRow(rowIndex++);
+            Cell cell = row.createCell(0);
+            cell.setCellValue(d.getId());
+            Cell cell1 = row.createCell(1);
+            cell1.setCellValue(d.getDocumentReference());
+            Cell cell2 = row.createCell(2);
+            cell2.setCellValue(d.getType());
+            Cell cell3= row.createCell(3);
+            cell3.setCellValue(d.getName());
+            Cell cell4= row.createCell(4);
+            cell4.setCellValue(d.getRevision());
+            Cell cell5= row.createCell(5);
+            cell5.setCellValue(d.getStatus());
+            Cell cell6= row.createCell(6);
+            cell6.setCellValue(d.getIssueDate());
+            Cell cell7= row.createCell(7);
+            cell7.setCellValue(d.getRevisionDate());
+            Cell cell8= row.createCell(8);
+            cell8.setCellValue(d.getRevisionInterval());
+            Cell cell9= row.createCell(9);
+            cell9.setCellValue(d.getProcessOwner());
+            Cell cell10= row.createCell(10);
+            cell10.setCellValue(d.getLink());
+        }
+
+        // Apply borders to all non-empty cells
+        for (Row row : sheet) {
+            for (Cell cell : row) {
+                if (cell.getCellType() != CellType.BLANK) {
+                    cell.setCellStyle(styleBody);
+                }
+            }
+        }
+
+        for (int i = 0; i <= 11; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        try (FileOutputStream outputStream = new FileOutputStream(excelFilePath)) {
+            workbook.write(outputStream);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            workbook.close();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Workbook cannot be closed");
+        }
+        return "List has been downloaded";
     }
 
     private static Pageable doPagingAndSorting(Integer page, Integer size, String sortBy, String sortDirection) {
