@@ -40,19 +40,19 @@ public class UserServiceImpl implements UserService {
         if (keyword!=null&&column!=null) {
             switch (column) {
                 case "id":
-                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getId()).equals(keyword)).collect(Collectors.toList());
+                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getId()).contains(keyword)).collect(Collectors.toList());
                     return usersFiltered;
                 case "userId":
-                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getUserId()).equals(keyword)).collect(Collectors.toList());
+                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getUserId()).contains(keyword)).collect(Collectors.toList());
                     return usersFiltered;
                 case "firstName":
-                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getFirstName()).equals(keyword)).collect(Collectors.toList());
+                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getFirstName()).contains(keyword)).collect(Collectors.toList());
                     return usersFiltered;
                 case "lastName":
-                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getLastName()).equals(keyword)).collect(Collectors.toList());
+                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getLastName()).contains(keyword)).collect(Collectors.toList());
                     return usersFiltered;
                 case "email":
-                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getEmail()).equals(keyword)).collect(Collectors.toList());
+                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getEmail()).contains(keyword)).collect(Collectors.toList());
                     return usersFiltered;
             }
             return usersFiltered;

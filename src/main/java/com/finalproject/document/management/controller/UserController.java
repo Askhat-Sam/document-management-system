@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/document-management/users")
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -89,6 +89,8 @@ public class UserController {
             user.setUserId(email);
         }
         if (password != null) {
+            // Generate bcrypt hash
+            //String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
             user.setPassword(password);
         }
         if (active != null) {
