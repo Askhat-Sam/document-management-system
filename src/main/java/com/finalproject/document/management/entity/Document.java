@@ -13,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-
 @Table(name="document")
 public class Document{
     @Id

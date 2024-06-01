@@ -17,7 +17,6 @@ import java.util.List;
 public class DocumentController {
     private DocumentService documentService;
 
-
     @GetMapping("/getDocuments")
     public List<Document> getDocuments(@RequestParam(name = "page", required = false) Integer page,
                                        @RequestParam(name = "size", required = false) Integer size,
@@ -119,7 +118,7 @@ public class DocumentController {
         Document document = documentService.findById(documentId);
 
         // Add comment to the document
-        document.add(new DocumentComment(userId, new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()), comment, documentId));
+        document.add(new DocumentComment(userId, new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()), comment));
 
         documentService.update(document);
         return "Comment has been added into document with id " + documentId;

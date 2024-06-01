@@ -30,25 +30,21 @@ public class DocumentComment {
     @JoinColumn(name="document_id")
     private Document document;
 
-    @Column(insertable=false, updatable=false, name="document_id")
-    private int documentId;
 
     public DocumentComment(String userId, String comment) {
         this.userId = userId;
         this.comment = comment;
     }
 
-    public DocumentComment(String userId, String date, String comment, int documentId) {
+    public DocumentComment(String userId, String date, String comment) {
         this.userId = userId;
         this.date = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
         this.comment = comment;
-        this.documentId = documentId;
     }
 
     public DocumentComment(String userId, String comment, int documentId) {
         this.userId = userId;
         this.comment = comment;
-        this.documentId = documentId;
     }
 
     @Override
@@ -57,7 +53,6 @@ public class DocumentComment {
                 "id=" + id +
                 ", userId='" + userId + '\'' +
                 ", comment='" + comment + '\'' +
-                ", documentId=" + documentId +
                 '}';
     }
 }
