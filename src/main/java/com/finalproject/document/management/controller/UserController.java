@@ -1,5 +1,6 @@
 package com.finalproject.document.management.controller;
 
+import com.finalproject.document.management.entity.Department;
 import com.finalproject.document.management.entity.Role;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.UserService;
@@ -37,18 +38,17 @@ public class UserController {
             @RequestParam("firstName") String firstName,
             @RequestParam("lastName") String lastName,
             @RequestParam("email") String email,
+            @RequestParam("departmentId") int departmentId,
+            @RequestParam("role") String role,
             @RequestParam("password") String password,
-            @RequestParam("active") int active,
-            @RequestParam("roleId") String roleId,
-            @RequestParam("userRole") String userRole) {
+            @RequestParam("active") int active) {
         // Generate bcrypt hash
 //        String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
 
-        // Create a new user
-        User newUser = new User(userId, firstName, lastName, email, password, 1);
+        Department department = new Department()
 
-        // Add role to use
-        newUser.add(new Role(roleId, userRole));
+        // Create a new user
+        User newUser = new User(userId, firstName, lastName, email, departmentId, role, password, 1);
 
         userService.update(newUser);
 

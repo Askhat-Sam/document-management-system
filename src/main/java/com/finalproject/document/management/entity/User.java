@@ -32,23 +32,23 @@ public class User{
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name="department_id")
     private Department department;
+    @Column(name="role")
+    private String role;
     @Column(name="password")
     private String password;
     @Column(name="active")
     private int active;
-    @JsonManagedReference
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    private List<Role> roles;
 
-    public User(String userId, String firstName, String lastName, String email, String password, int active) {
+    public User(String userId, String firstName, String lastName, String email, Department department, String role, String password, int active) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.department = department;
+        this.role = role;
         this.password = password;
         this.active = active;
     }
-
 
     @Override
     public String toString() {
