@@ -19,7 +19,7 @@ public class Document{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
-    @Column(name="document_reference")
+    @Column(name="document_code")
     private String documentReference;
     @Column(name="type")
     private String type;

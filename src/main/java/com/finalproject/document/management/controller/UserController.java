@@ -1,8 +1,8 @@
 package com.finalproject.document.management.controller;
 
 import com.finalproject.document.management.entity.Department;
-import com.finalproject.document.management.entity.Role;
 import com.finalproject.document.management.entity.User;
+import com.finalproject.document.management.service.DepartmentService;
 import com.finalproject.document.management.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +12,11 @@ import java.util.List;
 @RequestMapping("/document-management/users")
 public class UserController {
     private final UserService userService;
+    private final DepartmentService departmentService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, DepartmentService departmentService) {
         this.userService = userService;
+        this.departmentService = departmentService;
     }
 
     @RequestMapping("/getUsers")
@@ -45,10 +47,10 @@ public class UserController {
         // Generate bcrypt hash
 //        String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
 
-        Department department = new Department()
+        Department department = departmentService.findById(departmentId);
 
         // Create a new user
-        User newUser = new User(userId, firstName, lastName, email, departmentId, role, password, 1);
+        User newUser = new User(userId, firstName, lastName, email, department, role, password, 1);
 
         userService.update(newUser);
 
@@ -95,9 +97,6 @@ public class UserController {
         }
         if (active != null) {
             user.setActive(active);
-        }
-        if (roleId != null) {
-            user.setRoles((List<Role>) new Role(roleId, userRole));
         }
 
         userService.update(user);

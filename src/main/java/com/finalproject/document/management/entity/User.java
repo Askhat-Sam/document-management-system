@@ -1,13 +1,11 @@
 package com.finalproject.document.management.entity;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -28,8 +26,10 @@ public class User{
     private String lastName;
     @Column(name="email")
     private String email;
-    @JsonBackReference
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @Column(insertable=false, updatable=false, name="department_id")
+    private String departmentId;
+    @JsonManagedReference
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name="department_id")
     private Department department;
     @Column(name="role")
@@ -53,22 +53,15 @@ public class User{
     @Override
     public String toString() {
         return "User{" +
-                "userId='" + userId + '\'' +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", department=" + department +
+                ", role='" + role + '\'' +
                 ", password='" + password + '\'' +
                 ", active=" + active +
-                ", roles=" + roles +
                 '}';
-    }
-
-    //     add convenience methods for bi-directional relationship
-    public void add(Role tempRole){
-        if(roles==null){
-            roles = new ArrayList<>();
-        }
-        roles.add(tempRole);
-        tempRole.setUser(this);
     }
 }
