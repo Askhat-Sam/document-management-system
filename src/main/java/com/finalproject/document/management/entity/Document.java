@@ -20,23 +20,21 @@ public class Document{
     @Column(name="id")
     private int id;
     @Column(name="document_code")
-    private String documentReference;
-    @Column(name="type")
-    private String type;
+    private String documentCode;
+    @Column(insertable=false, updatable=false, name="document_type_id")
+    private int documentTypeId;
     @Column(name="name")
     private String name;
-    @Column(name="revision")
-    private int revision;
-    @Column(name="status")
-    private String status;
-    @Column(name="issue_date")
-    private String issueDate;
-    @Column(name="revision_date")
-    private String revisionDate;
-    @Column(name="revision_interval")
-    private int revisionInterval;
-    @Column(name="process_owner")
-    private String processOwner;
+    @Column(name="revision_number")
+    private int revisionNumber;
+    @Column(name="status_id")
+    private int statusId;
+    @Column(name="creation_date")
+    private String creationDate;
+    @Column(name="modification_date")
+    private String modificationDate;
+    @Column(name="author_id")
+    private String authorId;
     @Column(name="link")
     private String link;
     @JsonManagedReference
