@@ -6,11 +6,11 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link th:href="@{/css/style2.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
     <script type="text/javascript" src="../static/js/code.jquery.com_jquery-3.7.1.min.js" th:src="@{/js/code.jquery.com_jquery-3.7.1.min.js}"></script>
     <script type="text/javascript" src="../static/js/main.js" th:src="@{/js/main.js}"></script>
 
-    <title>DMS</title>
+    <title>Document Management System</title>
 </head>
 <body>
 
@@ -20,16 +20,73 @@
         <div>User Name: John.S</div>
         <div>Logout</div>
     </div>
+    <div class="navbar flex-container">
+        <form class="navbar-form" role="search" modelAttribute="selectedOption">
+            <input  name="keyword"  class="" type="search" placeholder="Search" aria-label="Search" id="searchText">
+
+<!--            <select th:field="*{header}" name="option" class="search-list" area-label="">-->
+<!--                <option th:each="tempHeader : ${headers}" th:value="${tempHeader}" th:text="${tempHeader}"/>-->
+<!--            </select>-->
+
+            <button class="" type="submit">Search</button>
+        </form>
+    </div>
+    <div class="table-container">
+        <table class="">
+            <thead>
+            <tr class="table-header">
+                <th>Id</th>
+                <th>Document code</th>
+                <th>Type</th>
+                <th>Title</th>
+                <th>Revision numnber</th>
+                <th>Status</th>
+                <th>Creation date</th>
+                <th>Modification date</th>
+                <th>Author</th>
+                <th>Link</th>
+            </tr>
+            </thead>
+            <tbody class="table-body">
+            <tr th:each="document : ${documents}" class="" style="height: 20px">
+                <td th:text="${document.id}" />
+                <td th:text="${document.documentCode}" />
+                <td th:text="${document.documentTypeId}"/>
+                <td th:text="${document.name}"/>
+                <td th:text="${document.revisionNumber}"/>
+                <td th:text="${document.statusId}"/>
+                <td th:text="${document.creationDate}"/>
+                <td th:text="${document.modificationDate}"/>
+                <td th:text="${document.authorId}"/>
+                <td th:text="${document.link}"/>
+<!--                <td>-->
+<!--                    <a th:href="@{/tools/getOne(theId=${tool.barcodeId})}" class="action-tool-edit" sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">-->
+<!--                        Edit-->
+<!--                    </a>-->
+<!--                    <a th:href="@{/tools/delete(toolId=${tool.barcodeId})}"-->
+<!--                       class="action-btn-delete"-->
+<!--                       onclick="if (!(confirm('Are you sure you want to delete this tool?'))) return false" sec:authorize="hasRole('ROLE_ADMIN')">-->
+<!--                        Delete-->
+<!--                    </a>-->
+
+<!--                    <button type="button" class="" data-bs-toggle="modal" data-bs-target="#editModal2">-->
+<!--                        Edit-->
+<!--                    </button>-->
+<!--                </td>-->
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
 
-<script type="text/javascript">
-    function clearFilter(){
-        window.location = '/tools/list';
-    }
-</script>
+<!--<script type="text/javascript">-->
+<!--    function clearFilter(){-->
+<!--        window.location = '/tools/list';-->
+<!--    }-->
+<!--</script>-->
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>-->
 
 </body>
 </html>

@@ -1,0 +1,191 @@
+body {
+    background-color: #F0F0F0;
+}
+
+.container {
+    width: 100%;
+}
+
+table {
+    width:100%
+}
+.main-container{
+    border: 1px solid grey;
+    margin: 5px;
+}
+.table-container{
+    margin: 0px 5px 5px 5px;
+    padding: 0px 5px 5px 5px;
+}
+.header-container{
+    background-color: rgb(0,32,91);
+    color: white;
+    font-weight: bold;
+}
+
+table, th, td {
+  border-collapse: collapse;
+  font-size: 14px;
+  font-family: sans-serif;
+}
+.navbar-header {
+    margin-left: 5px;
+}
+.navbar-header>input {
+    background: transparent;
+    border: none;
+    padding: 5px;
+    color: black;
+    font-weight: 500;
+}
+.navbar-header>input:hover {
+    color: white;
+}
+
+.navbar {
+
+    border-top: 1px solid grey;
+    align-items: center;
+}
+
+tr{
+    line-height: 28px;
+}
+td, th{
+    padding-left: 4px;
+}
+
+
+.table-header {
+    background: rgb(0,32,91);
+     line-height: 22px;
+     color: white;
+}
+.table-body {
+    background-color: #FFFFD6;
+}
+.flex-container {
+   display: flex;
+  align-items: center;
+  column-gap: 40px;
+
+}
+
+.flex-container > div {
+    height: 30px;
+    margin: 10px;
+}
+
+button {
+    margin: 5px;
+    background-color: white;
+    border: 1px solid grey;
+}
+.navbar-form {
+    display: flex;
+    margin: 0px 10px;
+    height: auto;
+}
+select, option{
+     line-height: 24px;
+}
+
+.action-tool-edit {
+    background-color: #E2E4E8;
+    border: 1px solid grey;
+    color: black;
+    padding: 1px;
+    text-align: center;
+    text-decoration: none;
+
+    font-size: 14px;
+    margin: 2px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition-duration: 0.4s;
+    height: 18px;
+}
+
+.action-user-edit {
+    background-color: #E2E4E8;
+    border: 1px solid grey;
+    color: black;
+    padding: 1px;
+    text-align: center;
+    text-decoration: none;
+
+    font-size: 14px;
+    margin: 2px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition-duration: 0.4s;
+    height: 18px;
+}
+
+.action-btn-delete {
+    background-color: #E2E4E8;
+    border: 1px solid grey;
+    color: black;
+    padding: 1px;
+    text-align: center;
+    text-decoration: none;
+
+    font-size: 14px;
+    margin: 2px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition-duration: 0.4s;
+    height: 18px;
+}
+
+.action-btn-delete: hover {
+    background-color: #yellow; /* Green */
+     color: red;
+}
+.action-btn-edit: hover {
+    background-color: #04AA6D; /* Green */
+     color: red;
+}
+/* The Modal (background) */
+.add-user-modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.add-user-modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+
+
+

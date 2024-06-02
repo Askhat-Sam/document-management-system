@@ -6,6 +6,8 @@ import com.finalproject.document.management.service.DocumentStatusService;
 import com.finalproject.document.management.service.DocumentTypeService;
 import com.finalproject.document.management.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -13,7 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@RestController
+//@RestController
+@Controller
 @RequestMapping("/document-management/documents")
 @AllArgsConstructor
 public class DocumentController {
@@ -22,6 +25,14 @@ public class DocumentController {
     private DocumentStatusService documentStatusService;
     private UserService userService;
 
+    @RequestMapping("/showDocuments")
+    public String showDocuments(Model model){
+        List<Document> documents = documentService.findAll();
+        // Add documents into model
+        model.addAttribute("documents", documents);
+
+        return "documents/documents";
+    }
 
 
     @GetMapping("/getDocuments")
