@@ -30,7 +30,6 @@ public class DocumentComment {
     @JoinColumn(name="document_id")
     private Document document;
 
-
     public DocumentComment(String userId, String comment) {
         this.userId = userId;
         this.comment = comment;

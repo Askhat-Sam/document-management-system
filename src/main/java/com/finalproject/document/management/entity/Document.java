@@ -1,5 +1,6 @@
 package com.finalproject.document.management.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class Document{
     private int id;
     @Column(name="document_code")
     private String documentCode;
-    @Column(insertable=false, updatable=false, name="document_type_id")
+    @Column(name="document_type_id")
     private int documentTypeId;
     @Column(name="name")
     private String name;
@@ -37,16 +38,29 @@ public class Document{
     private String authorId;
     @Column(name="link")
     private String link;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private List<DocumentComment> comments;
 
-    public Document(String documentCode, int documentTypeId, String name, int revisionNumber, int statusId, String creationDate, String modificationDate, String authorId, String link, List<DocumentComment> comments) {
+    @JsonBackReference
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name="status_id")
+    private DocumentStatus documentStatus;
+
+    @JsonBackReference
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name="document_type_id")
+    private DocumentType documentType;
+
+    public Document(String documentCode, DocumentType documentType, String name, int revisionNumber,
+                    DocumentStatus documentStatus, String creationDate, String modificationDate,
+                    String authorId, String link, List<DocumentComment> comments) {
         this.documentCode = documentCode;
-        this.documentTypeId = documentTypeId;
+        this.documentType = documentType;
         this.name = name;
         this.revisionNumber = revisionNumber;
-        this.statusId = statusId;
+        this.documentStatus = documentStatus;
         this.creationDate = creationDate;
         this.modificationDate = modificationDate;
         this.authorId = authorId;
@@ -68,6 +82,8 @@ public class Document{
                 ", authorId='" + authorId + '\'' +
                 ", link='" + link + '\'' +
                 ", comments=" + comments +
+                ", documentStatus=" + documentStatus +
+                ", documentType=" + documentType +
                 '}';
     }
 
