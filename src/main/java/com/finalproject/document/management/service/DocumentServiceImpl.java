@@ -52,23 +52,23 @@ public class DocumentServiceImpl implements DocumentService {
             switch(column) {
                 case "id": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getId()).equals(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "documentReference": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getDocumentReference()).equals(keyword)).collect(Collectors.toList());
+                case "documentReference": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getDocumentCode()).equals(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "type": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getType()).contains(keyword)).collect(Collectors.toList());
+                case "type": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getDocumentTypeId()).contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
                 case "name": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getName()).equals(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "status": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getStatus()).equals(keyword)).collect(Collectors.toList());
+                case "status": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getStatusId()).equals(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "issueDate": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getIssueDate()).equals(keyword)).collect(Collectors.toList());
+                case "issueDate": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getCreationDate()).equals(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "revisionDate": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getRevisionDate()).equals(keyword)).collect(Collectors.toList());
+                case "revisionDate": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getModificationDate()).equals(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "revisionInterval": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getRevisionInterval()).equals(keyword)).collect(Collectors.toList());
+//                case "revisionInterval": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.get()).equals(keyword)).collect(Collectors.toList());
+//                    return documentsFiltered;
+                case "processOwner": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getAuthorId()).equals(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "processOwner": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getProcessOwner()).equals(keyword)).collect(Collectors.toList());
-                    return documentsFiltered;
-                case "link": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getRevisionInterval()).equals(keyword)).collect(Collectors.toList());
+                case "link": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getLink()).equals(keyword)).collect(Collectors.toList());
             }
             return documentsFiltered;
         }
@@ -160,23 +160,23 @@ public class DocumentServiceImpl implements DocumentService {
             Cell cell = row.createCell(0);
             cell.setCellValue(d.getId());
             Cell cell1 = row.createCell(1);
-            cell1.setCellValue(d.getDocumentReference());
+            cell1.setCellValue(d.getDocumentCode());
             Cell cell2 = row.createCell(2);
-            cell2.setCellValue(d.getType());
+            cell2.setCellValue(d.getDocumentTypeId());
             Cell cell3= row.createCell(3);
             cell3.setCellValue(d.getName());
             Cell cell4= row.createCell(4);
-            cell4.setCellValue(d.getRevision());
+            cell4.setCellValue(d.getRevisionNumber());
             Cell cell5= row.createCell(5);
-            cell5.setCellValue(d.getStatus());
+            cell5.setCellValue(d.getStatusId());
             Cell cell6= row.createCell(6);
-            cell6.setCellValue(d.getIssueDate());
+            cell6.setCellValue(d.getCreationDate());
             Cell cell7= row.createCell(7);
-            cell7.setCellValue(d.getRevisionDate());
-            Cell cell8= row.createCell(8);
-            cell8.setCellValue(d.getRevisionInterval());
+            cell7.setCellValue(d.getModificationDate());
+//            Cell cell8= row.createCell(8);
+//            cell8.setCellValue(d.getRevisionInterval());
             Cell cell9= row.createCell(9);
-            cell9.setCellValue(d.getProcessOwner());
+            cell9.setCellValue(d.getAuthorId());
             Cell cell10= row.createCell(10);
             cell10.setCellValue(d.getLink());
         }
