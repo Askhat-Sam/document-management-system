@@ -41,34 +41,33 @@ public class Document{
     @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private List<DocumentComment> comments;
 
-    public Document(String documentReference, String type, String name, int revision, String status, String issueDate,
-                    String revisionDate, int revisionInterval, String processOwner, String link) {
-        this.documentReference = documentReference;
-        this.type = type;
+    public Document(String documentCode, int documentTypeId, String name, int revisionNumber, int statusId, String creationDate, String modificationDate, String authorId, String link, List<DocumentComment> comments) {
+        this.documentCode = documentCode;
+        this.documentTypeId = documentTypeId;
         this.name = name;
-        this.revision = revision;
-        this.status = status;
-        this.issueDate = issueDate;
-        this.revisionDate = revisionDate;
-        this.revisionInterval = revisionInterval;
-        this.processOwner = processOwner;
-        this.link= link;
+        this.revisionNumber = revisionNumber;
+        this.statusId = statusId;
+        this.creationDate = creationDate;
+        this.modificationDate = modificationDate;
+        this.authorId = authorId;
+        this.link = link;
+        this.comments = comments;
     }
 
     @Override
     public String toString() {
         return "Document{" +
                 "id=" + id +
-                ", documentReference='" + documentReference + '\'' +
-                ", type='" + type + '\'' +
+                ", documentCode='" + documentCode + '\'' +
+                ", documentTypeId=" + documentTypeId +
                 ", name='" + name + '\'' +
-                ", revision=" + revision +
-                ", status='" + status + '\'' +
-                ", issueDate='" + issueDate + '\'' +
-                ", revisionDate='" + revisionDate + '\'' +
-                ", revisionInterval=" + revisionInterval +
-                ", processOwner='" + processOwner + '\'' +
+                ", revisionNumber=" + revisionNumber +
+                ", statusId=" + statusId +
+                ", creationDate='" + creationDate + '\'' +
+                ", modificationDate='" + modificationDate + '\'' +
+                ", authorId='" + authorId + '\'' +
                 ", link='" + link + '\'' +
+                ", comments=" + comments +
                 '}';
     }
 
