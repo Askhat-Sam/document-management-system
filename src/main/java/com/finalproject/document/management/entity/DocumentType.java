@@ -16,13 +16,13 @@ public class DocumentType {
     @Column(name="id")
     private int id;
     @Column(name="type_name")
-    private int typeName;
+    private String typeName;
     @Column(name="type_short_name")
-    private int typeShortName;
+    private String typeShortName;
     @Column(name="revision_interval")
     private int revisionInterval;
 
-    public DocumentType(int typeName, int typeShortName, int revisionInterval) {
+    public DocumentType(String typeName, String typeShortName, int revisionInterval) {
         this.typeName = typeName;
         this.typeShortName = typeShortName;
         this.revisionInterval = revisionInterval;

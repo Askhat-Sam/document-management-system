@@ -1,8 +1,10 @@
 package com.finalproject.document.management.controller;
 
-import com.finalproject.document.management.entity.Document;
-import com.finalproject.document.management.entity.DocumentComment;
+import com.finalproject.document.management.entity.*;
 import com.finalproject.document.management.service.DocumentService;
+import com.finalproject.document.management.service.DocumentStatusService;
+import com.finalproject.document.management.service.DocumentTypeService;
+import com.finalproject.document.management.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,11 @@ import java.util.List;
 @AllArgsConstructor
 public class DocumentController {
     private DocumentService documentService;
+    private DocumentTypeService documentTypeService;
+    private DocumentStatusService documentStatusService;
+    private UserService userService;
+
+
 
     @GetMapping("/getDocuments")
     public List<Document> getDocuments(@RequestParam(name = "page", required = false) Integer page,
@@ -34,27 +41,35 @@ public class DocumentController {
 
     @PostMapping("/addNewDocument")
     public String addDocument(
-            @RequestParam("documentReference") String documentReference,
-            @RequestParam("type") String type,
+            @RequestParam("documentCode") String documentCode,
+            @RequestParam("documentTypeId") int documentTypeId,
             @RequestParam("name") String name,
-            @RequestParam("revision") int revision,
-            @RequestParam("status") String status,
-            @RequestParam("issueDate") String issueDate,
-            @RequestParam("revisionDate") String revisionDate,
-            @RequestParam("revisionInterval") int revisionInterval,
-            @RequestParam("processOwner") String processOwner,
+            @RequestParam("revisionNumber") int revisionNumber,
+            @RequestParam("statusId") int statusId,
+            @RequestParam("creationDate") String creationDate,
+            @RequestParam("modificationDate") String modificationDate,
+            @RequestParam("authorId") int authorId,
             @RequestParam("link") String link) {
 
         // Move the file into "documentsUploaded" folder
         String newLink = documentService.uploadDocument(link, "upload");
 
+        // Get document type
+        DocumentType documentType = documentTypeService.findById(documentTypeId);
+
+        // Get document status object
+        DocumentStatus documentStatus = documentStatusService.findByID(statusId);
+
+        // Get user by authorId
+        User user = userService.findById(authorId);
 
         // Create a new document
-        Document document = new Document(documentReference, type, name, revision, status, issueDate, revisionDate, revisionInterval, processOwner, newLink);
+        Document document = new Document(documentCode, documentType, name, revisionNumber, documentStatus,
+                creationDate, modificationDate, user, newLink);
 
         // Add document into database
         documentService.update(document);
-        return "Document with reference: " + documentReference + " has been added into database";
+        return "Document with reference: " + documentCode + " has been added into database";
     }
 
     @GetMapping("/deleteDocument")
@@ -73,37 +88,46 @@ public class DocumentController {
 
     @PostMapping("/updateDocument")
     public String updateDocument(
-            @RequestParam(name = "id", required = false) int id,
-            @RequestParam(name = "documentReference", required = false) String documentReference,
-            @RequestParam(name = "type", required = false) String type,
-            @RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "revision", required = false) Integer revision,
-            @RequestParam(name = "status", required = false) String status,
-            @RequestParam(name = "issueDate", required = false) String issueDate,
-            @RequestParam(name = "revisionDate", required = false) String revisionDate,
-            @RequestParam(name = "revisionInterval", required = false) Integer revisionInterval,
-            @RequestParam(name = "processOwner", required = false) String processOwner,
-            @RequestParam(name = "link", required = false) String link) {
+            @RequestParam("id") int id,
+            @RequestParam("documentCode") String documentCode,
+            @RequestParam("documentTypeId") int documentTypeId,
+            @RequestParam("name") String name,
+            @RequestParam("revisionNumber") int revisionNumber,
+            @RequestParam("statusId") int statusId,
+            @RequestParam("creationDate") String creationDate,
+            @RequestParam("modificationDate") String modificationDate,
+            @RequestParam("authorId") int authorId,
+            @RequestParam("link") String link) {
+
+        // Move the file into "documentsUploaded" folder
+        String newLink = documentService.uploadDocument(link, "upload");
+
+        // Get document type
+        DocumentType documentType = documentTypeService.findById(documentTypeId);
+
+        // Get document status object
+        DocumentStatus documentStatus = documentStatusService.findByID(statusId);
+
+        // Get user by authorId
+        User user = userService.findById(authorId);
 
         Document document = documentService.findById(id);
-        if (documentReference != null) {
-            document.setDocumentReference(documentReference);
-        } else if (type != null) {
-            document.setType(type);
+        if (documentCode != null) {
+            document.setDocumentCode(documentCode);
+        } else if (documentType != null) {
+            document.setDocumentType(documentType);
         } else if (name != null) {
             document.setName(name);
-        } else if (revision != null) {
-            document.setRevision(revision);
-        } else if (status != null) {
-            document.setStatus(status);
-        } else if (issueDate != null) {
-            document.setIssueDate(issueDate);
-        } else if (revisionDate != null) {
-            document.setIssueDate(revisionDate);
-        } else if (revisionInterval != null) {
-            document.setRevisionInterval(revisionInterval);
-        } else if (processOwner != null) {
-            document.setProcessOwner(processOwner);
+        } else if (String.valueOf(revisionNumber) != null) {
+            document.setRevisionNumber(revisionNumber);
+        } else if (documentStatus!= null) {
+            document.setDocumentStatus(documentStatus);
+        } else if (creationDate != null) {
+            document.setCreationDate(creationDate);
+        } else if (modificationDate != null) {
+            document.setModificationDate(modificationDate);
+        } else if (user != null) {
+            document.setAuthorId(user.getUserId());
         } else if (link != null) {
             document.setLink(link);
         }

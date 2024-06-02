@@ -22,19 +22,19 @@ public class Document{
     private int id;
     @Column(name="document_code")
     private String documentCode;
-    @Column(name="document_type_id")
+    @Column(insertable=false, updatable=false, name="document_type_id")
     private int documentTypeId;
     @Column(name="name")
     private String name;
     @Column(name="revision_number")
     private int revisionNumber;
-    @Column(name="status_id")
+    @Column(insertable=false, updatable=false, name="status_id")
     private int statusId;
     @Column(name="creation_date")
     private String creationDate;
     @Column(name="modification_date")
     private String modificationDate;
-    @Column(name="author_id")
+    @Column(name="author_id",insertable=false, updatable=false)
     private String authorId;
     @Column(name="link")
     private String link;
@@ -43,19 +43,24 @@ public class Document{
     @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private List<DocumentComment> comments;
 
-    @JsonBackReference
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @JsonManagedReference
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name="status_id")
     private DocumentStatus documentStatus;
 
-    @JsonBackReference
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @JsonManagedReference
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name="document_type_id")
     private DocumentType documentType;
 
+    @JsonManagedReference
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name="author_id")
+    private User user;
+
     public Document(String documentCode, DocumentType documentType, String name, int revisionNumber,
                     DocumentStatus documentStatus, String creationDate, String modificationDate,
-                    String authorId, String link, List<DocumentComment> comments) {
+                    User user, String link) {
         this.documentCode = documentCode;
         this.documentType = documentType;
         this.name = name;
@@ -64,9 +69,10 @@ public class Document{
         this.creationDate = creationDate;
         this.modificationDate = modificationDate;
         this.authorId = authorId;
+        this.user =user;
         this.link = link;
-        this.comments = comments;
     }
+
 
     @Override
     public String toString() {

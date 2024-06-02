@@ -48,30 +48,30 @@ public class DocumentServiceImpl implements DocumentService {
         List<Document> documentsFiltered = new ArrayList<>();
 
         //if searching by keyword in certain column. Uses "contains" to search by the part of word.
-        if (keyword!=null&&column!=null){
-            switch(column) {
-                case "id": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getId()).equals(keyword)).collect(Collectors.toList());
-                    return documentsFiltered;
-                case "documentReference": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getDocumentCode()).equals(keyword)).collect(Collectors.toList());
-                    return documentsFiltered;
-                case "type": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getDocumentTypeId()).contains(keyword)).collect(Collectors.toList());
-                    return documentsFiltered;
-                case "name": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getName()).equals(keyword)).collect(Collectors.toList());
-                    return documentsFiltered;
-                case "status": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getStatusId()).equals(keyword)).collect(Collectors.toList());
-                    return documentsFiltered;
-                case "issueDate": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getCreationDate()).equals(keyword)).collect(Collectors.toList());
-                    return documentsFiltered;
-                case "revisionDate": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getModificationDate()).equals(keyword)).collect(Collectors.toList());
-                    return documentsFiltered;
-//                case "revisionInterval": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.get()).equals(keyword)).collect(Collectors.toList());
+//        if (keyword!=null&&column!=null){
+//            switch(column) {
+//                case "id": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getId()).equals(keyword)).collect(Collectors.toList());
 //                    return documentsFiltered;
-                case "processOwner": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getAuthorId()).equals(keyword)).collect(Collectors.toList());
-                    return documentsFiltered;
-                case "link": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getLink()).equals(keyword)).collect(Collectors.toList());
-            }
-            return documentsFiltered;
-        }
+//                case "documentReference": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getDocumentCode()).equals(keyword)).collect(Collectors.toList());
+//                    return documentsFiltered;
+//                case "type": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getDocumentTypeId()).contains(keyword)).collect(Collectors.toList());
+//                    return documentsFiltered;
+//                case "name": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getName()).equals(keyword)).collect(Collectors.toList());
+//                    return documentsFiltered;
+//                case "status": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getStatusId()).equals(keyword)).collect(Collectors.toList());
+//                    return documentsFiltered;
+//                case "issueDate": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getCreationDate()).equals(keyword)).collect(Collectors.toList());
+//                    return documentsFiltered;
+//                case "revisionDate": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getModificationDate()).equals(keyword)).collect(Collectors.toList());
+//                    return documentsFiltered;
+////                case "revisionInterval": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.get()).equals(keyword)).collect(Collectors.toList());
+////                    return documentsFiltered;
+//                case "processOwner": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getAuthorId()).equals(keyword)).collect(Collectors.toList());
+//                    return documentsFiltered;
+//                case "link": documentsFiltered = documents.stream().filter(d -> String.valueOf(d.getLink()).equals(keyword)).collect(Collectors.toList());
+//            }
+//            return documentsFiltered;
+//        }
         return documents;
     }
 
