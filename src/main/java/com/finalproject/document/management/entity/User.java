@@ -1,4 +1,5 @@
 package com.finalproject.document.management.entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -27,6 +28,10 @@ public class User{
     private String lastName;
     @Column(name="email")
     private String email;
+    @JsonBackReference
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name="department_id")
+    private Department department;
     @Column(name="password")
     private String password;
     @Column(name="active")

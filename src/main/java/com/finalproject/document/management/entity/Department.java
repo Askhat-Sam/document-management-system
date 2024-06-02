@@ -1,12 +1,13 @@
 package com.finalproject.document.management.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
+
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -19,7 +20,9 @@ public class Department {
     private int id;
     @Column(name = "name")
     private int name;
-
+    @JsonManagedReference
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private List<User> users;
     public Department(int name) {
         this.name = name;
     }
