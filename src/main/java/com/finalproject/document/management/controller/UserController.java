@@ -31,6 +31,8 @@ public class UserController {
                                 @RequestParam(name = "column", required = false) String column,
                                 Model model) {
         List<User> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
+        User user = new User();
+        model.addAttribute(user);
         model.addAttribute("users", users);
         return "users/users";
     }
@@ -39,6 +41,13 @@ public class UserController {
     public User getUserById(@PathVariable("id") Integer id) {
         return userService.findById(id);
     }
+
+    @GetMapping("/addNew")
+    public String addNewUser(User user){
+        userService.update(user);
+        return "redirect:/document-management/users/getUsers";
+    }
+
 
     @PostMapping("/addNewUser")
     public String addNewUser(

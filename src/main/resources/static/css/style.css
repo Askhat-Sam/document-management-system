@@ -43,7 +43,6 @@ table {
     column-gap: 40px;
     background-color: rgb(0,32,91);
     color: white;
-    font-weight: bold;
     height: auto;
     padding: 10px;
 }
@@ -61,7 +60,7 @@ table {
 
 table, th, td {
   border-collapse: collapse;
-  font-size: 14px;
+  font-size: 15px;
   font-family: sans-serif;
 }
 .navbar-header {
@@ -92,17 +91,14 @@ td, th{
      line-height: 22px;
      color: white;
 }
-.sidebar{
-    color: white;
-    text-align: center;
-}
+
 .side-panel{
     margin-top: 1px;
+    font-size: 16px;
     width: 150px;
     background-color: #F0F0F0;
 }
 .side-panel div{
-    height: auto;
     margin: 10px;
 }
 .sidebar {

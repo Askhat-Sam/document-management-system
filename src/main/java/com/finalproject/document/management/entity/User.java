@@ -49,6 +49,16 @@ public class User{
         this.active = active;
     }
 
+    public User(String userId, String firstName, String lastName, String email, String departmentId, String role, String password) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.departmentId = departmentId;
+        this.role = role;
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "User{" +
