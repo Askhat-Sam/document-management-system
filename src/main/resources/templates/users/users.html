@@ -51,31 +51,26 @@
                             <thead>
                             <tr class="table-header">
                                 <th>Id</th>
-                                <th>Document code</th>
-                                <th>Type</th>
-                                <th>Title</th>
-                                <th>Revision numnber</th>
-                                <th>Status</th>
-                                <th>Creation date</th>
-                                <th>Modification date</th>
-                                <th>Author</th>
-                                <th>Link</th>
+                                <th>User ID</th>
+                                <th>First name</th>
+                                <th>Last name</th>
+                                <th>Email</th>
+                                <th>Department</th>
+                                <th>Role</th>
+                                <th>Password</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody class="table-body">
-                            <tr th:each="document : ${documents}" class="" style="height: 20px">
-                                <td th:text="${document.id}" />
-                                <td th:text="${document.documentCode}" />
-                                <td th:text="${document.documentTypeId}"/>
-                                <td th:text="${document.name}"/>
-                                <td th:text="${document.revisionNumber}"/>
-                                <td th:text="${document.statusId}"/>
-                                <td th:text="${document.creationDate}"/>
-                                <td th:text="${document.modificationDate}"/>
-                                <td th:text="${document.authorId}"/>
-                                <td th:text="${document.link}"/>
-
+                            <tr th:each="user : ${users}" class="" style="height: 20px">
+                                <td th:text="${user.id}" />
+                                <td th:text="${document.userId}" />
+                                <td th:text="${document.firstName}"/>
+                                <td th:text="${document.lastName}"/>
+                                <td th:text="${document.email}"/>
+                                <td th:text="${document.departmentId}"/>
+                                <td th:text="${document.role}"/>
+                                <td th:text="${document.password}"/>
                                 <td>
                                     <!--To change to icons-->
                                     <a class="action-tool-edit">

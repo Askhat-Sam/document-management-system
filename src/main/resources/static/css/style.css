@@ -1,26 +1,62 @@
-body {
-    background-color: #F0F0F0;
-}
-
-.container {
-    width: 100%;
-}
-
 table {
     width:100%
 }
+
+.action-button {
+    background: rgb(0,32,91);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+.body-container{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+.container {
+    display: flex;
+    flex-direction: row;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}
+.container-main{
+    height: 100vh;
+}
+.centered-div{
+    display: flex;
+    justify-content: center;
+}
+
 .main-container{
     border: 1px solid grey;
-    margin: 5px;
+    margin: 2px;
+    height: 100vh;
 }
-.table-container{
-    margin: 0px 5px 5px 5px;
-    padding: 0px 5px 5px 5px;
+.main-content{
+    width: 100%;
 }
+
 .header-container{
+    display: flex;
+    column-gap: 40px;
     background-color: rgb(0,32,91);
     color: white;
     font-weight: bold;
+    height: auto;
+    padding: 10px;
+}
+.empty-div{
+    width: 900px;
+}
+
+.flex-container {
+   display: flex;
+}
+.table-container{
+    margin: 0px 10px 5px 10px;
+    border: 1px solid grey;
 }
 
 table, th, td {
@@ -41,39 +77,66 @@ table, th, td {
 .navbar-header>input:hover {
     color: white;
 }
-
 .navbar {
-
     border-top: 1px solid grey;
     align-items: center;
 }
-
 tr{
     line-height: 28px;
 }
 td, th{
     padding-left: 4px;
 }
-
-
 .table-header {
     background: rgb(0,32,91);
      line-height: 22px;
      color: white;
 }
-.table-body {
-    background-color: #FFFFD6;
+.sidebar{
+    color: white;
+    text-align: center;
 }
-.flex-container {
-   display: flex;
-  align-items: center;
-  column-gap: 40px;
+.side-panel{
+    margin-top: 1px;
+    width: 150px;
+    background-color: #F0F0F0;
+}
+.side-panel div{
+    height: auto;
+    margin: 10px;
+}
+.sidebar {
+    height: 100vh;
+    width: 200px;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    background-color: #111;
+    padding-top: 20px;
+}
 
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 8px;
+    text-align: center;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+.sidebar ul li a:hover {
+    background-color: #575757;
 }
 
 .flex-container > div {
-    height: 30px;
-    margin: 10px;
+
 }
 
 button {
