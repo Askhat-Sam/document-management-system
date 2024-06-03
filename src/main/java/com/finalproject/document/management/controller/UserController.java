@@ -1,14 +1,17 @@
 package com.finalproject.document.management.controller;
 
 import com.finalproject.document.management.entity.Department;
+import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.DepartmentService;
 import com.finalproject.document.management.service.UserService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/document-management/users")
 public class UserController {
     private final UserService userService;
@@ -20,13 +23,16 @@ public class UserController {
     }
 
     @RequestMapping("/getUsers")
-    public List<User> showUsers(@RequestParam(name = "page", required = false) Integer page,
+    public String showUsers(@RequestParam(name = "page", required = false) Integer page,
                                 @RequestParam(name = "size", required = false) Integer size,
                                 @RequestParam(name = "sortBy", required = false) String sortBy,
                                 @RequestParam(name = "sortDirection", required = false) String sortDirection,
                                 @RequestParam(name = "keyword", required = false) String keyword,
-                                @RequestParam(name = "column", required = false) String column) {
-        return userService.findAll(page, size, sortBy, sortDirection, keyword, column);
+                                @RequestParam(name = "column", required = false) String column,
+                                Model model) {
+        List<User> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
+        model.addAttribute("users", users);
+        return "users/users";
     }
 
     @RequestMapping("/getUser/{id}")

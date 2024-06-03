@@ -25,24 +25,17 @@ public class DocumentController {
     private DocumentStatusService documentStatusService;
     private UserService userService;
 
-    @RequestMapping("/showDocuments")
-    public String showDocuments(Model model){
-        List<Document> documents = documentService.findAll();
-        // Add documents into model
-        model.addAttribute("documents", documents);
-
-        return "documents/documents";
-    }
-
-
     @GetMapping("/getDocuments")
-    public List<Document> getDocuments(@RequestParam(name = "page", required = false) Integer page,
+    public String getDocuments(@RequestParam(name = "page", required = false) Integer page,
                                        @RequestParam(name = "size", required = false) Integer size,
                                        @RequestParam(name = "sortBy", required = false) String sortBy,
                                        @RequestParam(name = "sortDirection", required = false) String sortDirection,
                                        @RequestParam(name = "keyword", required = false) String keyword,
-                                       @RequestParam(name = "column", required = false) String column) {
-        return documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
+                                       @RequestParam(name = "column", required = false) String column,
+                                        Model model) {
+        List<Document> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
+        model.addAttribute("documents", documents);
+        return "documents/documents";
     }
 
     @GetMapping("/getDocument/{id}")

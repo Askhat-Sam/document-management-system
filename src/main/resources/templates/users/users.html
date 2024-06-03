@@ -24,10 +24,14 @@
         <div class="flex-container">
             <div class="side-panel">
                 <div>
-                    <a class="side-panel-item">Documents</a>
+                    <a class="" th:href="@{/document-management/documents/getDocuments}">
+                        Documents
+                    </a>
                 </div>
                 <div>
-                    <a class="">Users</a>
+                    <a class="" th:href="@{/document-management/users/getUsers}">
+                        Users
+                    </a>
                 </div>
                 <div>
                     <a class="">Export</a>
@@ -64,13 +68,13 @@
                             <tbody class="table-body">
                             <tr th:each="user : ${users}" class="" style="height: 20px">
                                 <td th:text="${user.id}" />
-                                <td th:text="${document.userId}" />
-                                <td th:text="${document.firstName}"/>
-                                <td th:text="${document.lastName}"/>
-                                <td th:text="${document.email}"/>
-                                <td th:text="${document.departmentId}"/>
-                                <td th:text="${document.role}"/>
-                                <td th:text="${document.password}"/>
+                                <td th:text="${user.userId}" />
+                                <td th:text="${user.firstName}"/>
+                                <td th:text="${user.lastName}"/>
+                                <td th:text="${user.email}"/>
+                                <td th:text="${user.departmentId}"/>
+                                <td th:text="${user.role}"/>
+                                <td th:text="${user.password}"/>
                                 <td>
                                     <!--To change to icons-->
                                     <a class="action-tool-edit">
