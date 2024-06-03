@@ -77,7 +77,7 @@ public class UserController {
         // Get user by id
         User user = userService.findById(id);
         userService.deleteUserById(user);
-        return "User with id: " + id + " has been deleted";
+        return "redirect:/document-management/users/getUsers";
     }
 
     @PostMapping("/updateUser")
