@@ -59,6 +59,10 @@ public class User{
         this.password = password;
     }
 
+    public Department getDepartment() {
+        return department;
+    }
+
     @Override
     public String toString() {
         return "User{" +

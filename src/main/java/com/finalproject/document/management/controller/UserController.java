@@ -32,6 +32,10 @@ public class UserController {
                                 Model model) {
         List<User> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
         User user = new User();
+        // Add default department
+        Department department = new Department();
+        user.setDepartment(department);
+
         model.addAttribute(user);
         model.addAttribute("users", users);
         return "users/users";
@@ -42,11 +46,11 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @GetMapping("/addNew")
-    public String addNewUser(User user){
-        userService.update(user);
-        return "redirect:/document-management/users/getUsers";
-    }
+//    @GetMapping("/addNew")
+//    public String addNewUser(User user){
+//        userService.update(user);
+//
+//    }
 
 
     @PostMapping("/addNewUser")
@@ -57,8 +61,7 @@ public class UserController {
             @RequestParam("email") String email,
             @RequestParam("departmentId") int departmentId,
             @RequestParam("role") String role,
-            @RequestParam("password") String password,
-            @RequestParam("active") int active) {
+            @RequestParam("password") String password){
         // Generate bcrypt hash
 //        String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
 
@@ -69,7 +72,7 @@ public class UserController {
 
         userService.update(newUser);
 
-        return "User with user id: " + userId + " has been added";
+        return "redirect:/document-management/users/getUsers";
     }
 
     @GetMapping("/deleteUser")

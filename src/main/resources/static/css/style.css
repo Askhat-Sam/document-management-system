@@ -5,7 +5,7 @@ table {
 .action-button {
     background: rgb(0,32,91);
     color: white;
-    padding: 5px;
+    padding: 5px 10px;
     border-radius: 5px;
 }
 .body-container{
