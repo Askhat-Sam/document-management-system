@@ -14,7 +14,7 @@ public class DocumentType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private int id;
+    private Long id;
     @Column(name="type_name")
     private String typeName;
     @Column(name="type_short_name")

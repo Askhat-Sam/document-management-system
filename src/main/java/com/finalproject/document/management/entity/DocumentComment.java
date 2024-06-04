@@ -1,6 +1,7 @@
 package com.finalproject.document.management.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,30 +19,36 @@ public class DocumentComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private int id;
-    @Column(name="user_id")
-    private String userId;
+    private Long id;
+    @Column(name="document_id", insertable=false, updatable=false)
+    private int documentId;
+    @Column(name="user_id",  insertable=false, updatable=false)
+    private int userId;
+    @JsonManagedReference
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name="user_id")
+    private User user;
     @Column(name="date")
     private String date;
     @Column(name="comment")
     private String comment;
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name="document_id")
     private Document document;
 
-    public DocumentComment(String userId, String comment) {
+    public DocumentComment(int userId, String comment) {
         this.userId = userId;
         this.comment = comment;
     }
 
-    public DocumentComment(String userId, String date, String comment) {
+    public DocumentComment(int userId, String date, String comment) {
         this.userId = userId;
         this.date = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
         this.comment = comment;
     }
 
-    public DocumentComment(String userId, String comment, int documentId) {
+    public DocumentComment(int userId, String comment, int documentId) {
         this.userId = userId;
         this.comment = comment;
     }

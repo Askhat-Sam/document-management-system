@@ -13,7 +13,7 @@ public class DocumentStatusServiceImpl implements DocumentStatusService{
     }
 
     @Override
-    public DocumentStatus findByID(int id) {
+    public DocumentStatus findByID(Long id) {
         return documentStatusRepository.getById(id);
     }
 }

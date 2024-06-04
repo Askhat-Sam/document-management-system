@@ -4,9 +4,10 @@ import com.finalproject.document.management.entity.Department;
 import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.DepartmentService;
+import com.finalproject.document.management.service.DocumentCommentService;
+import com.finalproject.document.management.service.DocumentService;
 import com.finalproject.document.management.service.UserService;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +15,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+//@RestController
 @RequestMapping("/document-management/users")
 public class UserController {
     private final UserService userService;
     private final DepartmentService departmentService;
+    private final DocumentCommentService documentCommentService;
+    private final DocumentService documentService;
 
-    public UserController(UserService userService, DepartmentService departmentService) {
+    public UserController(UserService userService, DepartmentService departmentService, DocumentCommentService documentCommentService, DocumentService documentService) {
         this.userService = userService;
         this.departmentService = departmentService;
+        this.documentCommentService = documentCommentService;
+        this.documentService = documentService;
     }
 
     @RequestMapping("/getUsers")
@@ -44,8 +50,7 @@ public class UserController {
     }
 
     @RequestMapping("/getUser/{id}")
-    public User getUserById(@PathVariable("id") Integer id) {
-
+    public User getUserById(@PathVariable("id") Long id) {
         User user = userService.findById(id);
         System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%" + user);
         return userService.findById(id);
@@ -53,11 +58,9 @@ public class UserController {
 
     @RequestMapping("/getOne")
     @ResponseBody
-    public User findById(int id, Model model){
+    public User findById(Long id, Model model){
         User user = userService.findById(id);
         model.addAttribute(user);
-
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&& User from get one method " + user);
         return user;
     }
 
@@ -68,7 +71,7 @@ public class UserController {
             @RequestParam("firstName") String firstName,
             @RequestParam("lastName") String lastName,
             @RequestParam("email") String email,
-            @RequestParam("departmentId") int departmentId,
+            @RequestParam("departmentId") Long departmentId,
             @RequestParam("role") String role,
             @RequestParam("password") String password){
         //generate bcrypt hash
@@ -84,20 +87,31 @@ public class UserController {
     }
 
     @GetMapping("/deleteUser")
-    public String deleteUser(@RequestParam int id) {
+    public String deleteUser(@RequestParam Long id) {
         // Get user by id
         User user = userService.findById(id);
+
+        List<Document> documents = documentService.findByUserId(id);
+
+        for (Document document : documents) {
+            document.setAuthorId(null);
+        }
+
+        System.out.println("To be deleted: " + user);
+
+//        System.out.println("@@@@@@@Comments made by this user: " + id + " followos: " + documentComments);
+
         userService.deleteUserById(user);
         return "redirect:/document-management/users/getUsers";
     }
 
     @PostMapping("/updateUser")
-    public String updateUser(@RequestParam(name = "id", required = false) Integer id,
+    public String updateUser(@RequestParam(name = "id", required = false) Long id,
                              @RequestParam(name = "userId", required = false) String userId,
                              @RequestParam(name = "firstName", required = false) String firstName,
                              @RequestParam(name = "lastName", required = false) String lastName,
                              @RequestParam(name = "email", required = false) String email,
-                             @RequestParam(name = "departmentId", required = false) Integer departmentId,
+                             @RequestParam(name = "departmentId", required = false) Long departmentId,
                              @RequestParam(name = "password", required = false) String password,
                              @RequestParam(name = "active", required = false) Integer active,
                              @RequestParam(name = "role", required = false) String role) {

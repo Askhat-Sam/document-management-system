@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(Integer theId) {
+    public User findById(Long theId) {
 
         Optional<User> result = userRepository.findById(theId);
 
@@ -88,6 +88,11 @@ public class UserServiceImpl implements UserService {
         }
         return theUser;
 
+    }
+
+    @Override
+    public User findUserByIdWithDocuments(Long id) {
+        return userRepository.findUserWithDocuments(id);
     }
 
     private static Pageable doPagingAndSorting(Integer page, Integer size, String sortBy, String sortDirection) {

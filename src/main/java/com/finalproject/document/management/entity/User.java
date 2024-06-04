@@ -1,10 +1,15 @@
 package com.finalproject.document.management.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -16,27 +21,40 @@ public class User{
     @Id
     @Column(name="id")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+
     @Column(name="user_id")
     private String userId;
+
     @Column(name="first_name")
     private String firstName;
+
     @Column(name="last_name")
     private String lastName;
+
     @Column(name="email")
     private String email;
+
     @Column(insertable=false, updatable=false, name="department_id")
     private String departmentId;
+
     @JsonManagedReference
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name="department_id")
     private Department department;
+
     @Column(name="role")
     private String role;
+
     @Column(name="password")
     private String password;
+
     @Column(name="active")
     private int active;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    private List<Document> documents;
 
     public User(String userId, String firstName, String lastName, String email, Department department, String role, String password, int active) {
         this.userId = userId;
@@ -59,10 +77,6 @@ public class User{
         this.password = password;
     }
 
-    public Department getDepartment() {
-        return department;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -71,10 +85,16 @@ public class User{
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", departmentId='" + departmentId + '\'' +
                 ", department=" + department +
                 ", role='" + role + '\'' +
                 ", password='" + password + '\'' +
                 ", active=" + active +
+//                ", documents=" + documents +
                 '}';
+    }
+
+    public Department getDepartment() {
+        return department;
     }
 }

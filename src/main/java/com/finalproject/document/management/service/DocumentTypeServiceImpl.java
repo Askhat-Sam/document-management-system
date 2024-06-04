@@ -13,7 +13,7 @@ public class DocumentTypeServiceImpl implements DocumentTypeService{
     }
 
     @Override
-    public DocumentType findById(int id) {
+    public DocumentType findById(Long id) {
         return documentTypeRepository.getById(id);
     }
 }

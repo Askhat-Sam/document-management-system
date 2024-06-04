@@ -12,6 +12,8 @@ public interface UserService {
 
     void deleteUserById(User theUser);
 
-    User findById(Integer theId);
+    User findById(Long theId);
+
+    User findUserByIdWithDocuments(Long id);
 
 }

@@ -39,20 +39,20 @@ public class DocumentController {
     }
 
     @GetMapping("/getDocument/{id}")
-    public Document getDocument(@PathVariable("id") int id) {
+    public Document getDocument(@PathVariable("id") Long id) {
         return documentService.findById(id);
     }
 
     @PostMapping("/addNewDocument")
     public String addDocument(
             @RequestParam("documentCode") String documentCode,
-            @RequestParam("documentTypeId") int documentTypeId,
+            @RequestParam("documentTypeId") Long documentTypeId,
             @RequestParam("name") String name,
             @RequestParam("revisionNumber") int revisionNumber,
-            @RequestParam("statusId") int statusId,
+            @RequestParam("statusId") Long statusId,
             @RequestParam("creationDate") String creationDate,
             @RequestParam("modificationDate") String modificationDate,
-            @RequestParam("authorId") int authorId,
+            @RequestParam("authorId") Long authorId,
             @RequestParam("link") String link) {
 
         // Move the file into "documentsUploaded" folder
@@ -77,7 +77,7 @@ public class DocumentController {
     }
 
     @GetMapping("/deleteDocument")
-    public String deleteDocument(@RequestParam int id) {
+    public String deleteDocument(@RequestParam Long id) {
 
         Document document = documentService.findById(id);
 
@@ -92,15 +92,15 @@ public class DocumentController {
 
     @PostMapping("/updateDocument")
     public String updateDocument(
-            @RequestParam("id") int id,
+            @RequestParam("id") Long id,
             @RequestParam("documentCode") String documentCode,
-            @RequestParam("documentTypeId") int documentTypeId,
+            @RequestParam("documentTypeId") Long documentTypeId,
             @RequestParam("name") String name,
             @RequestParam("revisionNumber") int revisionNumber,
-            @RequestParam("statusId") int statusId,
+            @RequestParam("statusId") Long statusId,
             @RequestParam("creationDate") String creationDate,
             @RequestParam("modificationDate") String modificationDate,
-            @RequestParam("authorId") int authorId,
+            @RequestParam("authorId") Long authorId,
             @RequestParam("link") String link) {
 
         // Move the file into "documentsUploaded" folder
@@ -119,19 +119,17 @@ public class DocumentController {
         if (documentCode != null) {
             document.setDocumentCode(documentCode);
         } else if (documentType != null) {
-            document.setDocumentType(documentType);
+//            document.setDocumentType(documentType);
         } else if (name != null) {
             document.setName(name);
         } else if (String.valueOf(revisionNumber) != null) {
             document.setRevisionNumber(revisionNumber);
         } else if (documentStatus!= null) {
-            document.setDocumentStatus(documentStatus);
+//            document.setDocumentStatus(documentStatus);
         } else if (creationDate != null) {
             document.setCreationDate(creationDate);
         } else if (modificationDate != null) {
             document.setModificationDate(modificationDate);
-        } else if (user != null) {
-            document.setAuthorId(user.getUserId());
         } else if (link != null) {
             document.setLink(link);
         }
@@ -140,13 +138,13 @@ public class DocumentController {
     }
 
     @PostMapping("/addComment")
-    public String addComment(@RequestParam int documentId,
-                             @RequestParam String userId,
+    public String addComment(@RequestParam Long documentId,
+                             @RequestParam int userId,
                              @RequestParam String comment) {
         Document document = documentService.findById(documentId);
 
         // Add comment to the document
-        document.add(new DocumentComment(userId, new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()), comment));
+//        document.add(new DocumentComment(userId, new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()), comment)); ????
 
         documentService.update(document);
         return "Comment has been added into document with id " + documentId;

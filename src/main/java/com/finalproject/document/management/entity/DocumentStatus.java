@@ -13,7 +13,7 @@ public class DocumentStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private int id;
+    private Long id;
     @Column(name="status_name")
     private String statusName;
 

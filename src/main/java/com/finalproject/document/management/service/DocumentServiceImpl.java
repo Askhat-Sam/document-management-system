@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -82,7 +81,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     //Issue with using OPTIONAL ????
     @Override
-    public Document findById(int id) {
+    public Document findById(Long id) {
 
         Optional<Document> result =documentRepository.findById(id);
 
@@ -105,7 +104,7 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public void deleteDocumentById(int id) {
+    public void deleteDocumentById(Long id) {
         documentRepository.deleteById(id);
     }
 
@@ -203,6 +202,11 @@ public class DocumentServiceImpl implements DocumentService {
             logger.log(Level.SEVERE, "Workbook cannot be closed");
         }
         return "List has been downloaded";
+    }
+
+    @Override
+    public List<Document> findByUserId(Long id) {
+        return documentRepository.findByUserId(id);
     }
 
     private static Pageable doPagingAndSorting(Integer page, Integer size, String sortBy, String sortDirection) {

@@ -9,53 +9,61 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name="document")
-public class Document{
+@Table(name = "document")
+public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private int id;
-    @Column(name="document_code")
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "document_code")
     private String documentCode;
-    @Column(insertable=false, updatable=false, name="document_type_id")
+
+    @Column(insertable = false, updatable = false, name = "document_type_id")
     private int documentTypeId;
-    @Column(name="name")
+
+    @Column(name = "name")
     private String name;
-    @Column(name="revision_number")
+
+    @Column(name = "revision_number")
     private int revisionNumber;
-    @Column(insertable=false, updatable=false, name="status_id")
+
+    @Column(insertable = false, updatable = false, name = "status_id")
     private int statusId;
-    @Column(name="creation_date")
+
+    @Column(name = "creation_date")
     private String creationDate;
-    @Column(name="modification_date")
+
+    @Column(name = "modification_date")
     private String modificationDate;
-    @Column(name="author_id",insertable=false, updatable=false)
-    private String authorId;
-    @Column(name="link")
+
+    @Column(name = "author_id", insertable = false, updatable = false)
+    private Integer authorId;
+
+    @Column(name = "link")
     private String link;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JsonBackReference
+    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
     private List<DocumentComment> comments;
 
-    @JsonManagedReference
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name="status_id")
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "status_id")
     private DocumentStatus documentStatus;
 
-    @JsonManagedReference
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name="document_type_id")
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "document_type_id")
     private DocumentType documentType;
 
-    @JsonManagedReference
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name="author_id")
+    @JsonBackReference
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "author_id")
     private User user;
 
     public Document(String documentCode, DocumentType documentType, String name, int revisionNumber,
@@ -68,7 +76,6 @@ public class Document{
         this.documentStatus = documentStatus;
         this.creationDate = creationDate;
         this.modificationDate = modificationDate;
-        this.authorId = authorId;
         this.user =user;
         this.link = link;
     }
@@ -87,17 +94,17 @@ public class Document{
                 ", modificationDate='" + modificationDate + '\'' +
                 ", authorId='" + authorId + '\'' +
                 ", link='" + link + '\'' +
-                ", comments=" + comments +
+//                ", comments=" + comments +
                 ", documentStatus=" + documentStatus +
                 ", documentType=" + documentType +
                 '}';
     }
 
-    public void add(DocumentComment comment){
-        if(comment==null){
-            comments = new ArrayList<>();
-        }
-        comments.add(comment);
-        comment.setDocument(this);
-    }
+//    public void add(DocumentComment comment){
+//        if(comment==null){
+//            comments = new ArrayList<>();
+//        }
+//        comments.add(comment);
+//        comment.setDocument(this);
+//    }
 }
