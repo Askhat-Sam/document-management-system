@@ -7,6 +7,7 @@
 - implement search for user - DONE
 - implement download of list of ALL users - ?
 - how drop count of id after deleting the user - ?????????????
+- BCRYPT not working fo the new or updated users - ?
 
 #Documents:
 - implement sorting (by different columns) - DONE

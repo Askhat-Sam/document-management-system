@@ -154,6 +154,7 @@ public class DocumentController {
     @GetMapping("/downloadList")
     public String downloadList() throws IOException, IllegalAccessException {
         List<Document> documents = documentService.findAll();
-        return documentService.downloadList(documents);
+        documentService.downloadList(documents);
+        return "redirect:/document-management/users/getUsers";
     }
 }
