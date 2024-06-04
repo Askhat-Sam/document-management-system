@@ -21,7 +21,11 @@
             <div>User Name: John.S (MANAGER)</div>
             <div class="empty-div"></div>
             <div>Notifications</div>
-            <div>Logout</div>
+            <div>
+                <form action="#" th:action="@{/logout}" method="POST" class="navbar-header">
+                    <input type="submit" value="Logout" class="" />
+                </form>
+            </div>
         </div>
         <div class="flex-container">
             <div class="side-panel">

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Access denied</title>
+</head>
+<body>
+    <h2 class="errorMessage">
+        Access Denied - User <span sec:authentication="principal.username"></span> is not authorized to access this resource.</h2>
+    <a th:href="@{/tools/list}">Back to main page</a>
+</body>
+</html>

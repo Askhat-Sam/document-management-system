@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login Page</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+
+    <style>
+        .failed{
+        color: red
+        }
+        .login-form-style{
+        top: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h3>Login page</h3>
+<div class="login-form-style">
+    <form action="#" th:action="@{/authenticateTheUser}" method="POST" >
+
+        <div th:if="${param.logout}">
+            <i class="failed">You have been logged out</i>
+        </div>
+        <p>
+            Username:<input type="text" name="username">
+        </p>
+        <p>
+            Password:<input type="password" name="password">
+        </p>
+        <input type="submit" value="Login">
+    </form>
+</div>
+
+
+</body>
+</html>
