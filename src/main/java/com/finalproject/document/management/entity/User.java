@@ -36,10 +36,10 @@ public class User{
     private String email;
 
     @Column(insertable=false, updatable=false, name="department_id")
-    private String departmentId;
+    private Long departmentId;
 
     @JsonManagedReference
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinColumn(name="department_id")
     private Department department;
 
@@ -52,8 +52,8 @@ public class User{
     @Column(name="active")
     private int active;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<Document> documents;
 
     public User(String userId, String firstName, String lastName, String email, Department department, String role, String password, int active) {
@@ -67,7 +67,7 @@ public class User{
         this.active = active;
     }
 
-    public User(String userId, String firstName, String lastName, String email, String departmentId, String role, String password) {
+    public User(String userId, String firstName, String lastName, String email, Long departmentId, String role, String password) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;

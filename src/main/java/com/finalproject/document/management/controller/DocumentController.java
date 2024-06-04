@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-//@RestController
+@RestController
 @Controller
 @RequestMapping("/document-management/documents")
 @AllArgsConstructor
@@ -25,17 +25,27 @@ public class DocumentController {
     private DocumentStatusService documentStatusService;
     private UserService userService;
 
+//    @GetMapping("/getDocuments")
+//    public String getDocuments(@RequestParam(name = "page", required = false) Integer page,
+//                                       @RequestParam(name = "size", required = false) Integer size,
+//                                       @RequestParam(name = "sortBy", required = false) String sortBy,
+//                                       @RequestParam(name = "sortDirection", required = false) String sortDirection,
+//                                       @RequestParam(name = "keyword", required = false) String keyword,
+//                                       @RequestParam(name = "column", required = false) String column,
+//                                        Model model) {
+//        List<Document> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
+//        model.addAttribute("documents", documents);
+//        return "documents/documents";
+//    }
     @GetMapping("/getDocuments")
-    public String getDocuments(@RequestParam(name = "page", required = false) Integer page,
-                                       @RequestParam(name = "size", required = false) Integer size,
-                                       @RequestParam(name = "sortBy", required = false) String sortBy,
-                                       @RequestParam(name = "sortDirection", required = false) String sortDirection,
-                                       @RequestParam(name = "keyword", required = false) String keyword,
-                                       @RequestParam(name = "column", required = false) String column,
-                                        Model model) {
+    public List<Document>  getDocuments(@RequestParam(name = "page", required = false) Integer page,
+                               @RequestParam(name = "size", required = false) Integer size,
+                               @RequestParam(name = "sortBy", required = false) String sortBy,
+                               @RequestParam(name = "sortDirection", required = false) String sortDirection,
+                               @RequestParam(name = "keyword", required = false) String keyword,
+                               @RequestParam(name = "column", required = false) String column) {
         List<Document> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
-        model.addAttribute("documents", documents);
-        return "documents/documents";
+        return documents;
     }
 
     @GetMapping("/getDocument/{id}")
@@ -43,12 +53,45 @@ public class DocumentController {
         return documentService.findById(id);
     }
 
+//    @PostMapping("/addNewDocument")
+//    public String addDocument(
+//            @RequestParam("documentCode") String documentCode,
+//            @RequestParam("documentTypeId") Long documentTypeId,
+//            @RequestParam("name") String name,
+//            @RequestParam("revisionNumber") int revisionNumber,
+//            @RequestParam("statusId") Long statusId,
+//            @RequestParam("creationDate") String creationDate,
+//            @RequestParam("modificationDate") String modificationDate,
+//            @RequestParam("authorId") Long authorId,
+//            @RequestParam("link") String link) {
+//
+//        // Move the file into "documentsUploaded" folder
+//        String newLink = documentService.uploadDocument(link, "upload");
+//
+//        // Get document type
+//        DocumentType documentType = documentTypeService.findById(documentTypeId);
+//
+//        // Get document status object
+//        DocumentStatus documentStatus = documentStatusService.findByID(statusId);
+//
+//        // Get user by authorId
+//        User user = userService.findById(authorId);
+//
+//        // Create a new document
+//        Document document = new Document(documentCode, documentType, name, revisionNumber, documentStatus,
+//                creationDate, modificationDate, user, newLink);
+//
+//        // Add document into database
+//        documentService.update(document);
+//        return "Document with reference: " + documentCode + " has been added into database";
+//    }
+
     @PostMapping("/addNewDocument")
     public String addDocument(
             @RequestParam("documentCode") String documentCode,
             @RequestParam("documentTypeId") Long documentTypeId,
             @RequestParam("name") String name,
-            @RequestParam("revisionNumber") int revisionNumber,
+            @RequestParam("revisionNumber") Long revisionNumber,
             @RequestParam("statusId") Long statusId,
             @RequestParam("creationDate") String creationDate,
             @RequestParam("modificationDate") String modificationDate,
@@ -92,40 +135,43 @@ public class DocumentController {
 
     @PostMapping("/updateDocument")
     public String updateDocument(
-            @RequestParam("id") Long id,
-            @RequestParam("documentCode") String documentCode,
-            @RequestParam("documentTypeId") Long documentTypeId,
-            @RequestParam("name") String name,
-            @RequestParam("revisionNumber") int revisionNumber,
-            @RequestParam("statusId") Long statusId,
-            @RequestParam("creationDate") String creationDate,
-            @RequestParam("modificationDate") String modificationDate,
-            @RequestParam("authorId") Long authorId,
-            @RequestParam("link") String link) {
+            @RequestParam(name="id", required = false) Long id,
+            @RequestParam(name="documentCode", required = false) String documentCode,
+            @RequestParam(name="documentTypeId", required = false) Long documentTypeId,
+            @RequestParam(name="name", required = false) String name,
+            @RequestParam(name="revisionNumber", required = false) Long revisionNumber,
+            @RequestParam(name="statusId", required = false) Long statusId,
+            @RequestParam(name="creationDate", required = false) String creationDate,
+            @RequestParam(name="modificationDate", required = false) String modificationDate,
+            @RequestParam(name="authorId", required = false) Long authorId,
+            @RequestParam(name="link", required = false) String link) {
 
         // Move the file into "documentsUploaded" folder
-        String newLink = documentService.uploadDocument(link, "upload");
-
-        // Get document type
-        DocumentType documentType = documentTypeService.findById(documentTypeId);
-
-        // Get document status object
-        DocumentStatus documentStatus = documentStatusService.findByID(statusId);
-
-        // Get user by authorId
-        User user = userService.findById(authorId);
+//        String newLink = documentService.uploadDocument(link, "upload");
 
         Document document = documentService.findById(id);
+
+        // Get document type
+        if (documentTypeId!=null) {
+            DocumentType documentType = documentTypeService.findById(documentTypeId);
+            document.setDocumentType(documentType);
+        }
+        // Get document status object
+        if (statusId!=null) {
+            DocumentStatus documentStatus = documentStatusService.findByID(statusId);
+            document.setDocumentStatus(documentStatus);
+        }
+        // Get user by authorId
+        if (authorId!=null) {
+            User user = userService.findById(authorId);
+        }
+
         if (documentCode != null) {
             document.setDocumentCode(documentCode);
-        } else if (documentType != null) {
-//            document.setDocumentType(documentType);
         } else if (name != null) {
             document.setName(name);
         } else if (String.valueOf(revisionNumber) != null) {
             document.setRevisionNumber(revisionNumber);
-        } else if (documentStatus!= null) {
-//            document.setDocumentStatus(documentStatus);
         } else if (creationDate != null) {
             document.setCreationDate(creationDate);
         } else if (modificationDate != null) {
@@ -139,12 +185,12 @@ public class DocumentController {
 
     @PostMapping("/addComment")
     public String addComment(@RequestParam Long documentId,
-                             @RequestParam int userId,
+                             @RequestParam Long userId,
                              @RequestParam String comment) {
         Document document = documentService.findById(documentId);
 
         // Add comment to the document
-//        document.add(new DocumentComment(userId, new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()), comment)); ????
+        document.add(new DocumentComment(userId, new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()), comment));
 
         documentService.update(document);
         return "Comment has been added into document with id " + documentId;
@@ -155,4 +201,10 @@ public class DocumentController {
         documentService.downloadList(documents);
         return "redirect:/document-management/users/getUsers";
     }
+
+//    @GetMapping("/newDocument")
+//    public String newDocument(){
+//        return "documents/add-document";
+//    }
+
 }

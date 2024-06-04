@@ -39,51 +39,20 @@
             </div>
             <div class="body-container">
                 <div class="navbar flex-container">
+                    1. Document info
+<!--                    <form action="#" th:action="@{/document-management/users/addNewUser}" th:object = "${user}" method="POST">-->
+                        <input type="text" class="form-control mb-4 w-75"  placeholder="Document code">
+                        <input type="text" class="form-control mb-4 w-75"  placeholder="Title">
+                        <input type="text" class="form-control mb-4 w-75"  placeholder="Type">
+                        <input type="text" class="form-control mb-4 w-75" placeholder="Department">
+                        <input type="text" class="form-control mb-4 w-75"  placeholder="Author">
+                        <input type="text" class="form-control mb-4 w-75"  placeholder="Creation date">
+                        <input type="text" class="form-control mb-4 w-75"  placeholder="Revision interval">
+                        <button type="submit" class="">Save</button>
+<!--                    </form>-->
                 </div>
                 <div class="main-content">
                     <div class="table-container">
-                        <table class="">
-                            <thead>
-                            <tr class="table-header">
-                                <th>Id</th>
-                                <th>Document code</th>
-                                <th>Type</th>
-                                <th>Title</th>
-                                <th>Revision numnber</th>
-                                <th>Status</th>
-                                <th>Creation date</th>
-                                <th>Modification date</th>
-                                <th>Author</th>
-                                <th>Link</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody class="table-body">
-                            <tr th:each="document : ${documents}" class="" style="height: 20px">
-                                <td th:text="${document.id}" />
-                                <td th:text="${document.documentCode}" />
-                                <td th:text="${document.documentTypeId}"/>
-                                <td th:text="${document.name}"/>
-                                <td th:text="${document.revisionNumber}"/>
-                                <td th:text="${document.statusId}"/>
-                                <td th:text="${document.creationDate}"/>
-                                <td th:text="${document.modificationDate}"/>
-                                <td th:text="${document.authorId}"/>
-                                <td th:text="${document.link}"/>
-
-                                <td>
-                                    <!--To change to icons-->
-                                    <a class="action-tool-edit">
-                                        View
-                                    </a>
-                                    <a class="action-btn-delete"
-                                       onclick="if (!(confirm('Are you sure you want to delete this tool?'))) return false">
-                                        Delete
-                                    </a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
                     </div>
                     <div class="centered-div">
                         <div>
@@ -96,6 +65,5 @@
     </div>
 </body>
 
-<!-- Modal form for add tool-->
 
 </html>

@@ -44,16 +44,18 @@ http://localhost:8080/document-management/documents/getDocuments?page=2&size=1
 http://localhost:8080/document-management/documents/getDocument/3
 
 // POST - Adding new document
-http://localhost:8080/document-management/documents/addNewDocument?documentReference=POL_008&type=Policy&name=OHS policy&status=In progress&revision=2&issueDate=02.05.2022&revisionDate=04.09.2022&revisionInterval=365&processOwner=OHS department&link=src/main/resources/docuemntSource/file2.txt
+http://localhost:8080/document-management/documents/addNewDocument?documentCode=POL-666&documentTypeId=1&name=OHS policy 2&revisionNumber=1&statusId=2&creationDate=02.05.2022&modificationDate=04.09.2022&authorId=2&link=src/main/resources/docuemntSource/newFile2.txt
 
 // POST - Updating the document by id
-http://localhost:8080/document-management/documents/updateDocument?id=3&documentReference=INS-002
+http://localhost:8080/document-management/documents/updateDocument?id=2&documentCode=INS-002
 
 // GET - Deleting the document by id
 http://localhost:8080/document-management/documents/deleteDocument?id=7
 
 // POST - Add comment to the document
 http://localhost:8080/document-management/documents/addComment?documentId=3&userId=Sarah.S&comment=Typo
+
+STOPPPPPPPED BELOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 // GET - Search for documents by keyword (e.g Policy) and in certain column (e.g type)
 http://localhost:8080/document-management/documents/getDocuments?keyword=Policy&column=type

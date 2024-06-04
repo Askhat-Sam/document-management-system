@@ -7,7 +7,6 @@ import com.finalproject.document.management.service.DepartmentService;
 import com.finalproject.document.management.service.DocumentCommentService;
 import com.finalproject.document.management.service.DocumentService;
 import com.finalproject.document.management.service.UserService;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -75,11 +74,11 @@ public class UserController {
             @RequestParam("role") String role,
             @RequestParam("password") String password){
         //generate bcrypt hash
-        String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
+//        String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
         Department department = departmentService.findById(departmentId);
 
         // Create a new user
-        User newUser = new User(userId, firstName, lastName, email, department, role, pw_hash, 1);
+        User newUser = new User(userId, firstName, lastName, email, department, role, password, 1);
 
         userService.update(newUser);
 
@@ -136,8 +135,8 @@ public class UserController {
         }
         if (password != null) {
             // Generate bcrypt hash
-            String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt()) +".q";
-            user.setPassword(passwordHashed);
+//            String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt()) +".q";
+            user.setPassword(password);
         }
         if (role != null) {
             user.setRole(role);

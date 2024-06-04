@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +31,10 @@ public class Document {
     private String name;
 
     @Column(name = "revision_number")
-    private int revisionNumber;
+    private Long revisionNumber;
 
     @Column(insertable = false, updatable = false, name = "status_id")
-    private int statusId;
+    private Long statusId;
 
     @Column(name = "creation_date")
     private String creationDate;
@@ -42,31 +43,35 @@ public class Document {
     private String modificationDate;
 
     @Column(name = "author_id", insertable = false, updatable = false)
-    private Integer authorId;
+    private Long authorId;
 
     @Column(name = "link")
     private String link;
 
-    @JsonBackReference
-    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
+    @JsonManagedReference
+    @OneToMany(mappedBy = "document", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<DocumentComment> comments;
 
-    @JsonBackReference
+    @JsonManagedReference
+    @OneToMany(mappedBy = "documentRevision", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    private List<DocumentRevision> revisions;
+
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status_id")
     private DocumentStatus documentStatus;
 
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinColumn(name = "document_type_id")
     private DocumentType documentType;
 
-    @JsonBackReference
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinColumn(name = "author_id")
     private User user;
 
-    public Document(String documentCode, DocumentType documentType, String name, int revisionNumber,
+    public Document(String documentCode, DocumentType documentType, String name, Long revisionNumber,
                     DocumentStatus documentStatus, String creationDate, String modificationDate,
                     User user, String link) {
         this.documentCode = documentCode;
@@ -80,7 +85,6 @@ public class Document {
         this.link = link;
     }
 
-
     @Override
     public String toString() {
         return "Document{" +
@@ -92,19 +96,21 @@ public class Document {
                 ", statusId=" + statusId +
                 ", creationDate='" + creationDate + '\'' +
                 ", modificationDate='" + modificationDate + '\'' +
-                ", authorId='" + authorId + '\'' +
+                ", authorId=" + authorId +
                 ", link='" + link + '\'' +
-//                ", comments=" + comments +
+                ", comments=" + comments +
+                ", revisions=" + revisions +
                 ", documentStatus=" + documentStatus +
                 ", documentType=" + documentType +
+                ", user=" + user +
                 '}';
     }
 
-//    public void add(DocumentComment comment){
-//        if(comment==null){
-//            comments = new ArrayList<>();
-//        }
-//        comments.add(comment);
-//        comment.setDocument(this);
-//    }
+    public void add(DocumentComment comment){
+        if(comment==null){
+            comments = new ArrayList<>();
+        }
+        comments.add(comment);
+        comment.setDocument(this);
+    }
 }
