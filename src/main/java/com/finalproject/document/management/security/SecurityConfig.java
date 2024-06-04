@@ -41,6 +41,7 @@ public class SecurityConfig {
                         form
                                 .loginPage("/showMyLoginPage")
                                 .loginProcessingUrl("/authenticateTheUser")
+                                .defaultSuccessUrl("/users.html", true)
                                 .permitAll()
                 )
 
