@@ -29,23 +29,19 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests(configurer ->
                         configurer
-                                .requestMatchers("/document-management/users/getUsers").hasRole("EMPLOYEE")
-                                .requestMatchers("/document-management/users/getUsers").hasRole("MANAGER")
-                                .requestMatchers("/document-management/users/getUsers").hasRole("ADMIN")
-//                                .requestMatchers("/tools/showFormForAdd").hasRole("MANAGER")
-//                                .requestMatchers("/tools/admin-user").hasRole("ADMIN")
-//                                .requestMatchers("/tools/transactions").hasAnyRole("MANAGER","ADMIN")
+                                .requestMatchers("/document-management/users/getUsers").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form->
                         form
                                 .loginPage("/showMyLoginPage")
                                 .loginProcessingUrl("/authenticateTheUser")
-                                .defaultSuccessUrl("/users.html", true)
+                                .defaultSuccessUrl("/document-management/documents/getDocuments", true)
                                 .permitAll()
                 )
 
-                .logout(logout->logout.permitAll()
+                .logout(logout->
+                        logout.permitAll()
                 )
                 .exceptionHandling(configurer ->
                         configurer

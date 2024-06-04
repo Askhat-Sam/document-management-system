@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -18,7 +19,9 @@
     <div class="main-container">
         <div class="flex-container header-container">
             <div>Document Management Service</div>
-            <div>User Name: John.S (MANAGER)</div>
+            <div>
+                <p>User: <span sec:authentication="principal.username"></span> <span sec:authentication="principal.authorities"></span></p>
+            </div>
             <div class="empty-div"></div>
             <div>Notifications</div>
             <div>
