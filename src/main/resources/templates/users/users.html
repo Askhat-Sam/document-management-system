@@ -18,15 +18,15 @@
 <body>
     <div class="main-container">
         <div class="flex-container header-container">
-            <div>Document Management Service</div>
-            <div>
+            <div class="navbar-div">Document Management Service</div>
+            <div class="navbar-div">
                 <p>User: <span sec:authentication="principal.username"></span> <span sec:authentication="principal.authorities"></span></p>
             </div>
-            <div class="empty-div"></div>
-            <div>Notifications</div>
+            <div class="empty-div navbar-div"></div>
+            <div class="navbar-div">Notifications</div>
             <div>
                 <form action="#" th:action="@{/logout}" method="POST" class="navbar-header">
-                    <input type="submit" value="Logout" class="" />
+                    <input type="submit" value="Logout" class=""/>
                 </form>
             </div>
         </div>

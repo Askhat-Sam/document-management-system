@@ -53,6 +53,13 @@ table {
 .flex-container {
    display: flex;
 }
+
+.navbar-div {
+       padding: 5px;
+       color: white;
+       font-weight: 500;
+}
+
 .table-container{
     margin: 0px 10px 5px 10px;
     border: 1px solid grey;
@@ -70,11 +77,11 @@ table, th, td {
     background: transparent;
     border: none;
     padding: 5px;
-    color: black;
+    color: white;
     font-weight: 500;
 }
 .navbar-header>input:hover {
-    color: white;
+    color: red;
 }
 .navbar {
     border-top: 1px solid grey;
