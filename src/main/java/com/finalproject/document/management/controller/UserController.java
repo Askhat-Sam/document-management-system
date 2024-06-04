@@ -71,12 +71,12 @@ public class UserController {
             @RequestParam("role") String role,
             @RequestParam("password") String password){
         // Generate bcrypt hash
-//        String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
+        String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
 
         Department department = departmentService.findById(departmentId);
 
         // Create a new user
-        User newUser = new User(userId, firstName, lastName, email, department, role, password, 1);
+        User newUser = new User(userId, firstName, lastName, email, department, role, passwordHashed, 1);
 
         userService.update(newUser);
 
