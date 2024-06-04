@@ -134,25 +134,23 @@ public class DocumentServiceImpl implements DocumentService {
         Cell cellHeader = rowHeader.createCell(0);
         cellHeader.setCellValue("Id");
         Cell cellHeader1 = rowHeader.createCell(1);
-        cellHeader1.setCellValue("Document reference");
+        cellHeader1.setCellValue("Document code");
         Cell cellHeader2 = rowHeader.createCell(2);
         cellHeader2.setCellValue("Type");
         Cell cellHeader3 = rowHeader.createCell(3);
         cellHeader3.setCellValue("Name");
         Cell cellHeader4 = rowHeader.createCell(4);
-        cellHeader4.setCellValue("Revision");
+        cellHeader4.setCellValue("Revision number");
         Cell cellHeader5 = rowHeader.createCell(5);
         cellHeader5.setCellValue("Status");
         Cell cellHeader6 = rowHeader.createCell(6);
-        cellHeader6.setCellValue("Issue date");
+        cellHeader6.setCellValue("Creation date");
         Cell cellHeader7 = rowHeader.createCell(7);
-        cellHeader7.setCellValue("Revision date");
+        cellHeader7.setCellValue("Modification date");
         Cell cellHeader8 = rowHeader.createCell(8);
-        cellHeader8.setCellValue("Revision date");
+        cellHeader8.setCellValue("Process owner");
         Cell cellHeader9 = rowHeader.createCell(9);
-        cellHeader9.setCellValue("Process owner");
-        Cell cellHeader10 = rowHeader.createCell(10);
-        cellHeader10.setCellValue("Link");
+        cellHeader9.setCellValue("Link");
 
         // Add table body values
         for (Document d:documents) {
@@ -173,12 +171,10 @@ public class DocumentServiceImpl implements DocumentService {
             cell6.setCellValue(d.getCreationDate());
             Cell cell7= row.createCell(7);
             cell7.setCellValue(d.getModificationDate());
-//            Cell cell8= row.createCell(8);
-//            cell8.setCellValue(d.getRevisionInterval());
+            Cell cell8= row.createCell(8);
+            cell8.setCellValue(d.getAuthorId());
             Cell cell9= row.createCell(9);
-            cell9.setCellValue(d.getAuthorId());
-            Cell cell10= row.createCell(10);
-            cell10.setCellValue(d.getLink());
+            cell9.setCellValue(d.getLink());
         }
 
         // Apply borders to all non-empty cells
