@@ -87,7 +87,7 @@
                                 <td th:text="${user.password}"/>
                                 <td>
                                     <!--To change to icons-->
-                                    <a th:href="@{/document-management/users/getUser(id=${user.id})}" class="action-user-edit">
+                                    <a th:href="@{/document-management/users/getOne(id=${user.id})}" class="action-user-edit">
                                         View
                                     </a>
                                     <a th:href="@{/document-management/users/deleteUser(id=${user.id})}"
@@ -95,6 +95,9 @@
                                        onclick="if (!(confirm('Are you sure you want to delete this tool?'))) return false">
                                         Delete
                                     </a>
+<!--                                    <button type="button" class="" data-bs-toggle="modal" data-bs-target="#editModalUser">-->
+<!--                                        Edit user TEST-->
+<!--                                    </button>-->
                                 </td>
                             </tr>
                             </tbody>
@@ -118,7 +121,7 @@
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="addModalLabel">Add new user</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>S
+            </div>
             <div class="modal-body">
                 <form action="#" th:action="@{/document-management/users/addNewUser}" th:object = "${user}" method="POST">
                     <input type="text" class="form-control mb-4 w-75"  placeholder="User ID" th:field = "*{userId}">
@@ -135,51 +138,29 @@
     </div>
 </div>
 
-<!--<div class="modal fade" id="editModalUser" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">-->
-<!--    <form action="#" th:action="@{/users/updateUser}" method="PUT">-->
-<!--        <div class="modal-dialog">-->
-<!--            <div class="modal-content">-->
-<!--                <div class="modal-header">-->
-<!--                    <h1 class="modal-title fs-5" id="editModalLabel">Edit user</h1>-->
-<!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--                </div>-->
-<!--                <div class="modal-body">-->
-<!--                    <input type="text" class="form-control mb-4 w-75"  placeholder="User ID" name="id" id="idUserEdit">-->
-<!--                    <input type="text" class="form-control mb-4 w-75"  placeholder="First name" name="firstName" id="firstNameUserEdit">-->
-<!--                    <input type="text" class="form-control mb-4 w-75"  placeholder="Last name" name="lastName" id="lastNameUserEdit">-->
-<!--                    <input type="text" class="form-control mb-4 w-75" placeholder="Email" name="email" id="emailUserEdit">-->
-<!--                    <input type="text" class="form-control mb-4 w-75"  placeholder="Department ID" name="departmentId" id="departmentIdUserEdit">-->
-<!--                    <input type="text" class="form-control mb-4 w-75"  placeholder="Role" name="role" id="roleUserEdit">-->
-<!--                    <input type="text" class="form-control mb-4 w-75"  placeholder="Password" name="password" id="passwordUserEdit">-->
-
-<!--                    <button type="submit" class="btn btn-info col-5">Save</button>-->
-
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </form>-->
-<!--</div>-->
-
-<div class="modal fade" id="editModalUser" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+<!-- Modal form for edit tool-->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="editModalLabel">Edit tool</h1>
+                <h1 class="modal-title fs-5" id="editModalLabel">Edit USER</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="#" th:action="@{/tools/update}" method="PUT">
-                    <input type="text" class="form-control mb-4 w-75"  placeholder="User ID" name="id" id="idUserEdit">
-                    <input type="text" class="form-control mb-4 w-75"  placeholder="First name" name="firstName" id="firstNameUserEdit">
-                    <input type="text" class="form-control mb-4 w-75"  placeholder="Last name" name="lastName" id="lastNameUserEdit">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Email" name="email" id="emailUserEdit">
-                    <input type="text" class="form-control mb-4 w-75"  placeholder="Department ID" name="departmentId" id="departmentIdUserEdit">
-                    <input type="text" class="form-control mb-4 w-75"  placeholder="Role" name="role" id="roleUserEdit">
-                    <input type="text" class="form-control mb-4 w-75"  placeholder="Password" name="password" id="passwordUserEdit">
+                <form action="#" th:action="@{/document-management/users/updateUser}" method="POST">
+                    <input type="text" class="form-control mb-4 w-75" placeholder="ID" name="id" id="idEdit">
+                    <input type="text" class="form-control mb-4 w-75" placeholder="USER ID" name="userId" id="userIdEdit">
+                    <input type="text" class="form-control mb-4 w-75" placeholder="USER ID" name="firstName" id="firstNameEdit">
+                    <input type="text" class="form-control mb-4 w-75" placeholder="USER ID" name="lastName" id="lastNameEdit">
+                    <input type="text" class="form-control mb-4 w-75" placeholder="USER ID" name="email" id="emailEdit">
+                    <input type="text" class="form-control mb-4 w-75" placeholder="USER ID" name="departmentId" id="departmentIdEdit">
+                    <input type="text" class="form-control mb-4 w-75" placeholder="USER ID" name="role" id="roleEdit">
+                    <input type="text" class="form-control mb-4 w-75" placeholder="USER ID" name="password" id="passwordEdit">
                     <button type="submit" class="">Save</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 </html>

@@ -5,6 +5,7 @@ import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.DepartmentService;
 import com.finalproject.document.management.service.UserService;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -43,14 +44,21 @@ public class UserController {
 
     @RequestMapping("/getUser/{id}")
     public User getUserById(@PathVariable("id") Integer id) {
+
+        User user = userService.findById(id);
+        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%" + user);
         return userService.findById(id);
     }
 
-//    @GetMapping("/addNew")
-//    public String addNewUser(User user){
-//        userService.update(user);
-//
-//    }
+    @RequestMapping("/getOne")
+    @ResponseBody
+    public User findById(int id, Model model){
+        User user = userService.findById(id);
+        model.addAttribute(user);
+
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&& User from get one method " + user);
+        return user;
+    }
 
 
     @PostMapping("/addNewUser")
@@ -84,15 +92,15 @@ public class UserController {
     }
 
     @PostMapping("/updateUser")
-    public String updateUser(@RequestParam(name = "id", required = false) int id,
+    public String updateUser(@RequestParam(name = "id", required = false) Integer id,
                              @RequestParam(name = "userId", required = false) String userId,
                              @RequestParam(name = "firstName", required = false) String firstName,
                              @RequestParam(name = "lastName", required = false) String lastName,
                              @RequestParam(name = "email", required = false) String email,
+                             @RequestParam(name = "departmentId", required = false) Integer departmentId,
                              @RequestParam(name = "password", required = false) String password,
                              @RequestParam(name = "active", required = false) Integer active,
-                             @RequestParam(name = "roleId", required = false) String roleId,
-                             @RequestParam(name = "userRole", required = false) String userRole) {
+                             @RequestParam(name = "role", required = false) String role) {
 
         User user = userService.findById(id);
 
@@ -106,20 +114,24 @@ public class UserController {
             user.setLastName(lastName);
         }
         if (email != null) {
-            user.setUserId(email);
+            user.setEmail(email);
+        }
+        if (departmentId != null) {
+            Department department = departmentService.findById(departmentId);
+            user.setDepartment(department);
         }
         if (password != null) {
             // Generate bcrypt hash
-            //String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
-            user.setPassword(password);
+            String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
+            user.setPassword(passwordHashed);
         }
-        if (active != null) {
-            user.setActive(active);
+        if (role != null) {
+            user.setRole(role);
         }
 
         userService.update(user);
 
-        return "User with id: " + id + " has been updated";
+        return "redirect:/document-management/users/getUsers";
     }
 
 
