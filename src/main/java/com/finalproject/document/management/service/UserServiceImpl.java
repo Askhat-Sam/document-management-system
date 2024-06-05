@@ -51,26 +51,26 @@ public class UserServiceImpl implements UserService {
         //if searching by keyword in certain column. Uses "contains" to search by the part of word.
         if (keyword!=null&&column!=null) {
             switch (column) {
-                case "id":
-                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getId()).contains(keyword)).collect(Collectors.toList());
+                case "Id":
+                    usersFiltered = users.stream().filter(u -> Long.toString(u.getId()).contains(keyword)).collect(Collectors.toList());
                     return usersFiltered;
-                case "userId":
-                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getUserId()).contains(keyword)).collect(Collectors.toList());
+                case "User Id":
+                    usersFiltered = users.stream().filter(u -> u.getUserId().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
-                case "firstName":
-                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getFirstName()).contains(keyword)).collect(Collectors.toList());
+                case "First name":
+                    usersFiltered = users.stream().filter(u -> u.getFirstName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
-                case "lastName":
-                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getLastName()).contains(keyword)).collect(Collectors.toList());
+                case "Last name":
+                    usersFiltered = users.stream().filter(u -> u.getLastName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
-                case "email":
-                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getEmail()).contains(keyword)).collect(Collectors.toList());
+                case "Email":
+                    usersFiltered = users.stream().filter(u -> u.getEmail().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
-                case "departmentId":
-                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getDepartmentId()).contains(keyword)).collect(Collectors.toList());
+                case "Department Id":
+                    usersFiltered = users.stream().filter(u -> Long.toString(u.getDepartmentId()).contains(keyword)).collect(Collectors.toList());
                     return usersFiltered;
-                case "role":
-                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getRole()).contains(keyword)).collect(Collectors.toList());
+                case "Role":
+                    usersFiltered = users.stream().filter(u -> u.getRole().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
             }
             return usersFiltered;
