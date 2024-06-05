@@ -47,14 +47,16 @@
             </div>
             <div class="body-container">
                 <div class="navbar flex-container">
-                    <form class="navbar-form" role="search" modelAttribute="selectedOption">
-                        <input  name="keyword"  class="" type="search" placeholder="Search" aria-label="Search" id="searchText">
+                    <form th:action="@{/document-management/documents/getDocuments}" th:object="${search}" class="navbar-form" role="search">
+                        <input name="keyword" th:value="${keyword}" class="" type="search" placeholder="Search" aria-label="Search" id="searchText">
 
-                        <!--            <select th:field="*{header}" name="option" class="search-list" area-label="">-->
-                        <!--                <option th:each="tempHeader : ${headers}" th:value="${tempHeader}" th:text="${tempHeader}"/>-->
-                        <!--            </select>-->
+                        <select th:field="*{column}" name="column" class="search-list" aria-label="">
+                            <option th:each="tempHeader : ${headers}" th:value="${tempHeader}" th:text="${tempHeader}"></option>
+                        </select>
 
                         <button class="" type="submit">Search</button>
+                        &nbsp;
+                        <!-- <button class="" type="button" onclick="clearFilter()">Clear</button> -->
                     </form>
                 </div>
                 <div class="main-content">
