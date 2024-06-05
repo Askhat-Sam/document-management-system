@@ -243,28 +243,28 @@ public class DocumentServiceImpl implements DocumentService {
         try {
             Path filePathTemp = findFile(Paths.get(filePath), fileName);
             if (filePathTemp != null) {
-                System.out.println("File found: " + filePath.toString());
-                String oldPath = filePath + "\\" + fileName;
+                String oldPath = filePath  + fileName;
                 Path oldFilePath = Paths.get(oldPath);
-                String newPath = "src/main/resources/donwloads/" + fileName;
+                String newPath = actionType.equals("upload") ? "src/main/resources/documentsUploaded/" + fileName:
+                        "src/main/resources/donwloads/" + fileName;
+
                 Path newFilePath = Paths.get(newPath);
 
-                File file = actionType.equals("upload") ? new File(oldFilePath.toUri()): new File(newPath);
+                File file = new File(oldPath);
 
                 if (!file.exists()){
                     logger.log(Level.SEVERE, "File cannot be found");
                 } else {
-                    if (actionType.equals("upload")) {
+                    if (actionType.equals("upload") || actionType.equals("download")) {
                         try {
                             Files.copy(oldFilePath, newFilePath, StandardCopyOption.REPLACE_EXISTING);
-//                            Files.delete(oldFilePath);
                             return "src/main/resources/donwloads/" + fileName;
                         } catch (IOException e) {
                             logger.log(Level.SEVERE, "File cannot be uploaded");
                         }
                     } else if (actionType.equals("delete")) {
                         try {
-                            Files.delete(newFilePath);
+                            Files.delete(oldFilePath);
                         } catch (IOException e) {
                             logger.log(Level.SEVERE, "File cannot be deleted");
                         }
@@ -276,8 +276,6 @@ public class DocumentServiceImpl implements DocumentService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
-
         return null;
     }
 

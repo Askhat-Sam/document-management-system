@@ -95,11 +95,12 @@ public class DocumentController {
             @RequestParam("statusId") Long statusId,
             @RequestParam("creationDate") String creationDate,
             @RequestParam("modificationDate") String modificationDate,
-            @RequestParam("authorId") Long authorId,
-            @RequestParam("link") String link) {
+            @RequestParam("authorId") Long authorId) {
+
+        String link = "src/main/resources/documentSource/";
 
         // Move the file into "documentsUploaded" folder
-        String newLink = documentService.uploadDocument(name, link, "upload");
+        String newLink = documentService.uploadDocument(name + ".pdf", link, "upload");
 
         // Get document type
         DocumentType documentType = documentTypeService.findById(documentTypeId);
@@ -116,7 +117,7 @@ public class DocumentController {
 
         // Add document into database
         documentService.update(document);
-        return "Document with reference: " + documentCode + " has been added into database";
+        return "redirect:/document-management/users/getUsers";
     }
 
     @GetMapping("/downloadDocument")
@@ -125,7 +126,7 @@ public class DocumentController {
         Document document = documentService.findById(id);
 
         // Move the file into "documentsUploaded" folder
-        documentService.uploadDocument(document.getName() + ".pdf","src/main/resources/documentSource", "upload");
+        documentService.uploadDocument(document.getName() + ".pdf","src/main/resources/documentSource/", "download");
 
         return "redirect:/document-management/users/getUsers";
     }
