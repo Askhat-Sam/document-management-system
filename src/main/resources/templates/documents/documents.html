@@ -40,7 +40,7 @@
                     </a>
                 </div>
                 <div>
-                    <a class="" th:href="@{/document-management/users/downloadList}">
+                    <a class="" th:href="@{/document-management/documents/downloadList}">
                         Export as list
                     </a>
                 </div>
@@ -90,6 +90,9 @@
 
                                 <td>
                                     <!--To change to icons-->
+                                    <a th:href="@{/document-management/documents/downloadDocument(id=${document.id})}" class="action-tool-edit">
+                                        download
+                                    </a>
                                     <a class="action-tool-edit">
                                         View
                                     </a>
