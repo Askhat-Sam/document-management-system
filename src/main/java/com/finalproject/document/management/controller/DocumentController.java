@@ -126,9 +126,9 @@ public class DocumentController {
         Document document = documentService.findById(id);
 
         // Move the file into "documentsUploaded" folder
-        documentService.uploadDocument(document.getName() + ".pdf","src/main/resources/documentSource/", "download");
+        documentService.uploadDocument(document.getName() + ".pdf","src/main/resources/documentsUploaded/", "download");
 
-        return "redirect:/document-management/users/getUsers";
+        return "redirect:/document-management/documents/getDocuments";
     }
 
     @GetMapping("/deleteDocument")
