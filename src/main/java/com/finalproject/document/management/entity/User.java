@@ -53,7 +53,7 @@ public class User{
     private int active;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     private List<Document> documents;
 
     public User(String userId, String firstName, String lastName, String email, Department department, String role, String password, int active) {

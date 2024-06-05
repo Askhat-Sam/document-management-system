@@ -12,9 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@RestController
 @Controller
-//@RestController
 @RequestMapping("/document-management/users")
 public class UserController {
     private final UserService userService;
@@ -29,24 +28,36 @@ public class UserController {
         this.documentService = documentService;
     }
 
-    @RequestMapping("/getUsers")
-    public String showUsers(@RequestParam(name = "page", required = false) Integer page,
-                                @RequestParam(name = "size", required = false) Integer size,
-                                @RequestParam(name = "sortBy", required = false) String sortBy,
-                                @RequestParam(name = "sortDirection", required = false) String sortDirection,
-                                @RequestParam(name = "keyword", required = false) String keyword,
-                                @RequestParam(name = "column", required = false) String column,
-                                Model model) {
-        List<User> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
-        User user = new User();
-        // Add default department
-        Department department = new Department();
-        user.setDepartment(department);
+//    @RequestMapping("/getUsers")
+//    public String showUsers(@RequestParam(name = "page", required = false) Integer page,
+//                                @RequestParam(name = "size", required = false) Integer size,
+//                                @RequestParam(name = "sortBy", required = false) String sortBy,
+//                                @RequestParam(name = "sortDirection", required = false) String sortDirection,
+//                                @RequestParam(name = "keyword", required = false) String keyword,
+//                                @RequestParam(name = "column", required = false) String column,
+//                                Model model) {
+//        List<User> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
+//        User user = new User();
+//        // Add default department
+//        Department department = new Department();
+//        user.setDepartment(department);
+//
+//        model.addAttribute(user);
+//        model.addAttribute("users", users);
+//        return "users/users";
+//    }
+@RequestMapping("/getUsers")
+public List<User>  showUsers(@RequestParam(name = "page", required = false) Integer page,
+                        @RequestParam(name = "size", required = false) Integer size,
+                        @RequestParam(name = "sortBy", required = false) String sortBy,
+                        @RequestParam(name = "sortDirection", required = false) String sortDirection,
+                        @RequestParam(name = "keyword", required = false) String keyword,
+                        @RequestParam(name = "column", required = false) String column,
+                        Model model) {
+    List<User> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
 
-        model.addAttribute(user);
-        model.addAttribute("users", users);
-        return "users/users";
-    }
+    return users;
+}
 
     @RequestMapping("/getUser/{id}")
     public User getUserById(@PathVariable("id") Long id) {

@@ -55,8 +55,6 @@ http://localhost:8080/document-management/documents/deleteDocument?id=7
 // POST - Add comment to the document
 http://localhost:8080/document-management/documents/addComment?documentId=3&userId=Sarah.S&comment=Typo
 
-STOPPPPPPPED BELOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 // GET - Search for documents by keyword (e.g Policy) and in certain column (e.g type)
 http://localhost:8080/document-management/documents/getDocuments?keyword=Policy&column=type
 
@@ -82,7 +80,7 @@ http://localhost:8080/document-management/users/getUsers?page=0&size=1
 http://localhost:8080/document-management/users/getUser/2
 
 // POST - Adding new user
-http://localhost:8080/document-management/users/addNewUser?userId=Stephen.K&firstName=Stephen&lastName=King&email=Stephen.King@gmail.cpm&password=123&active=1&roleId=Stephen.K&userRole=ROLE_MANAGER
+http://localhost:8080/document-management/users/addNewUser?userId=Stephen.K&firstName=Stephen&lastName=King&email=Stephen.King@gmail.cpm&departmentId=4&role=ROLE_MANAGER&password=fun123
 
 // POST - Updating the user by id
 http://localhost:8080/document-management/documents/updateDocument?id=3&documentReference=POL-777
@@ -90,5 +88,5 @@ http://localhost:8080/document-management/documents/updateDocument?id=3&document
 // GET - Deleting the user by id
 http://localhost:8080/document-management/users/deleteUser?id=9
 
-// GET - Search for documents by keyword (e.g Policy) and in certain column (e.g type)
+// GET - Search for user by keyword (e.g Policy) and in certain column (e.g type)
 http://localhost:8080/document-management/users/getUsers?keyword=john&column=firstName

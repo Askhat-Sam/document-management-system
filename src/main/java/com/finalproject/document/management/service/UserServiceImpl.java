@@ -54,6 +54,12 @@ public class UserServiceImpl implements UserService {
                 case "email":
                     usersFiltered = users.stream().filter(u -> String.valueOf(u.getEmail()).contains(keyword)).collect(Collectors.toList());
                     return usersFiltered;
+                case "departmentId":
+                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getDepartmentId()).contains(keyword)).collect(Collectors.toList());
+                    return usersFiltered;
+                case "role":
+                    usersFiltered = users.stream().filter(u -> String.valueOf(u.getRole()).contains(keyword)).collect(Collectors.toList());
+                    return usersFiltered;
             }
             return usersFiltered;
         }
