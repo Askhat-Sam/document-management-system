@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 @RestController
 @Controller
@@ -155,6 +156,13 @@ public List<User>  showUsers(@RequestParam(name = "page", required = false) Inte
 
         userService.update(user);
 
+        return "redirect:/document-management/users/getUsers";
+    }
+
+    @GetMapping("/downloadList")
+    public String downloadList() throws IOException, IllegalAccessException {
+        List<User> documents = userService.findAll();
+        userService.downloadList(documents);
         return "redirect:/document-management/users/getUsers";
     }
 

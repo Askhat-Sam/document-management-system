@@ -5,7 +5,7 @@
 - implement pagination - DONE
 - implement reverse sorting - DONE
 - implement search for user - DONE
-- implement download of list of ALL users - ?
+- implement download of list of ALL users - DONE
 - how drop count of id after deleting the user - ?????????????
 - BCRYPT not working fo the new or updated users - ?
 
@@ -90,3 +90,6 @@ http://localhost:8080/document-management/users/deleteUser?id=9
 
 // GET - Search for user by keyword (e.g Policy) and in certain column (e.g type)
 http://localhost:8080/document-management/users/getUsers?keyword=john&column=firstName
+
+// GET - Download the list of all users
+http://localhost:8080/document-management/users/downloadList
