@@ -1,7 +1,7 @@
 package com.finalproject.document.management.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +17,8 @@ public class DocumentRevision {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    @Column(name = "user_id")
+    private Long userId;
     @Column(name = "document_id", insertable=false, updatable=false)
     private Long documentId;
     @Column(name = "date")
@@ -25,15 +27,17 @@ public class DocumentRevision {
     private Long revisionNumber;
     @Column(name = "statusId")
     private Long statusId;
+    @Column(name = "description")
+    private String description;
     @Column(name = "link")
     private String link;
     @Column(name = "validated_user_id")
     private Long validatedUserId;
 
-    @JsonBackReference
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @JsonIgnore
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name="document_id")
-    private Document documentRevision;
+    private Document document;
 
     public DocumentRevision(Long documentId, String date, Long revisionNumber, Long statusId, String link, Long validatedUserId) {
         this.documentId = documentId;
@@ -42,6 +46,17 @@ public class DocumentRevision {
         this.statusId = statusId;
         this.link = link;
         this.validatedUserId = validatedUserId;
+    }
+
+    public DocumentRevision(Long userId, Long revisionNumber, Long statusId, String date, String description, String link, Long validatingUserId) {
+        this.userId =userId;
+        this.revisionNumber =revisionNumber;
+        this.statusId =statusId;
+        this.date =date;
+        this.description =description;
+        this.link =link;
+        this.validatedUserId =validatedUserId;
+
     }
 
     @Override

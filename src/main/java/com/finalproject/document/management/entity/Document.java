@@ -53,7 +53,7 @@ public class Document {
     private List<DocumentComment> comments;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "documentRevision", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "document", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<DocumentRevision> revisions;
 
     @JsonManagedReference
@@ -106,11 +106,19 @@ public class Document {
                 '}';
     }
 
-    public void add(DocumentComment comment){
+    public void addComment(DocumentComment comment){
         if(comment==null){
             comments = new ArrayList<>();
         }
         comments.add(comment);
         comment.setDocument(this);
+    }
+
+    public void addRevision(DocumentRevision revision){
+        if(revision==null){
+            revisions = new ArrayList<>();
+        }
+        revisions.add(revision);
+        revision.setDocument(this);
     }
 }

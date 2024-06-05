@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@RestController
+//@RestController
 @Controller
 @RequestMapping("/document-management/documents")
 @AllArgsConstructor
@@ -25,28 +25,28 @@ public class DocumentController {
     private DocumentStatusService documentStatusService;
     private UserService userService;
 
-//    @GetMapping("/getDocuments")
-//    public String getDocuments(@RequestParam(name = "page", required = false) Integer page,
-//                                       @RequestParam(name = "size", required = false) Integer size,
-//                                       @RequestParam(name = "sortBy", required = false) String sortBy,
-//                                       @RequestParam(name = "sortDirection", required = false) String sortDirection,
-//                                       @RequestParam(name = "keyword", required = false) String keyword,
-//                                       @RequestParam(name = "column", required = false) String column,
-//                                        Model model) {
-//        List<Document> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
-//        model.addAttribute("documents", documents);
-//        return "documents/documents";
-//    }
     @GetMapping("/getDocuments")
-    public List<Document>  getDocuments(@RequestParam(name = "page", required = false) Integer page,
-                               @RequestParam(name = "size", required = false) Integer size,
-                               @RequestParam(name = "sortBy", required = false) String sortBy,
-                               @RequestParam(name = "sortDirection", required = false) String sortDirection,
-                               @RequestParam(name = "keyword", required = false) String keyword,
-                               @RequestParam(name = "column", required = false) String column) {
+    public String getDocuments(@RequestParam(name = "page", required = false) Integer page,
+                                       @RequestParam(name = "size", required = false) Integer size,
+                                       @RequestParam(name = "sortBy", required = false) String sortBy,
+                                       @RequestParam(name = "sortDirection", required = false) String sortDirection,
+                                       @RequestParam(name = "keyword", required = false) String keyword,
+                                       @RequestParam(name = "column", required = false) String column,
+                                        Model model) {
         List<Document> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
-        return documents;
+        model.addAttribute("documents", documents);
+        return "documents/documents";
     }
+//    @GetMapping("/getDocuments")
+//    public List<Document>  getDocuments(@RequestParam(name = "page", required = false) Integer page,
+//                               @RequestParam(name = "size", required = false) Integer size,
+//                               @RequestParam(name = "sortBy", required = false) String sortBy,
+//                               @RequestParam(name = "sortDirection", required = false) String sortDirection,
+//                               @RequestParam(name = "keyword", required = false) String keyword,
+//                               @RequestParam(name = "column", required = false) String column) {
+//        List<Document> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
+//        return documents;
+//    }
 
     @GetMapping("/getDocument/{id}")
     public Document getDocument(@PathVariable("id") Long id) {
@@ -190,7 +190,7 @@ public class DocumentController {
         Document document = documentService.findById(documentId);
 
         // Add comment to the document
-        document.add(new DocumentComment(userId, new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()), comment));
+        document.addComment(new DocumentComment(userId, new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()), comment));
 
         documentService.update(document);
         return "Comment has been added into document with id " + documentId;
@@ -201,6 +201,26 @@ public class DocumentController {
         documentService.downloadList(documents);
         return "redirect:/document-management/users/getUsers";
     }
+
+    @PostMapping("/addRevision")
+    public String addRevision(
+                             @RequestParam Long userId,
+                             @RequestParam Long documentId,
+                             @RequestParam String date,
+                              @RequestParam Long revisionNumber,
+                             @RequestParam Long statusId,
+                              @RequestParam String description,
+                              @RequestParam String link,
+                              @RequestParam Long validatingUserId) {
+        Document document = documentService.findById(documentId);
+
+        // Add comment to the document
+        document.addRevision(new DocumentRevision(userId, revisionNumber, statusId, date, description, link, validatingUserId));
+
+        documentService.update(document);
+        return "Revision has been added into document with id " + documentId;
+    }
+
 
 //    @GetMapping("/newDocument")
 //    public String newDocument(){
