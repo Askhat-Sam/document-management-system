@@ -14,10 +14,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -110,8 +108,8 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public String uploadDocument(String path, String actionType) {
-        return moveFile(path, actionType);
+    public String uploadDocument(String fileName, String path, String actionType) {
+        return moveFile(fileName, path, actionType);
     }
 
     public <T> String downloadList(List<T> documentsList) {
@@ -240,37 +238,69 @@ public class DocumentServiceImpl implements DocumentService {
         }
     }
 
-    private static String moveFile(String filePath, String actionType) {
+    private static String moveFile(String fileName, String filePath, String actionType) {
 
-        Path oldFilePath = Paths.get(filePath);
+        try {
+            Path filePathTemp = findFile(Paths.get(filePath), fileName);
+            if (filePathTemp != null) {
+                System.out.println("File found: " + filePath.toString());
+                String oldPath = filePath + "\\" + fileName;
+                Path oldFilePath = Paths.get(oldPath);
+                String newPath = "src/main/resources/donwloads/" + fileName;
+                Path newFilePath = Paths.get(newPath);
 
-        String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
+                File file = actionType.equals("upload") ? new File(oldFilePath.toUri()): new File(newPath);
 
-        String newPath = "src/main/resources/documentsUploaded/" + fileName;
-
-        Path newFilePath = Paths.get(newPath);
-
-        File file = actionType.equals("upload") ? new File(filePath): new File(newPath);
-
-        if (!file.exists()){
-            logger.log(Level.SEVERE, "File cannot be found");
-        } else {
-            if (actionType.equals("upload")) {
-                try {
-                    Files.copy(oldFilePath, newFilePath, StandardCopyOption.REPLACE_EXISTING);
-                    Files.delete(oldFilePath);
-                    return "src/main/resources/documentsUploaded/" + fileName;
-                } catch (IOException e) {
-                    logger.log(Level.SEVERE, "File cannot be uploaded");
+                if (!file.exists()){
+                    logger.log(Level.SEVERE, "File cannot be found");
+                } else {
+                    if (actionType.equals("upload")) {
+                        try {
+                            Files.copy(oldFilePath, newFilePath, StandardCopyOption.REPLACE_EXISTING);
+//                            Files.delete(oldFilePath);
+                            return "src/main/resources/donwloads/" + fileName;
+                        } catch (IOException e) {
+                            logger.log(Level.SEVERE, "File cannot be uploaded");
+                        }
+                    } else if (actionType.equals("delete")) {
+                        try {
+                            Files.delete(newFilePath);
+                        } catch (IOException e) {
+                            logger.log(Level.SEVERE, "File cannot be deleted");
+                        }
+                    }
                 }
-            } else if (actionType.equals("delete")) {
-                try {
-                    Files.delete(newFilePath);
-                } catch (IOException e) {
-                    logger.log(Level.SEVERE, "File cannot be deleted");
-                }
+            } else {
+                System.out.println("File not found.");
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+//        String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
+
         return null;
+    }
+
+    public static Path findFile(Path directory, String fileName) throws IOException {
+        final Path[] foundFile = {null};
+
+        Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                if (file.getFileName().toString().equals(fileName)) {
+                    foundFile[0] = file;
+                    return FileVisitResult.TERMINATE; // Stop the file tree walk
+                }
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                // Handle file visit failure
+                return FileVisitResult.CONTINUE;
+            }
+        });
+
+        return foundFile[0];
     }
 }

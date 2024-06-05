@@ -14,7 +14,7 @@ public interface DocumentService {
 
     void deleteDocumentById(Long id);
 
-    String uploadDocument(String path, String actionType);
+    String uploadDocument(String fileName, String path, String actionType);
 
      <T> String downloadList(List<T> list);
     List<Document> findByUserId(Long id);

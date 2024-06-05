@@ -61,6 +61,9 @@ http://localhost:8080/document-management/documents/getDocuments?keyword=Policy&
 // GET - Download the list of all documents
 http://localhost:8080/document-management/documents/downloadList
 
+// GET - Download the one documetn by ID
+http://localhost:8080/document-management/documents/downloadDocument?id=1
+
 // POST - Add new revision of the document
 http://localhost:8080/document-management/documents/addRevision?userId=3&documentId=3&date=01.01.2024&revisionNumber=2&statusId=1&description=New revision of the new document&link=Some link to document&validatingUserId=1
 ---------------------------------------------------------------------------------------------------------------------

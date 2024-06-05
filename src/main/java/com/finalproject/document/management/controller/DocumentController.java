@@ -99,7 +99,7 @@ public class DocumentController {
             @RequestParam("link") String link) {
 
         // Move the file into "documentsUploaded" folder
-        String newLink = documentService.uploadDocument(link, "upload");
+        String newLink = documentService.uploadDocument(name, link, "upload");
 
         // Get document type
         DocumentType documentType = documentTypeService.findById(documentTypeId);
@@ -119,6 +119,17 @@ public class DocumentController {
         return "Document with reference: " + documentCode + " has been added into database";
     }
 
+    @GetMapping("/downloadDocument")
+    public String downloadDocument(@RequestParam Long id) {
+
+        Document document = documentService.findById(id);
+
+        // Move the file into "documentsUploaded" folder
+        documentService.uploadDocument(document.getName() + ".pdf","src/main/resources/documentSource", "upload");
+
+        return "redirect:/document-management/users/getUsers";
+    }
+
     @GetMapping("/deleteDocument")
     public String deleteDocument(@RequestParam Long id) {
 
@@ -126,7 +137,7 @@ public class DocumentController {
 
 
         // Delete the file from "documentsUploaded" folder
-        documentService.uploadDocument(document.getLink(), "delete");
+        documentService.uploadDocument(document.getName() + ".pdf", document.getLink(), "delete");
 
         documentService.deleteDocumentById(id);
 
