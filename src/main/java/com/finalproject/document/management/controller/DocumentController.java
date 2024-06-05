@@ -41,19 +41,7 @@ public class DocumentController {
 
         List<Document> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
         model.addAttribute("documents", documents);
-//        if (option!=null){
-//            switch(option) {
-//                case "Id":
-//                    for (Document document : documents) {
-//                        if (String.valueOf(document.getId()).contains(keyword)) {
-//                            filteredTools.add(tool);
-//                        }
-//                    }
-//                    theModel.addAttribute("tools", filteredTools);
-//                    theModel.addAttribute("keyword", keyword); // to keep  previously selected option
-//                    theModel.addAttribute("option", option); // to keep  previous input in search input box
-//                    return "tools/list-tools";
-//            }
+
         model.addAttribute("search", search);
         model.addAttribute("headers", headers);
         return "documents/documents";

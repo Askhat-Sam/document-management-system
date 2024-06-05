@@ -72,6 +72,7 @@ public class UserServiceImpl implements UserService {
                 case "Role":
                     usersFiltered = users.stream().filter(u -> u.getRole().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
+                case "All": return users;
             }
             return usersFiltered;
         }

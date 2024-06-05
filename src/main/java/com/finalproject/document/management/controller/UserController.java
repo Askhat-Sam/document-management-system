@@ -2,11 +2,13 @@ package com.finalproject.document.management.controller;
 
 import com.finalproject.document.management.entity.Department;
 import com.finalproject.document.management.entity.Document;
+import com.finalproject.document.management.entity.Search;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.DepartmentService;
 import com.finalproject.document.management.service.DocumentCommentService;
 import com.finalproject.document.management.service.DocumentService;
 import com.finalproject.document.management.service.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,8 @@ public class UserController {
     private final DepartmentService departmentService;
     private final DocumentCommentService documentCommentService;
     private final DocumentService documentService;
+    @Value("${headersUser}")
+    private List<String> headers;
 
     public UserController(UserService userService, DepartmentService departmentService, DocumentCommentService documentCommentService, DocumentService documentService) {
         this.userService = userService;
@@ -37,6 +41,7 @@ public class UserController {
                                 @RequestParam(name = "keyword", required = false) String keyword,
                                 @RequestParam(name = "column", required = false) String column,
                                 Model model) {
+        Search search = new Search();
         List<User> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
         User user = new User();
         // Add default department
@@ -45,6 +50,8 @@ public class UserController {
 
         model.addAttribute(user);
         model.addAttribute("users", users);
+        model.addAttribute("search", search);
+        model.addAttribute("headers", headers);
         return "users/users";
     }
 //@RequestMapping("/getUsers")

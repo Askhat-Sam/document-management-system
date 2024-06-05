@@ -50,11 +50,11 @@ public class DocumentServiceImpl implements DocumentService {
             switch(column) {
                 case "Id": documentsFiltered = documents.stream().filter(d -> Long.toString(d.getId()).contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Document Code": documentsFiltered = documents.stream().filter(d -> d.getDocumentCode().contains(keyword)).collect(Collectors.toList());
+                case "Document Code": documentsFiltered = documents.stream().filter(d -> d.getDocumentCode().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
                 case "Document Type Id": documentsFiltered = documents.stream().filter(d ->  Long.toString(d.getDocumentTypeId()).contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Name": documentsFiltered = documents.stream().filter(d -> d.getName().contains(keyword)).collect(Collectors.toList());
+                case "Title": documentsFiltered = documents.stream().filter(d -> d.getName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
                 case "Status Id": documentsFiltered = documents.stream().filter(d -> Long.toString(d.getStatusId()).contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
