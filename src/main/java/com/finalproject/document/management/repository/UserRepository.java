@@ -10,4 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT * FROM user u INNER JOIN document d ON u.id = d.author_id WHERE u.id = :userId", nativeQuery = true)
     User findUserWithDocuments(@Param("userId") Long userId);
+
+    @Query(value="SELECT * FROM user WHERE user.id = :id", nativeQuery = true)
+    User getOldUserById(@Param("id") Long id);
 }

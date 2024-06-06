@@ -13,6 +13,7 @@ public interface UserService {
     void deleteUserById(User theUser);
 
     User findById(Long theId);
+    User getOldUserById(Long theId);
 
     <T> String downloadList(List<T> list);
 

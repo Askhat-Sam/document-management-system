@@ -8,6 +8,8 @@
 - implement download of list of ALL users - DONE
 - how drop count of id after deleting the user - ?????????????
 - BCRYPT not working fo the new or updated users - ?
+- pop up notification window if the users list exported successfully - ? 
+- convert department id to Department.getName() in search - ?
 
 #Documents:
 - implement sorting (by different columns) - DONE
@@ -22,7 +24,12 @@
 - exception handling fod bad request (e.g request to delete user which is not exist in DB) - ?
 - implement search for documents - DONE
 - implement download of list of ALL document - DONE
-- to apply filter to the list of documents
+- to apply filter to the list of documents - ?
+- search does not work for creation date and modification date - ?
+
+
+#Aspect:
+- change entityManger.clear to native query to force the findById to get data from DB instead of cached
 ---------------------------------------------------------------------------------------------------------------------
 
 -- Available endpoints ---
@@ -61,7 +68,7 @@ http://localhost:8080/document-management/documents/getDocuments?keyword=Policy&
 // GET - Download the list of all documents
 http://localhost:8080/document-management/documents/downloadList
 
-// GET - Download the one documetn by ID
+// GET - Download the one document by ID
 http://localhost:8080/document-management/documents/downloadDocument?id=1
 
 // POST - Add new revision of the document

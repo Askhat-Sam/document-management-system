@@ -98,6 +98,9 @@ td, th{
      line-height: 22px;
      color: white;
 }
+.search-list {
+    width: 300px;
+}
 
 .side-panel{
     margin-top: 1px;

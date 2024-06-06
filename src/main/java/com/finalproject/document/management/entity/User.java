@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Entity
@@ -16,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name="user")
-public class User{
+public class User implements Comparable<User>{
 
     @Id
     @Column(name="id")
@@ -96,5 +97,16 @@ public class User{
 
     public Department getDepartment() {
         return department;
+    }
+
+    @Override
+    public int compareTo(User o) {
+        return Comparator.comparing(User::getUserId)
+                .thenComparing(User::getFirstName)
+                .thenComparing(User::getLastName)
+                .thenComparing(User::getEmail)
+                .thenComparing(User::getDepartmentId)
+                .thenComparing(User::getRole)
+                .compare(this, o);
     }
 }

@@ -1,6 +1,5 @@
 package com.finalproject.document.management.entity;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name="transaction_document")
-public class TransactionDocument extends Transaction{
+@Table(name="transaction_user")
+public class TransactionUser extends Transaction {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -20,12 +19,12 @@ public class TransactionDocument extends Transaction{
     private String date;
     @Column(name="user")
     private String user;
-    @Column(name="document_id")
+    @Column(name="user_id")
     private Long documentId;
     @Column(name="transaction_type")
     private String transactionType;
 
-    public TransactionDocument(String date, String user, Long documentId, String transactionType) {
+    public TransactionUser(String date, String user, Long documentId, String transactionType) {
         this.date = date;
         this.user = user;
         this.documentId = documentId;
@@ -34,11 +33,11 @@ public class TransactionDocument extends Transaction{
 
     @Override
     public String toString() {
-        return "Transaction{" +
+        return "TransactionUser{" +
                 "id=" + id +
                 ", date='" + date + '\'' +
                 ", user='" + user + '\'' +
-                ", toolId='" + documentId + '\'' +
+                ", documentId=" + documentId +
                 ", transactionType='" + transactionType + '\'' +
                 '}';
     }
