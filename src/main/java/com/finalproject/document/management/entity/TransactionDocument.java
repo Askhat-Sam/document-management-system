@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name="transaction_document")
-public class TransactionDocument extends Transaction{
+public class TransactionDocument implements TransactionEntity{
     @Id
     @Column(name="id")
     @GeneratedValue(strategy= GenerationType.IDENTITY)

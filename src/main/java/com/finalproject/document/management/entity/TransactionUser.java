@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name="transaction_user")
-public class TransactionUser extends Transaction {
+public class TransactionUser implements TransactionEntity{
     @Id
     @Column(name="id")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
