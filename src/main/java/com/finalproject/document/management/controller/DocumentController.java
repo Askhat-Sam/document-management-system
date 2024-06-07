@@ -1,21 +1,27 @@
 package com.finalproject.document.management.controller;
 
-import com.finalproject.document.management.entity.*;
+import com.finalproject.document.management.entity.Document;
+import com.finalproject.document.management.entity.DocumentComment;
+import com.finalproject.document.management.entity.DocumentRevision;
+import com.finalproject.document.management.entity.Search;
 import com.finalproject.document.management.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -89,25 +95,39 @@ public class DocumentController {
         }
     }
 
-    @GetMapping("/downloadFile")
-    public ResponseEntity<byte[]> downloadFile(@RequestParam("link") String link) {
+
+    @PostMapping("/uploadFile")
+    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes,
+                             @RequestParam("documentId") Long documentId,
+                                Model model) {
+        if (file.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
+            return "redirect:/uploadStatus";
+        }
+
         try {
-            // Load the PDF file as a resource from the classpath
-            Resource resource = new ClassPathResource(link);
+            // Save the file to the specified directory
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get("src/main/resources/documentsUploaded/" + file.getOriginalFilename());
+            Files.write(path, bytes);
 
-            // Read the file's content into a byte array
-            byte[] content = Files.readAllBytes(resource.getFile().toPath());
+            redirectAttributes.addFlashAttribute("message", path);
 
-            // Set headers to inform the browser to display the PDF
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + link);
-            headers.add(HttpHeaders.CONTENT_TYPE, "application/pdf");
+            // Set the link attribute in the model
+            model.addAttribute("link", path.toString());
 
-            return new ResponseEntity<>(content, headers, HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            redirectAttributes.addFlashAttribute("message", "File upload failed");
         }
+        System.out.println("You successfully uploaded '" + file.getOriginalFilename() + "'");
+
+        return "redirect:/document-management/documents/addNewRevisionPage?documentId=" + documentId;
+    }
+
+    @GetMapping("/uploadStatus")
+    public String uploadStatus() {
+        return "documents/uploadStatus";
     }
 
     @GetMapping("/downloadListAsExcel")
