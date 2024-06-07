@@ -94,7 +94,10 @@ public class DocumentController {
 //        documentService.update(document);
 //        return "Document with reference: " + documentCode + " has been added into database";
 //    }
-
+    @GetMapping("/addNewDocumentPage")
+    public String addDocument(){
+        return "documents/add-document";
+    }
     @PostMapping("/addNewDocument")
     public String addDocument(
             @RequestParam("documentCode") String documentCode,

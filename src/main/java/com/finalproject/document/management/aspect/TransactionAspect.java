@@ -1,5 +1,6 @@
 package com.finalproject.document.management.aspect;
 
+import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.TransactionUser;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.DocumentService;
