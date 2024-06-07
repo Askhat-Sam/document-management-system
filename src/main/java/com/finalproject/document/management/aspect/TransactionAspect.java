@@ -5,14 +5,13 @@ import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.DocumentService;
 import com.finalproject.document.management.service.UserService;
 import com.finalproject.document.management.service.UserTransactionService;
-import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -26,12 +25,9 @@ import java.util.List;
 @Aspect
 @Component
 public class TransactionAspect {
-
     private UserTransactionService userTransactionService;
     private UserService userService;
     private DocumentService documentService;
-    @Autowired
-    private EntityManager entityManager;
 
     public TransactionAspect(UserTransactionService userTransactionService, UserService userService, DocumentService documentService) {
         this.userTransactionService = userTransactionService;
@@ -41,7 +37,7 @@ public class TransactionAspect {
 
 
     @Before("execution(* com.finalproject.document.management.service.UserService.update(..)) ")
-    public void beforeUserUpdate(JoinPoint joinPoint){
+    public void beforeUserUpdate(JoinPoint joinPoint) {
 
         // Get the user object passed to the update method
         Object userJointPoint = joinPoint.getArgs()[0];
@@ -118,16 +114,17 @@ public class TransactionAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         request.setAttribute("transactionList", transactionList);
         // Save each userTransaction in transactionList into DB
-        transactionList.forEach(t->userTransactionService.save(t));
+        transactionList.forEach(t -> userTransactionService.save(t));
     }
 
     @Around("execution(* com.finalproject.document.management.service.UserService.save(..)) ")
     public void beforeAddNewUser(ProceedingJoinPoint joinPoint) throws Throwable {
 
-        // Get the user object passed to the update method
+        // Get the user object passed to the save method
         Object userJointPoint = joinPoint.getArgs()[0];
         User user = (User) userJointPoint;
 
+        // Because the user.getId() return null value when creating TransactionUser
         joinPoint.proceed();
 
         // List for keeping transactions
@@ -138,13 +135,37 @@ public class TransactionAspect {
                 new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                 SecurityContextHolder.getContext().getAuthentication().getName(),
                 user.getId(),
-                "New user with id '" + user.getId() + "' has been added."
+                "New user '" + user.getUserId() + "' has been added."
         ));
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         request.setAttribute("transactionList", transactionList);
         // Save each userTransaction in transactionList into DB
-        transactionList.forEach(t->userTransactionService.save(t));
+        transactionList.forEach(t -> userTransactionService.save(t));
+    }
+
+    @AfterReturning("execution(* com.finalproject.document.management.service.UserService.downloadList(..)) ")
+    public void afterDownloadingList(JoinPoint joinPoint) throws Throwable {
+
+        // Get the user object passed to the save method
+//        Object userJointPoint = joinPoint.getArgs()[0];
+//        User user = (User) userJointPoint;
+
+        // List for keeping transactions
+        List<TransactionUser> transactionList = new ArrayList<>();
+
+        // Add new transaction to transactionList
+        transactionList.add(new TransactionUser(
+                new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
+                SecurityContextHolder.getContext().getAuthentication().getName(),
+                null,
+                "List of users has been downloaded."
+        ));
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        request.setAttribute("transactionList", transactionList);
+        // Save each userTransaction in transactionList into DB
+        transactionList.forEach(t -> userTransactionService.save(t));
     }
 
 //    @Before("execution(* com.finalproject.document.management.service.DocumentServiceImpl.update(..)) ")

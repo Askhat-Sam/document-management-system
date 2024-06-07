@@ -20,14 +20,14 @@ public class TransactionUser extends Transaction {
     @Column(name="user")
     private String user;
     @Column(name="user_id")
-    private Long documentId;
+    private Long userId;
     @Column(name="transaction_type")
     private String transactionType;
 
-    public TransactionUser(String date, String user, Long documentId, String transactionType) {
+    public TransactionUser(String date, String user, Long userId, String transactionType) {
         this.date = date;
         this.user = user;
-        this.documentId = documentId;
+        this.userId = userId;
         this.transactionType = transactionType;
     }
 
@@ -37,7 +37,7 @@ public class TransactionUser extends Transaction {
                 "id=" + id +
                 ", date='" + date + '\'' +
                 ", user='" + user + '\'' +
-                ", documentId=" + documentId +
+                ", documentId=" + userId +
                 ", transactionType='" + transactionType + '\'' +
                 '}';
     }
