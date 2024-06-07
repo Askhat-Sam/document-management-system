@@ -56,20 +56,20 @@ public class DocumentServiceImpl implements DocumentService {
                     return documentsFiltered;
                 case "Document Code": documentsFiltered = documents.stream().filter(d -> d.getDocumentCode().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Document Type Id": documentsFiltered = documents.stream().filter(d ->  Long.toString(d.getDocumentTypeId()).contains(keyword)).collect(Collectors.toList());
-                    return documentsFiltered;
+//                case "Document Type Id": documentsFiltered = documents.stream().filter(d ->  Long.toString(d.getDocumentTypeId()).contains(keyword)).collect(Collectors.toList());
+//                    return documentsFiltered;
                 case "Title": documentsFiltered = documents.stream().filter(d -> d.getName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Status Id": documentsFiltered = documents.stream().filter(d -> Long.toString(d.getStatusId()).contains(keyword)).collect(Collectors.toList());
-                    return documentsFiltered;
+//                case "Status Id": documentsFiltered = documents.stream().filter(d -> Long.toString(d.getStatusId()).contains(keyword)).collect(Collectors.toList());
+//                    return documentsFiltered;
                 case "Creation Date": documentsFiltered = documents.stream().filter(d -> d.getCreationDate().contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
                 case "Modification Date": documentsFiltered = documents.stream().filter(d -> d.getModificationDate().contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
                 case "Revision Number": documentsFiltered = documents.stream().filter(d -> Long.toString(d.getRevisionNumber()).equals(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Author Id": documentsFiltered = documents.stream().filter(d -> Long.toString(d.getAuthorId()).contains(keyword)).collect(Collectors.toList());
-                    return documentsFiltered;
+//                case "Author Id": documentsFiltered = documents.stream().filter(d -> Long.toString(d.getAuthorId()).contains(keyword)).collect(Collectors.toList());
+//                    return documentsFiltered;
                 case "All": return documents;
             }
             return documentsFiltered;
@@ -156,29 +156,29 @@ public class DocumentServiceImpl implements DocumentService {
         cellHeader9.setCellValue("Link");
 
         // Add table body values
-        for (Document d:documents) {
-            Row row = sheet.createRow(rowIndex++);
-            Cell cell = row.createCell(0);
-            cell.setCellValue(d.getId());
-            Cell cell1 = row.createCell(1);
-            cell1.setCellValue(d.getDocumentCode());
-            Cell cell2 = row.createCell(2);
-            cell2.setCellValue(d.getDocumentTypeId());
-            Cell cell3= row.createCell(3);
-            cell3.setCellValue(d.getName());
-            Cell cell4= row.createCell(4);
-            cell4.setCellValue(d.getRevisionNumber());
-            Cell cell5= row.createCell(5);
-            cell5.setCellValue(d.getStatusId());
-            Cell cell6= row.createCell(6);
-            cell6.setCellValue(d.getCreationDate());
-            Cell cell7= row.createCell(7);
-            cell7.setCellValue(d.getModificationDate());
-            Cell cell8= row.createCell(8);
-            cell8.setCellValue(d.getAuthorId());
-            Cell cell9= row.createCell(9);
-            cell9.setCellValue(d.getLink());
-        }
+//        for (Document d:documents) {
+//            Row row = sheet.createRow(rowIndex++);
+//            Cell cell = row.createCell(0);
+//            cell.setCellValue(d.getId());
+//            Cell cell1 = row.createCell(1);
+//            cell1.setCellValue(d.getDocumentCode());
+//            Cell cell2 = row.createCell(2);
+//            cell2.setCellValue(d.getDocumentTypeId());
+//            Cell cell3= row.createCell(3);
+//            cell3.setCellValue(d.getName());
+//            Cell cell4= row.createCell(4);
+//            cell4.setCellValue(d.getRevisionNumber());
+//            Cell cell5= row.createCell(5);
+//            cell5.setCellValue(d.getStatusId());
+//            Cell cell6= row.createCell(6);
+//            cell6.setCellValue(d.getCreationDate());
+//            Cell cell7= row.createCell(7);
+//            cell7.setCellValue(d.getModificationDate());
+//            Cell cell8= row.createCell(8);
+//            cell8.setCellValue(d.getAuthorId());
+//            Cell cell9= row.createCell(9);
+//            cell9.setCellValue(d.getLink());
+//        }
 
         // Apply borders to all non-empty cells
         for (Row row : sheet) {

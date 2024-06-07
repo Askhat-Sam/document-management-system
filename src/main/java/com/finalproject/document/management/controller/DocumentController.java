@@ -95,7 +95,9 @@ public class DocumentController {
 //        return "Document with reference: " + documentCode + " has been added into database";
 //    }
     @GetMapping("/addNewDocumentPage")
-    public String addDocument(){
+    public String addNewDocumentPage(Model model){
+        Document document = new Document();
+        model.addAttribute("document", document);
         return "documents/add-document";
     }
     @PostMapping("/addNewDocument")
@@ -113,23 +115,23 @@ public class DocumentController {
 
         // Move the file into "documentsUploaded" folder
         String newLink = documentService.uploadDocument(name + ".pdf", link, "upload");
-
-        // Get document type
-        DocumentType documentType = documentTypeService.findById(documentTypeId);
-
-        // Get document status object
-        DocumentStatus documentStatus = documentStatusService.findByID(statusId);
-
-        // Get user by authorId
-        User user = userService.findById(authorId);
+        // Fetch related entities
+//        DocumentType documentType = documentTypeService.findById(documentTypeId);
+//        DocumentStatus documentStatus = documentStatusService.findByID(statusId);
+//        User author = userService.findById(authorId);
 
         // Create a new document
-        Document document = new Document(documentCode, documentType, name, revisionNumber, documentStatus,
-                creationDate, modificationDate, user, newLink);
+//        Document document = new Document(documentCode, documentType, name, revisionNumber, documentStatus, creationDate, modificationDate, author, newLink);
+
+        // Create a new document
+        Document document = new Document(documentCode, documentTypeId, name, revisionNumber, statusId,creationDate, modificationDate,authorId,link);
+//        Document document = new Document(documentCode, documentType, name, revisionNumber, documentStatus,
+//                creationDate, modificationDate, user, newLink);
+        System.out.println(document);
 
         // Add document into database
         documentService.update(document);
-        return "redirect:/document-management/users/getUsers";
+        return "redirect:/document-management/documents/getDocuments";
     }
 
     @GetMapping("/downloadDocument")

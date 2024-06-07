@@ -1,12 +1,10 @@
 package com.finalproject.document.management.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +22,8 @@ public class Document {
     @Column(name = "document_code")
     private String documentCode;
 
-    @Column(insertable = false, updatable = false, name = "document_type_id")
-    private int documentTypeId;
+    @Column(name = "document_type_id")
+    private Long documentTypeId;
 
     @Column(name = "name")
     private String name;
@@ -33,7 +31,7 @@ public class Document {
     @Column(name = "revision_number")
     private Long revisionNumber;
 
-    @Column(insertable = false, updatable = false, name = "status_id")
+    @Column(name = "status_id")
     private Long statusId;
 
     @Column(name = "creation_date")
@@ -42,7 +40,7 @@ public class Document {
     @Column(name = "modification_date")
     private String modificationDate;
 
-    @Column(name = "author_id", insertable = false, updatable = false)
+    @Column(name = "author_id")
     private Long authorId;
 
     @Column(name = "link")
@@ -58,30 +56,28 @@ public class Document {
 
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "status_id")
+    @JoinColumn(name = "status_id", insertable = false, updatable = false)
     private DocumentStatus documentStatus;
 
     @JsonManagedReference
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    @JoinColumn(name = "document_type_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "document_type_id", insertable = false, updatable = false)
     private DocumentType documentType;
 
     @JsonManagedReference
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    @JoinColumn(name = "author_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "author_id", insertable = false, updatable = false)
     private User user;
 
-    public Document(String documentCode, DocumentType documentType, String name, Long revisionNumber,
-                    DocumentStatus documentStatus, String creationDate, String modificationDate,
-                    User user, String link) {
+    public Document(String documentCode, Long documentTypeId, String name, Long revisionNumber, Long statusId, String creationDate, String modificationDate, Long authorId, String link) {
         this.documentCode = documentCode;
-        this.documentType = documentType;
+        this.documentTypeId = documentTypeId;
         this.name = name;
         this.revisionNumber = revisionNumber;
-        this.documentStatus = documentStatus;
+        this.statusId = statusId;
         this.creationDate = creationDate;
         this.modificationDate = modificationDate;
-        this.user =user;
+        this.authorId = authorId;
         this.link = link;
     }
 
@@ -98,24 +94,19 @@ public class Document {
                 ", modificationDate='" + modificationDate + '\'' +
                 ", authorId=" + authorId +
                 ", link='" + link + '\'' +
-                ", comments=" + comments +
-                ", revisions=" + revisions +
-                ", documentStatus=" + documentStatus +
-                ", documentType=" + documentType +
-                ", user=" + user +
                 '}';
     }
 
-    public void addComment(DocumentComment comment){
-        if(comment==null){
+    public void addComment(DocumentComment comment) {
+        if (comments == null) {
             comments = new ArrayList<>();
         }
         comments.add(comment);
         comment.setDocument(this);
     }
 
-    public void addRevision(DocumentRevision revision){
-        if(revision==null){
+    public void addRevision(DocumentRevision revision) {
+        if (revisions == null) {
             revisions = new ArrayList<>();
         }
         revisions.add(revision);

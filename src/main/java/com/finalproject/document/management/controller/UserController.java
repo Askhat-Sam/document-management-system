@@ -111,9 +111,9 @@ public class UserController {
 
         List<Document> documents = documentService.findByUserId(id);
 
-        for (Document document : documents) {
-            document.setAuthorId(null);
-        }
+//        for (Document document : documents) {
+//            document.setAuthorId(null);
+//        }
 
         System.out.println("To be deleted: " + user);
 

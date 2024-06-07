@@ -1,6 +1,5 @@
 package com.finalproject.document.management.aspect;
 
-import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.TransactionUser;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.DocumentService;
@@ -13,6 +12,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
