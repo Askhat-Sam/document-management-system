@@ -278,9 +278,17 @@ public class DocumentController {
         return "redirect:/document-management/documents/getDocuments";
     }
 
-    @PostMapping("/addRevision")
-    public String addRevision(
-                             @RequestParam Long userId,
+
+    @GetMapping("/addNewRevisionPage")
+    public String addNewRevisionPage(@RequestParam Long documentId,
+                                     Model model){
+        model.addAttribute("documentId", documentId);
+        DocumentRevision documentRevision = new DocumentRevision();
+        model.addAttribute("documentRevision", documentRevision);
+        return "documents/add-revision";
+    }
+    @PostMapping("/addNewRevision")
+    public String addNewRevision(@RequestParam Long userId,
                              @RequestParam Long documentId,
                              @RequestParam String date,
                               @RequestParam Long revisionNumber,
@@ -294,8 +302,27 @@ public class DocumentController {
         document.addRevision(new DocumentRevision(userId, revisionNumber, statusId, date, description, link, validatingUserId));
 
         documentService.update(document);
-        return "Revision has been added into document with id " + documentId;
+        return "redirect:/document-management/documents/view/" + documentId;
     }
+//RestController
+//    @PostMapping("/addRevision")
+//    public String addRevision(
+//                             @RequestParam Long userId,
+//                             @RequestParam Long documentId,
+//                             @RequestParam String date,
+//                              @RequestParam Long revisionNumber,
+//                             @RequestParam Long statusId,
+//                              @RequestParam String description,
+//                              @RequestParam String link,
+//                              @RequestParam Long validatingUserId) {
+//        Document document = documentService.findById(documentId);
+//
+//        // Add comment to the document
+//        document.addRevision(new DocumentRevision(userId, revisionNumber, statusId, date, description, link, validatingUserId));
+//
+//        documentService.update(document);
+//        return "Revision has been added into document with id " + documentId;
+//    }
 
 
 //    @GetMapping("/newDocument")

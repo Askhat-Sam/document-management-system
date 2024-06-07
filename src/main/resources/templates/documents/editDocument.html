@@ -8,11 +8,6 @@
 <body>
 <div class="container">
     <h1>Edit Document</h1>
-    <form th:action="@{/document-management/documents/updateDocument}" th:object="${document}" method="post">
-        <div class="mb-3">
-            <label for="id" class="form-label">Document Id</label>
-            <input type="text" id="id" name="id" th:field="*{id}" class="form-control"/>
-        </div>
         <div class="mb-3">
             <label for="documentCode" class="form-label">Document Code</label>
             <input type="text" id="documentCode" name="documentCode" th:field="*{documentCode}" class="form-control"/>

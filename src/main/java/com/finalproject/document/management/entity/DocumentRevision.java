@@ -32,20 +32,20 @@ public class DocumentRevision {
     @Column(name = "link")
     private String link;
     @Column(name = "validated_user_id")
-    private Long validatedUserId;
+    private Long validatingUserId;
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name="document_id")
     private Document document;
 
-    public DocumentRevision(Long documentId, String date, Long revisionNumber, Long statusId, String link, Long validatedUserId) {
+    public DocumentRevision(Long documentId, String date, Long revisionNumber, Long statusId, String link, Long validatingUserId) {
         this.documentId = documentId;
         this.date = date;
         this.revisionNumber = revisionNumber;
         this.statusId = statusId;
         this.link = link;
-        this.validatedUserId = validatedUserId;
+        this.validatingUserId = validatingUserId;
     }
 
     public DocumentRevision(Long userId, Long revisionNumber, Long statusId, String date, String description, String link, Long validatingUserId) {
@@ -55,7 +55,7 @@ public class DocumentRevision {
         this.date =date;
         this.description =description;
         this.link =link;
-        this.validatedUserId =validatedUserId;
+        this.validatingUserId =validatingUserId;
 
     }
 
@@ -68,7 +68,7 @@ public class DocumentRevision {
                 ", revisionNumber=" + revisionNumber +
                 ", statusId=" + statusId +
                 ", link='" + link + '\'' +
-                ", validatedUserId=" + validatedUserId +
+                ", validatedUserId=" + validatingUserId +
                 '}';
     }
 }
