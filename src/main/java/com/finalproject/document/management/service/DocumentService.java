@@ -1,6 +1,7 @@
 package com.finalproject.document.management.service;
 
 import com.finalproject.document.management.entity.Document;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -16,6 +17,6 @@ public interface DocumentService {
 
     String uploadDocument(String fileName, String path, String actionType);
 
-     <T> String downloadList(List<T> list);
+    ResponseEntity<byte[]> downloadListAsExcel();
     List<Document> findByUserId(Long id);
 }

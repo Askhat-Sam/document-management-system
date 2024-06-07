@@ -4,12 +4,17 @@ import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.repository.DocumentRepository;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -117,9 +122,8 @@ public class DocumentServiceImpl implements DocumentService {
         return moveFile(fileName, path, actionType);
     }
 
-    public <T> String downloadList(List<T> documentsList) {
-        List<Document> documents =documentRepository.findAll();
-        String excelFilePath = "src/main/resources/donwloads/list.xlsx";
+    public ResponseEntity<byte[]> downloadListAsExcel() {
+        List<Document> documents = documentRepository.findAll();
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("List");
 
@@ -131,81 +135,77 @@ public class DocumentServiceImpl implements DocumentService {
         styleBody.setBorderRight(BorderStyle.THIN);
         styleBody.setAlignment(HorizontalAlignment.LEFT);
 
+        // Create header CellStyle
+        Font headerFont = workbook.createFont();
+        headerFont.setColor(IndexedColors.WHITE.index);
+        CellStyle headerCellStyle = sheet.getWorkbook().createCellStyle();
+        // fill foreground color ...
+        headerCellStyle.setFillForegroundColor(new XSSFColor(new java.awt.Color(0, 32, 91), null));
+        // and solid fill pattern produces solid grey cell fill
+        headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        headerCellStyle.setFont(headerFont);
+
+
         int rowIndex = 1;
         // Add header values
-        Row rowHeader = sheet.createRow(rowIndex-1);
-        Cell cellHeader = rowHeader.createCell(0);
-        cellHeader.setCellValue("Id");
-        Cell cellHeader1 = rowHeader.createCell(1);
-        cellHeader1.setCellValue("Document code");
-        Cell cellHeader2 = rowHeader.createCell(2);
-        cellHeader2.setCellValue("Type");
-        Cell cellHeader3 = rowHeader.createCell(3);
-        cellHeader3.setCellValue("Name");
-        Cell cellHeader4 = rowHeader.createCell(4);
-        cellHeader4.setCellValue("Revision number");
-        Cell cellHeader5 = rowHeader.createCell(5);
-        cellHeader5.setCellValue("Status");
-        Cell cellHeader6 = rowHeader.createCell(6);
-        cellHeader6.setCellValue("Creation date");
-        Cell cellHeader7 = rowHeader.createCell(7);
-        cellHeader7.setCellValue("Modification date");
-        Cell cellHeader8 = rowHeader.createCell(8);
-        cellHeader8.setCellValue("Process owner");
-        Cell cellHeader9 = rowHeader.createCell(9);
-        cellHeader9.setCellValue("Link");
+        Row rowHeader = sheet.createRow(rowIndex - 1);
+        rowHeader.createCell(0).setCellValue("Id");
+        rowHeader.createCell(1).setCellValue("Document code");
+        rowHeader.createCell(2).setCellValue("Type");
+        rowHeader.createCell(3).setCellValue("Name");
+        rowHeader.createCell(4).setCellValue("Revision number");
+        rowHeader.createCell(5).setCellValue("Status");
+        rowHeader.createCell(6).setCellValue("Creation date");
+        rowHeader.createCell(7).setCellValue("Modification date");
+        rowHeader.createCell(8).setCellValue("Process owner");
+        rowHeader.createCell(9).setCellValue("Link");
 
         // Add table body values
-//        for (Document d:documents) {
-//            Row row = sheet.createRow(rowIndex++);
-//            Cell cell = row.createCell(0);
-//            cell.setCellValue(d.getId());
-//            Cell cell1 = row.createCell(1);
-//            cell1.setCellValue(d.getDocumentCode());
-//            Cell cell2 = row.createCell(2);
-//            cell2.setCellValue(d.getDocumentTypeId());
-//            Cell cell3= row.createCell(3);
-//            cell3.setCellValue(d.getName());
-//            Cell cell4= row.createCell(4);
-//            cell4.setCellValue(d.getRevisionNumber());
-//            Cell cell5= row.createCell(5);
-//            cell5.setCellValue(d.getStatusId());
-//            Cell cell6= row.createCell(6);
-//            cell6.setCellValue(d.getCreationDate());
-//            Cell cell7= row.createCell(7);
-//            cell7.setCellValue(d.getModificationDate());
-//            Cell cell8= row.createCell(8);
-//            cell8.setCellValue(d.getAuthorId());
-//            Cell cell9= row.createCell(9);
-//            cell9.setCellValue(d.getLink());
-//        }
+        for (Document d : documents) {
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(d.getId());
+            row.createCell(1).setCellValue(d.getDocumentCode());
+            row.createCell(2).setCellValue(d.getDocumentTypeId());
+            row.createCell(3).setCellValue(d.getName());
+            row.createCell(4).setCellValue(d.getRevisionNumber());
+            row.createCell(5).setCellValue(d.getStatusId());
+            row.createCell(6).setCellValue(d.getCreationDate());
+            row.createCell(7).setCellValue(d.getModificationDate());
+            row.createCell(8).setCellValue(d.getAuthorId());
+            row.createCell(9).setCellValue(d.getLink());
+        }
 
-        // Apply borders to all non-empty cells
+        // Apply style to cells
         for (Row row : sheet) {
             for (Cell cell : row) {
+                // Apply border to all non empty cells
                 if (cell.getCellType() != CellType.BLANK) {
                     cell.setCellStyle(styleBody);
+                }
+                // Apply style to the headers
+                if (cell.getRowIndex()==0) {
+                    cell.setCellStyle(headerCellStyle);
                 }
             }
         }
 
-        for (int i = 0; i <= 11; i++) {
+        for (int i = 0; i <= 9; i++) {
             sheet.autoSizeColumn(i);
         }
 
-        try (FileOutputStream outputStream = new FileOutputStream(excelFilePath)) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             workbook.write(outputStream);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
             workbook.close();
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Workbook cannot be closed");
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=list.xlsx");
+            headers.add(HttpHeaders.CONTENT_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return "List has been downloaded";
     }
 
     @Override

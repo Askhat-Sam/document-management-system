@@ -110,6 +110,11 @@ public class DocumentController {
         }
     }
 
+    @GetMapping("/downloadListAsExcel")
+    public ResponseEntity<byte[]> downloadListAsExcel() {
+        return documentService.downloadListAsExcel();
+    }
+
     @GetMapping("/addNewDocumentPage")
     public String addNewDocumentPage(Model model){
         Document document = new Document();
@@ -231,12 +236,14 @@ public class DocumentController {
         documentService.update(document);
         return "Comment has been added into document with id " + documentId;
     }
-    @GetMapping("/downloadList")
-    public String downloadList() throws IOException, IllegalAccessException {
-        List<Document> documents = documentService.findAll();
-        documentService.downloadList(documents);
-        return "redirect:/document-management/documents/getDocuments";
-    }
+
+    //to be removed previous version
+//    @GetMapping("/downloadList")
+//    public String downloadList() throws IOException, IllegalAccessException {
+//        List<Document> documents = documentService.findAll();
+//        documentService.downloadList(documents);
+//        return "redirect:/document-management/documents/getDocuments";
+//    }
 
 
     @GetMapping("/addNewRevisionPage")
