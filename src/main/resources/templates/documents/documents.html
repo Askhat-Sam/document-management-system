@@ -79,13 +79,13 @@
                             <tr th:each="document : ${documents}" class="" style="height: 20px">
                                 <td th:text="${document.id}" />
                                 <td th:text="${document.documentCode}" />
-                                <td th:text="${document.documentType.id}"/>
+                                <td th:text="${document.documentTypeId}"/>
                                 <td th:text="${document.name}"/>
                                 <td th:text="${document.revisionNumber}"/>
-                                <td th:text="${document.documentStatus.id}"/>
+                                <td th:text="${document.statusId}"/>
                                 <td th:text="${document.creationDate}"/>
                                 <td th:text="${document.modificationDate}"/>
-                                <td th:text="${document.user.id}"/>
+                                <td th:text="${document.authorId}"/>
                                 <td th:text="${document.link}"/>
 
                                 <td>
@@ -93,11 +93,9 @@
                                     <a th:href="@{/document-management/documents/downloadDocument(id=${document.id})}" class="action-tool-edit">
                                         download
                                     </a>
-                                    <a class="action-tool-edit">
-                                        View
-                                    </a>
+                                    <a th:href="@{/document-management/documents/view/{id}(id=${document.id})}" class="action-tool-edit">View</a>
                                     <a class="action-btn-delete"
-                                       onclick="if (!(confirm('Are you sure you want to delete this tool?'))) return false">
+                                       onclick="if (!(confirm('Are you sure you want to delete this document?'))) return false">
                                         Delete
                                     </a>
                                 </td>

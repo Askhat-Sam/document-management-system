@@ -94,6 +94,14 @@ public class DocumentController {
 //        documentService.update(document);
 //        return "Document with reference: " + documentCode + " has been added into database";
 //    }
+
+    @GetMapping("/view/{id}")
+    public String viewDocument(@PathVariable Long id, Model model) {
+        Document document = documentService.findById(id);
+        model.addAttribute("document", document);
+        return "documents/view-document";
+    }
+
     @GetMapping("/addNewDocumentPage")
     public String addNewDocumentPage(Model model){
         Document document = new Document();
@@ -134,6 +142,8 @@ public class DocumentController {
         return "redirect:/document-management/documents/getDocuments";
     }
 
+
+
     @GetMapping("/downloadDocument")
     public String downloadDocument(@RequestParam Long id) {
 
@@ -159,54 +169,94 @@ public class DocumentController {
         return "Document with id: " + id + " has been successfully deleted from database";
     }
 
+//    @PostMapping("/updateDocument")
+//    public String updateDocument(
+//            @RequestParam(name="id", required = false) Long id,
+//            @RequestParam(name="documentCode", required = false) String documentCode,
+//            @RequestParam(name="documentTypeId", required = false) Long documentTypeId,
+//            @RequestParam(name="name", required = false) String name,
+//            @RequestParam(name="revisionNumber", required = false) Long revisionNumber,
+//            @RequestParam(name="statusId", required = false) Long statusId,
+//            @RequestParam(name="creationDate", required = false) String creationDate,
+//            @RequestParam(name="modificationDate", required = false) String modificationDate,
+//            @RequestParam(name="authorId", required = false) Long authorId,
+//            @RequestParam(name="link", required = false) String link) {
+//
+//        // Move the file into "documentsUploaded" folder
+////        String newLink = documentService.uploadDocument(link, "upload");
+//
+//        Document document = documentService.findById(id);
+//
+//        // Get document type
+//        if (documentTypeId!=null) {
+//            DocumentType documentType = documentTypeService.findById(documentTypeId);
+//            document.setDocumentType(documentType);
+//        }
+//        // Get document status object
+//        if (statusId!=null) {
+//            DocumentStatus documentStatus = documentStatusService.findByID(statusId);
+//            document.setDocumentStatus(documentStatus);
+//        }
+//        // Get user by authorId
+//        if (authorId!=null) {
+//            User user = userService.findById(authorId);
+//        }
+//
+//        if (documentCode != null) {
+//            document.setDocumentCode(documentCode);
+//        } else if (name != null) {
+//            document.setName(name);
+//        } else if (String.valueOf(revisionNumber) != null) {
+//            document.setRevisionNumber(revisionNumber);
+//        } else if (creationDate != null) {
+//            document.setCreationDate(creationDate);
+//        } else if (modificationDate != null) {
+//            document.setModificationDate(modificationDate);
+//        } else if (link != null) {
+//            document.setLink(link);
+//        }
+//        documentService.update(document);
+//        return "Document with id: " + id + " has been successfully updated in database";
+//    }
+
     @PostMapping("/updateDocument")
-    public String updateDocument(
-            @RequestParam(name="id", required = false) Long id,
-            @RequestParam(name="documentCode", required = false) String documentCode,
-            @RequestParam(name="documentTypeId", required = false) Long documentTypeId,
-            @RequestParam(name="name", required = false) String name,
-            @RequestParam(name="revisionNumber", required = false) Long revisionNumber,
-            @RequestParam(name="statusId", required = false) Long statusId,
-            @RequestParam(name="creationDate", required = false) String creationDate,
-            @RequestParam(name="modificationDate", required = false) String modificationDate,
-            @RequestParam(name="authorId", required = false) Long authorId,
-            @RequestParam(name="link", required = false) String link) {
+    public String updateDocument(@ModelAttribute Document document) {
+        // Retrieve the existing document from the database
+        Document existingDocument = documentService.findById(document.getId());
 
-        // Move the file into "documentsUploaded" folder
-//        String newLink = documentService.uploadDocument(link, "upload");
+        // Update the fields that are not null in the submitted form
+        if (document.getDocumentCode() != null) {
+            existingDocument.setDocumentCode(document.getDocumentCode());
+        }
+        if (document.getDocumentType() != null) {
+            existingDocument.setDocumentType(document.getDocumentType());
+        }
+        if (document.getName() != null) {
+            existingDocument.setName(document.getName());
+        }
+        if (document.getRevisionNumber() != null) {
+            existingDocument.setRevisionNumber(document.getRevisionNumber());
+        }
+        if (document.getStatusId() != null) {
+            existingDocument.setStatusId(document.getStatusId());
+        }
+        if (document.getCreationDate() != null) {
+            existingDocument.setCreationDate(document.getCreationDate());
+        }
+        if (document.getModificationDate() != null) {
+            existingDocument.setModificationDate(document.getModificationDate());
+        }
+        if (document.getAuthorId() != null) {
+            existingDocument.setAuthorId(document.getAuthorId());
+        }
+        if (document.getLink() != null) {
+            existingDocument.setLink(document.getLink());
+        }
 
-        Document document = documentService.findById(id);
+        // Update the document in the database
+        documentService.update(existingDocument);
 
-        // Get document type
-        if (documentTypeId!=null) {
-            DocumentType documentType = documentTypeService.findById(documentTypeId);
-            document.setDocumentType(documentType);
-        }
-        // Get document status object
-        if (statusId!=null) {
-            DocumentStatus documentStatus = documentStatusService.findByID(statusId);
-            document.setDocumentStatus(documentStatus);
-        }
-        // Get user by authorId
-        if (authorId!=null) {
-            User user = userService.findById(authorId);
-        }
-
-        if (documentCode != null) {
-            document.setDocumentCode(documentCode);
-        } else if (name != null) {
-            document.setName(name);
-        } else if (String.valueOf(revisionNumber) != null) {
-            document.setRevisionNumber(revisionNumber);
-        } else if (creationDate != null) {
-            document.setCreationDate(creationDate);
-        } else if (modificationDate != null) {
-            document.setModificationDate(modificationDate);
-        } else if (link != null) {
-            document.setLink(link);
-        }
-        documentService.update(document);
-        return "Document with id: " + id + " has been successfully updated in database";
+        return "redirect:/document-management/documents/getDocuments";
     }
 
     @PostMapping("/addComment")

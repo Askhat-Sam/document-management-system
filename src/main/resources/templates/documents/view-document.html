@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <script type="text/javascript" src="../static/js/code.jquery.com_jquery-3.7.1.min.js"
+            th:src="@{/js/code.jquery.com_jquery-3.7.1.min.js}"></script>
+    <script type="text/javascript" src="../static/js/main.js" th:src="@{/js/main.js}"></script>
+
+    <title>Document Management System</title>
+</head>
+<body>
+<div class="main-container">
+    <div class="flex-container header-container">
+        <div>Document Management Service</div>
+        <div>User Name: John.S (MANAGER)</div>
+        <div class="empty-div"></div>
+        <div>Notifications</div>
+        <div>Logout</div>
+    </div>
+    <div class="flex-container">
+        <div class="side-panel">
+            <div>
+                <a class="" th:href="@{/document-management/documents/getDocuments}">
+                    Documents
+                </a>
+            </div>
+            <div>
+                <a class="" th:href="@{/document-management/users/getUsers}">
+                    Users
+                </a>
+            </div>
+            <div>
+                <a class="">Export</a>
+            </div>
+        </div>
+        <div class="body-container">
+            <div class="navbar flex-container-column">
+                <div>1. Document info</div>
+                <form action="#" th:action="@{/document-management/documents/updateDocument}" th:object="${document}" method="POST">
+                    <div class="">
+                        <label for="id" class="">Document Id</label>
+                        <input type="text" id="id" name="id" th:field="*{id}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="documentCode" class="">Document Code</label>
+                        <input type="text" id="documentCode" name="documentCode" th:field="*{documentCode}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="documentCode" class="">Document type Id</label>
+                        <input type="text" id="documentTypeId" name="documentTypeId" th:field="*{documentTypeId}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="name" class="">Title</label>
+                        <input type="text" id="name" name="name" th:field="*{name}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="revisionNumber" class="">Revision Number</label>
+                        <input type="number" id="revisionNumber" name="revisionNumber" th:field="*{revisionNumber}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="statusId" class="">Status</label>
+                        <input type="text" id="statusId" name="statusId" th:field="*{statusId}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="creationDate" class="">Creation Date</label>
+                        <input type="date" id="creationDate" name="creationDate" th:field="*{creationDate}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="modificationDate" class="">Modification Date</label>
+                        <input type="date" id="modificationDate" name="modificationDate" th:field="*{modificationDate}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="authorId" class="">Author</label>
+                        <input type="text" id="authorId" name="authorId" th:field="*{authorId}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="link" class="">Link</label>
+                        <input type="text" id="link" name="link" th:field="*{link}" class=""/>
+                    </div>
+                    <button type="submit" class="">Save</button>
+                </form>
+                <div>2. Document version</div>
+
+            </div>
+            <div class="main-content">
+                <div class="table-container">
+                </div>
+                <div class="centered-div">
+                    <div>
+                        <button class="action-button" type="submit">Create document</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+</html>

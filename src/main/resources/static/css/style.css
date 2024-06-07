@@ -53,6 +53,10 @@ table {
 .flex-container {
    display: flex;
 }
+.flex-container-column {
+   display: flex;
+   flex-direction: column;
+}
 
 .navbar-div {
        padding: 5px;
