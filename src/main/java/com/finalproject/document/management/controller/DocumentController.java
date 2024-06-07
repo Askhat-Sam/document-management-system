@@ -41,12 +41,12 @@ public class DocumentController {
 
     @GetMapping("/getDocuments")
     public String getDocuments(@RequestParam(name = "page", required = false) Integer page,
-                                       @RequestParam(name = "size", required = false) Integer size,
-                                       @RequestParam(name = "sortBy", required = false) String sortBy,
-                                       @RequestParam(name = "sortDirection", required = false) String sortDirection,
-                                       @RequestParam(name = "keyword", required = false) String keyword,
-                                       @RequestParam(name = "column", required = false) String column,
-                                        Model model) {
+                               @RequestParam(name = "size", required = false) Integer size,
+                               @RequestParam(name = "sortBy", required = false) String sortBy,
+                               @RequestParam(name = "sortDirection", required = false) String sortDirection,
+                               @RequestParam(name = "keyword", required = false) String keyword,
+                               @RequestParam(name = "column", required = false) String column,
+                               Model model) {
         Search search = new Search();
 
         List<Document> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
@@ -62,7 +62,6 @@ public class DocumentController {
     public Document getDocument(@PathVariable("id") Long id) {
         return documentService.findById(id);
     }
-
 
 
     @GetMapping("/view/{id}")
@@ -95,11 +94,32 @@ public class DocumentController {
         }
     }
 
+    @GetMapping("/downloadFile")
+    public ResponseEntity<byte[]> downloadFile(@RequestParam("link") String link) {
+        try {
+            // Load the PDF file as a resource from the classpath
+            Resource resource = new ClassPathResource(link);
+
+            // Read the file's content into a byte array
+            byte[] content = Files.readAllBytes(resource.getFile().toPath());
+
+            // Set headers to inform the browser to display the PDF
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + link);
+            headers.add(HttpHeaders.CONTENT_TYPE, "application/pdf");
+
+            return new ResponseEntity<>(content, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     @PostMapping("/uploadFile")
     public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes,
                              @RequestParam("documentId") Long documentId,
-                                Model model) {
+                             Model model) {
         if (file.isEmpty()) {
             redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
             return "redirect:/uploadStatus";
@@ -111,10 +131,8 @@ public class DocumentController {
             Path path = Paths.get("src/main/resources/documentsUploaded/" + file.getOriginalFilename());
             Files.write(path, bytes);
 
-            redirectAttributes.addFlashAttribute("message", path);
-
-            // Set the link attribute in the model
-            model.addAttribute("link", path.toString());
+            // Send the file path to the previous page link field
+            redirectAttributes.addFlashAttribute("message", "documentsUploaded/" + file.getOriginalFilename());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -136,11 +154,12 @@ public class DocumentController {
     }
 
     @GetMapping("/addNewDocumentPage")
-    public String addNewDocumentPage(Model model){
+    public String addNewDocumentPage(Model model) {
         Document document = new Document();
         model.addAttribute("document", document);
         return "documents/add-document";
     }
+
     @PostMapping("/addNewDocument")
     public String addDocument(
             @RequestParam("documentCode") String documentCode,
@@ -165,7 +184,7 @@ public class DocumentController {
 //        Document document = new Document(documentCode, documentType, name, revisionNumber, documentStatus, creationDate, modificationDate, author, newLink);
 
         // Create a new document
-        Document document = new Document(documentCode, documentTypeId, name, revisionNumber, statusId,creationDate, modificationDate,authorId,link);
+        Document document = new Document(documentCode, documentTypeId, name, revisionNumber, statusId, creationDate, modificationDate, authorId, link);
 //        Document document = new Document(documentCode, documentType, name, revisionNumber, documentStatus,
 //                creationDate, modificationDate, user, newLink);
         System.out.println(document);
@@ -176,14 +195,13 @@ public class DocumentController {
     }
 
 
-
     @GetMapping("/downloadDocument")
     public String downloadDocument(@RequestParam Long id) {
 
         Document document = documentService.findById(id);
 
         // Move the file into "documentsUploaded" folder
-        documentService.uploadDocument(document.getName() + ".pdf","src/main/resources/documentsUploaded/", "download");
+        documentService.uploadDocument(document.getName() + ".pdf", "src/main/resources/documentsUploaded/", "download");
 
         return "redirect:/document-management/documents/getDocuments";
     }
@@ -201,7 +219,6 @@ public class DocumentController {
 
         return "Document with id: " + id + " has been successfully deleted from database";
     }
-
 
 
     @PostMapping("/updateDocument")
@@ -268,21 +285,22 @@ public class DocumentController {
 
     @GetMapping("/addNewRevisionPage")
     public String addNewRevisionPage(@RequestParam Long documentId,
-                                     Model model){
+                                     Model model) {
         model.addAttribute("documentId", documentId);
         DocumentRevision documentRevision = new DocumentRevision();
         model.addAttribute("documentRevision", documentRevision);
         return "documents/add-revision";
     }
+
     @PostMapping("/addNewRevision")
     public String addNewRevision(@RequestParam Long userId,
-                             @RequestParam Long documentId,
-                             @RequestParam String date,
-                              @RequestParam Long revisionNumber,
-                             @RequestParam Long statusId,
-                              @RequestParam String description,
-                              @RequestParam String link,
-                              @RequestParam Long validatingUserId) {
+                                 @RequestParam Long documentId,
+                                 @RequestParam String date,
+                                 @RequestParam Long revisionNumber,
+                                 @RequestParam Long statusId,
+                                 @RequestParam String description,
+                                 @RequestParam String link,
+                                 @RequestParam Long validatingUserId) {
         Document document = documentService.findById(documentId);
 
         // Add comment to the document
