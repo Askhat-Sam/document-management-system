@@ -1,13 +1,17 @@
 package com.finalproject.document.management.aspect;
+
 import com.finalproject.document.management.entity.TransactionUser;
 import com.finalproject.document.management.entity.User;
+import com.finalproject.document.management.service.DocumentService;
 import com.finalproject.document.management.service.UserService;
 import com.finalproject.document.management.service.UserTransactionService;
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
-import org.aspectj.lang.reflect.FieldSignature;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -22,22 +26,26 @@ import java.util.List;
 @Aspect
 @Component
 public class TransactionAspect {
-    @Autowired
+
     private UserTransactionService userTransactionService;
-
     private UserService userService;
+    private DocumentService documentService;
+    @Autowired
+    private EntityManager entityManager;
 
-    public TransactionAspect(UserService userService) {
+    public TransactionAspect(UserTransactionService userTransactionService, UserService userService, DocumentService documentService) {
+        this.userTransactionService = userTransactionService;
         this.userService = userService;
+        this.documentService = documentService;
     }
 
-    @Before("execution(* com.finalproject.document.management.service.UserServiceImpl.update(..)) ")
+
+    @Before("execution(* com.finalproject.document.management.service.UserService.update(..)) ")
     public void beforeUserUpdate(JoinPoint joinPoint){
 
         // Get the user object passed to the update method
         Object userJointPoint = joinPoint.getArgs()[0];
         User userAfterUpdate = (User) userJointPoint;
-
 
         // Get old version of user from DB
         User userBeforeUpdate = userService.getOldUserById(userAfterUpdate.getId());
@@ -80,12 +88,12 @@ public class TransactionAspect {
                         "User email was changed from '" + userBeforeUpdate.getEmail() + "' to '" + userAfterUpdate.getEmail() + "'"
                 ));
             }
-            if (!userAfterUpdate.getDepartmentId().equals(userBeforeUpdate.getDepartmentId())) {
+            if (!userAfterUpdate.getDepartment().getName().equals(userBeforeUpdate.getDepartment().getName())) {
                 transactionList.add(new TransactionUser(
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         userBeforeUpdate.getId(),
-                        "User department id was changed from '" + userBeforeUpdate.getDepartmentId() + "' to '" + userAfterUpdate.getDepartmentId() + "'"
+                        "User department was changed from '" + userBeforeUpdate.getDepartment().getName() + "' to '" + userAfterUpdate.getDepartment().getName() + "'"
                 ));
             }
             if (!userAfterUpdate.getRole().equals(userBeforeUpdate.getRole())) {
@@ -96,6 +104,14 @@ public class TransactionAspect {
                         "User role was changed from '" + userBeforeUpdate.getRole() + "' to '" + userAfterUpdate.getRole() + "'"
                 ));
             }
+            if (!userAfterUpdate.getPassword().equals(userBeforeUpdate.getPassword())) {
+                transactionList.add(new TransactionUser(
+                        new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
+                        SecurityContextHolder.getContext().getAuthentication().getName(),
+                        userBeforeUpdate.getId(),
+                        "User password was changed"
+                ));
+            }
             // Check changes of other fields if necessary
         }
 
@@ -104,4 +120,64 @@ public class TransactionAspect {
         // Save each userTransaction in transactionList into DB
         transactionList.forEach(t->userTransactionService.save(t));
     }
+
+    @Around("execution(* com.finalproject.document.management.service.UserService.save(..)) ")
+    public void beforeAddNewUser(ProceedingJoinPoint joinPoint) throws Throwable {
+
+        // Get the user object passed to the update method
+        Object userJointPoint = joinPoint.getArgs()[0];
+        User user = (User) userJointPoint;
+
+        joinPoint.proceed();
+
+        // List for keeping transactions
+        List<TransactionUser> transactionList = new ArrayList<>();
+
+        // Add new transaction to transactionList
+        transactionList.add(new TransactionUser(
+                new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
+                SecurityContextHolder.getContext().getAuthentication().getName(),
+                user.getId(),
+                "New user with id '" + user.getId() + "' has been added."
+        ));
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        request.setAttribute("transactionList", transactionList);
+        // Save each userTransaction in transactionList into DB
+        transactionList.forEach(t->userTransactionService.save(t));
+    }
+
+//    @Before("execution(* com.finalproject.document.management.service.DocumentServiceImpl.update(..)) ")
+//    public void beforeUserAdd(JoinPoint joinPoint){
+//
+//        // Get the user object passed to the update method
+//        Object documentJointPoint = joinPoint.getArgs()[0];
+//        Document documentAfterUpdate = (Document) documentJointPoint;
+//
+//        // Get old version of user from DB
+//        Document documentBeforeUpdate = documentService.findById(documentAfterUpdate.getId());
+//
+//        // List for keeping transactions
+//        List<TransactionUser> transactionList = new ArrayList<>();
+//
+//        // Check if the user was updated
+//        if (!documentAfterUpdate.equals(documentBeforeUpdate)) {
+//            // Check changes of userId
+//            if (!documentAfterUpdate.getDocumentCode().equals(documentBeforeUpdate.getDocumentCode())) {
+//                transactionList.add(new TransactionUser(
+//                        new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
+//                        SecurityContextHolder.getContext().getAuthentication().getName(),
+//                        documentBeforeUpdate.getId(),
+//                        "Document code was changed from '" + documentBeforeUpdate.getDocumentCode() + "' to '" + documentAfterUpdate.getDocumentCode() + "'"
+//                ));
+//            }
+//
+//            // Check changes of other fields if necessary
+//        }
+//
+//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+//        request.setAttribute("transactionList", transactionList);
+//        // Save each userTransaction in transactionList into DB
+//        transactionList.forEach(t->userTransactionService.save(t));
+//    }
 }

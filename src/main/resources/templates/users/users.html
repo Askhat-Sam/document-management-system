@@ -148,15 +148,23 @@
                 <h1 class="modal-title fs-5" id="editModalLabel">Edit USER</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body form-group">
                 <form action="#" th:action="@{/document-management/users/updateUser}" method="POST">
+                    <label for="idEdit">Id</label>
                     <input type="text" class="form-control mb-4 w-75" placeholder="ID" name="id" id="idEdit">
+                    <label for="userIdEdit">User Id</label>
                     <input type="text" class="form-control mb-4 w-75" placeholder="USER ID" name="userId" id="userIdEdit">
+                    <label for="firstNameEdit">First name</label>
                     <input type="text" class="form-control mb-4 w-75" placeholder="USER ID" name="firstName" id="firstNameEdit">
+                    <label for="lastNameEdit">Last name</label>
                     <input type="text" class="form-control mb-4 w-75" placeholder="USER ID" name="lastName" id="lastNameEdit">
+                    <label for="emailEdit">Email</label>
                     <input type="text" class="form-control mb-4 w-75" placeholder="USER ID" name="email" id="emailEdit">
+                    <label for="departmentIdEdit">Department Id</label>
                     <input type="text" class="form-control mb-4 w-75" placeholder="USER ID" name="departmentId" id="departmentIdEdit">
+                    <label for="roleEdit">Role</label>
                     <input type="text" class="form-control mb-4 w-75" placeholder="USER ID" name="role" id="roleEdit">
+                    <label for="passwordEdit">Password</label>
                     <input type="text" class="form-control mb-4 w-75" placeholder="USER ID" name="password" id="passwordEdit">
                     <button type="submit" class="">Save</button>
                 </form>

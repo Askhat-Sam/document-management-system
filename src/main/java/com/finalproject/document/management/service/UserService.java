@@ -8,12 +8,13 @@ import java.util.Optional;
 public interface UserService {
     List<User> findAll(Integer page, Integer size, String sortBy, String sortDirection, String  keyword, String column);
     List<User> findAll();
-    void update(User theUser);
+    void update(User user);
+    void save(User user);
 
-    void deleteUserById(User theUser);
+    void deleteUserById(User user);
 
-    User findById(Long theId);
-    User getOldUserById(Long theId);
+    User findById(Long id);
+    User getOldUserById(Long id);
 
     <T> String downloadList(List<T> list);
 

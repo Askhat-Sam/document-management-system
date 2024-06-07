@@ -99,6 +99,12 @@ public class UserServiceImpl implements UserService {
     public void update(User theUser) {
         userRepository.save(theUser);
     }
+
+    @Override
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
     @Override
     public User findById(Long theId) {
         entityManager.clear();

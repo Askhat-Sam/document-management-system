@@ -99,7 +99,7 @@ public class UserController {
         // Create a new user
         User newUser = new User(userId, firstName, lastName, email, department, role, password, 1);
 
-        userService.update(newUser);
+        userService.save(newUser);
 
         return "redirect:/document-management/users/getUsers";
     }

@@ -2,9 +2,11 @@ package com.finalproject.document.management.service;
 
 import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.repository.DocumentRepository;
+import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,6 +32,8 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @AllArgsConstructor
 public class DocumentServiceImpl implements DocumentService {
     private DocumentRepository documentRepository;
+    @Autowired
+    EntityManager entityManager;
 
     private static final Logger logger = Logger.getLogger(DocumentServiceImpl.class.getName());
 
@@ -81,6 +85,7 @@ public class DocumentServiceImpl implements DocumentService {
     //Issue with using OPTIONAL ????
     @Override
     public Document findById(Long id) {
+        entityManager.clear();
 
         Optional<Document> result =documentRepository.findById(id);
 
