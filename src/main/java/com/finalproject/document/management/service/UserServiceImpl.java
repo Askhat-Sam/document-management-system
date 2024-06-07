@@ -1,11 +1,14 @@
 package com.finalproject.document.management.service;
 
 import com.finalproject.document.management.entity.Department;
+import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.repository.DepartmentRepository;
 import com.finalproject.document.management.repository.UserRepository;
 import jakarta.persistence.EntityManager;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
@@ -14,6 +17,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -125,6 +131,85 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(theUser);
     }
 
+    public ResponseEntity<byte[]> downloadListAsExcel() {
+        List<User> users = userRepository.findAll();
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("List");
+
+        // Set style for table body
+        CellStyle styleBody = workbook.createCellStyle();
+        styleBody.setBorderTop(BorderStyle.THIN);
+        styleBody.setBorderBottom(BorderStyle.THIN);
+        styleBody.setBorderLeft(BorderStyle.THIN);
+        styleBody.setBorderRight(BorderStyle.THIN);
+        styleBody.setAlignment(HorizontalAlignment.LEFT);
+
+        // Create header CellStyle
+        Font headerFont = workbook.createFont();
+        headerFont.setColor(IndexedColors.WHITE.index);
+        CellStyle headerCellStyle = sheet.getWorkbook().createCellStyle();
+        // fill foreground color ...
+        headerCellStyle.setFillForegroundColor(new XSSFColor(new java.awt.Color(0, 32, 91), null));
+        // and solid fill pattern produces solid grey cell fill
+        headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        headerCellStyle.setFont(headerFont);
+
+
+        int rowIndex = 1;
+        // Add header values
+        Row rowHeader = sheet.createRow(rowIndex - 1);
+        rowHeader.createCell(0).setCellValue("Id");
+        rowHeader.createCell(1).setCellValue("User id");
+        rowHeader.createCell(2).setCellValue("First name");
+        rowHeader.createCell(3).setCellValue("Last name");
+        rowHeader.createCell(4).setCellValue("Email");
+        rowHeader.createCell(5).setCellValue("Department id");
+        rowHeader.createCell(6).setCellValue("Role");
+        // Add table body values
+        for (User u : users) {
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(u.getId());
+            row.createCell(1).setCellValue(u.getUserId());
+            row.createCell(2).setCellValue(u.getFirstName());
+            row.createCell(3).setCellValue(u.getLastName());
+            row.createCell(4).setCellValue(u.getEmail());
+            row.createCell(5).setCellValue(u.getDepartmentId());
+            row.createCell(6).setCellValue(u.getRole());
+        }
+
+        // Apply style to cells
+        for (Row row : sheet) {
+            for (Cell cell : row) {
+                // Apply border to all non empty cells
+                if (cell.getCellType() != CellType.BLANK) {
+                    cell.setCellStyle(styleBody);
+                }
+                // Apply style to the headers
+                if (cell.getRowIndex()==0) {
+                    cell.setCellStyle(headerCellStyle);
+                }
+            }
+        }
+
+        for (int i = 0; i <= 9; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            workbook.write(outputStream);
+            workbook.close();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=list.xlsx");
+            headers.add(HttpHeaders.CONTENT_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     //    @Override
 //    @Cacheable(cacheNames = "users", unless = "#result == null")
 //    public User findById(Long theId) {
@@ -148,92 +233,6 @@ public class UserServiceImpl implements UserService {
 //        return theUser;
 //
 //    }
-
-
-    @Override
-    public <T> String downloadList(List<T> list) {
-
-        List<User> users = userRepository.findAll();
-        String excelFilePath = "src/main/resources/donwloads/list.xlsx";
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("List");
-
-        // Set style for table body
-        CellStyle styleBody = workbook.createCellStyle();
-        styleBody.setBorderTop(BorderStyle.THIN);
-        styleBody.setBorderBottom(BorderStyle.THIN);
-        styleBody.setBorderLeft(BorderStyle.THIN);
-        styleBody.setBorderRight(BorderStyle.THIN);
-        styleBody.setAlignment(HorizontalAlignment.LEFT);
-
-        int rowIndex = 1;
-        // Add header values
-        Row rowHeader = sheet.createRow(rowIndex - 1);
-        Cell cellHeader = rowHeader.createCell(0);
-        cellHeader.setCellValue("ID");
-        Cell cellHeader1 = rowHeader.createCell(1);
-        cellHeader1.setCellValue("User ID");
-        Cell cellHeader2 = rowHeader.createCell(2);
-        cellHeader2.setCellValue("First name");
-        Cell cellHeader3 = rowHeader.createCell(3);
-        cellHeader3.setCellValue("Last name");
-        Cell cellHeader4 = rowHeader.createCell(4);
-        cellHeader4.setCellValue("Email");
-        Cell cellHeader5 = rowHeader.createCell(5);
-        cellHeader5.setCellValue("Department ID");
-        Cell cellHeader6 = rowHeader.createCell(6);
-        cellHeader6.setCellValue("Role");
-
-
-        // Add table body values
-        for (User u : users) {
-            Row row = sheet.createRow(rowIndex++);
-            Cell cell = row.createCell(0);
-            cell.setCellValue(u.getId());
-            Cell cell1 = row.createCell(1);
-            cell1.setCellValue(u.getUserId());
-            Cell cell2 = row.createCell(2);
-            cell2.setCellValue(u.getFirstName());
-            Cell cell3 = row.createCell(3);
-            cell3.setCellValue(u.getLastName());
-            Cell cell4 = row.createCell(4);
-            cell4.setCellValue(u.getEmail());
-            Cell cell5 = row.createCell(5);
-            // Get department by id
-            Department department = departmentRepository.getById(u.getDepartmentId());
-            cell5.setCellValue(department.getName());
-            Cell cell6 = row.createCell(6);
-            cell6.setCellValue(u.getRole());
-        }
-
-        // Apply borders to all non-empty cells
-        for (Row row : sheet) {
-            for (Cell cell : row) {
-                if (cell.getCellType() != CellType.BLANK) {
-                    cell.setCellStyle(styleBody);
-                }
-            }
-        }
-
-        for (int i = 0; i <= 11; i++) {
-            sheet.autoSizeColumn(i);
-        }
-
-        try (FileOutputStream outputStream = new FileOutputStream(excelFilePath)) {
-            workbook.write(outputStream);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            workbook.close();
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Workbook cannot be closed");
-        }
-        return "List has been downloaded";
-    }
-
 
     @Override
     public User findUserByIdWithDocuments(Long id) {

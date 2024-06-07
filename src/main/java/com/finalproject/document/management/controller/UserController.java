@@ -3,6 +3,7 @@ package com.finalproject.document.management.controller;
 import com.finalproject.document.management.entity.*;
 import com.finalproject.document.management.service.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -85,6 +86,11 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("transactions", transactions);
         return "users/view-user";
+    }
+
+    @GetMapping("/downloadListAsExcel")
+    public ResponseEntity<byte[]> downloadListAsExcel() {
+        return userService.downloadListAsExcel();
     }
 
 
@@ -172,12 +178,12 @@ public class UserController {
         return "redirect:/document-management/users/getUsers";
     }
 
-    @GetMapping("/downloadList")
-    public String downloadList() throws IOException, IllegalAccessException {
-        List<User> documents = userService.findAll();
-        userService.downloadList(documents);
-        return "redirect:/document-management/users/getUsers";
-    }
+//    @GetMapping("/downloadList")
+//    public String downloadList() throws IOException, IllegalAccessException {
+//        List<User> documents = userService.findAll();
+//        userService.downloadList(documents);
+//        return "redirect:/document-management/users/getUsers";
+//    }
 
 
 //    @PostMapping("/addNewUser")

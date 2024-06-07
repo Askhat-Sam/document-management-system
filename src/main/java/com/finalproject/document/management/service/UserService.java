@@ -1,6 +1,7 @@
 package com.finalproject.document.management.service;
 
 import com.finalproject.document.management.entity.User;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +17,7 @@ public interface UserService {
     User findById(Long id);
     User getOldUserById(Long id);
 
-    <T> String downloadList(List<T> list);
+    ResponseEntity<byte[]> downloadListAsExcel();
 
     User findUserByIdWithDocuments(Long id);
 
