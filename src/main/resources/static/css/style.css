@@ -8,6 +8,9 @@ table {
     padding: 5px 10px;
     border-radius: 5px;
 }
+.add-input {
+    margin: 5px;
+}
 .body-container{
     display: flex;
     width: 100%;
@@ -28,6 +31,14 @@ table {
     display: flex;
     justify-content: center;
 }
+.edit-form {
+    margin: 20px;
+}
+.edit-label{
+    width: 130px;
+    margin: 5px;
+}
+
 
 .main-container{
     border: 1px solid grey;
@@ -63,11 +74,10 @@ table {
        color: white;
        font-weight: 500;
 }
-
-.table-container{
-    margin: 0px 10px 5px 10px;
-    border: 1px solid grey;
+.link {
+    color: white;
 }
+
 
 table, th, td {
   border-collapse: collapse;
@@ -91,6 +101,11 @@ table, th, td {
     border-top: 1px solid grey;
     align-items: center;
 }
+.table-container{
+    margin: 20px;
+    border: 1px solid grey;
+    width: 98%;
+}
 tr{
     line-height: 30px;
 }
@@ -99,11 +114,24 @@ td, th{
 }
 .table-header {
     background: rgb(0,32,91);
-     line-height: 22px;
+     line-height: 35px;
      color: white;
 }
 .search-list {
     width: 300px;
+}
+.section-body{
+    border: 1px solid grey;
+    width:99%
+}
+
+.section-header {
+    background: rgb(0,32,91);
+    color: white;
+    font-weight: bold;
+    line-height: 35px;
+    width: 99%;
+    margin: 25px 5px 0 5px;
 }
 
 .side-panel{

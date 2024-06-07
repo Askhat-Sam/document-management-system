@@ -41,29 +41,20 @@
         </div>
         <div class="body-container">
             <div class="navbar flex-container">
-                <div>1. Document info</div>
-                <form action="#" th:action="@{/document-management/documents/addNewDocument}" th:object="${document}" method="POST">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Document code" th:field="*{documentCode}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Document type Id" th:field="*{documentTypeId}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Title" th:field="*{name}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Revision umber" th:field="*{revisionNumber}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Status Id" th:field="*{statusId}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Creation date" th:field="*{creationDate}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Modification date" th:field="*{modificationDate}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Author" th:field="*{authorId}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Link" th:field="*{link}">
-                    <button type="submit" class="">Save</button>
-                </form>
-                <div>2. Document version</div>
-
-            </div>
-            <div class="main-content">
-                <div class="table-container">
-                </div>
-                <div class="centered-div">
-                    <div>
-                        <button class="action-button" type="submit">Create document</button>
-                    </div>
+                <div class="section-header centered-div">1. Document info</div>
+                <div class="section-body">
+                    <form action="" th:action="@{/document-management/documents/addNewDocument}" th:object="${document}" method="POST" class="edit-form">
+                        <input type="text" class="add-input" placeholder="Document code" th:field="*{documentCode}">
+                        <input type="text" class="add-input" placeholder="Document type Id" th:field="*{documentTypeId}">
+                        <input type="text" class="add-input" placeholder="Title" th:field="*{name}">
+                        <input type="text" class="add-input" placeholder="Revision umber" th:field="*{revisionNumber}">
+                        <input type="text" class="add-input" placeholder="Status Id" th:field="*{statusId}">
+                        <input type="text" class="add-input" placeholder="Creation date" th:field="*{creationDate}">
+                        <input type="text" class="add-input" placeholder="Modification date" th:field="*{modificationDate}">
+                        <input type="text" class="add-input" placeholder="Author" th:field="*{authorId}">
+                        <input type="text" class="add-input" placeholder="Link" th:field="*{link}">
+                        <button type="submit" class="action-button">Save</button>
+                    </form>
                 </div>
             </div>
         </div>

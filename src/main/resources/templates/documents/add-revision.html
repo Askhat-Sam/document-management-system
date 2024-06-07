@@ -41,27 +41,30 @@
         </div>
         <div class="body-container">
             <div class="navbar flex-container-column">
-                <div>1. Revision info</div>
-                <form action="#" th:action="@{/document-management/documents/addNewRevision}" th:object="${documentRevision}" method="POST">
-                    <input type="hidden" name="documentId" th:value="${documentId}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="User id" th:field="*{userId}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Date" th:field="*{date}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Revision number" th:field="*{revisionNumber}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Status Id" th:field="*{statusId}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Description" th:field="*{description}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Link" th:field="*{link}">
-                    <input type="text" class="form-control mb-4 w-75" placeholder="Validated by user" th:field="*{validatingUserId}">
-                    <button type="submit" class="">Save</button>
-                </form>
+                <div class="section-header centered-div">1. Revision info</div>
+                <div class="section-body">
+                    <form action="#" th:action="@{/document-management/documents/addNewRevision}" th:object="${documentRevision}" method="POST">
+                        <input type="hidden" name="documentId" th:value="${documentId}">
+                        <input type="text" class="add-input" placeholder="User id" th:field="*{userId}">
+                        <input type="date" class="" placeholder="Date" th:field="*{date}">
+                        <input type="text" class="" placeholder="Revision number" th:field="*{revisionNumber}">
+                        <input type="text" class="" placeholder="Status Id" th:field="*{statusId}">
+                        <input type="text" class="" placeholder="Description" th:field="*{description}">
+                        <input type="text" class="" placeholder="Link" th:field="*{link}">
+                        <input type="text" class="" placeholder="Validated by user" th:field="*{validatingUserId}">
+                        <button type="submit" class="action-button">Save</button>
+                    </form>
                 <button class="action-button">Attach file</button>
-
+                </div>
             </div>
             <div class="main-content">
-                <div class="table-container">
-                </div>
                 <div class="centered-div">
                     <div>
-                        <button class="action-button" type="submit">Cancel</button>
+                        <button class="action-button" type="submit">
+                            <a class="link" th:href="@{/document-management/documents/getDocuments}">
+                                Cancel
+                            </a>
+                        </button>
                         <button class="action-button" type="submit">Save and send to validation</button>
                     </div>
                 </div>

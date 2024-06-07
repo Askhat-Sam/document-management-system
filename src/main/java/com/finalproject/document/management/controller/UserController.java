@@ -1,13 +1,7 @@
 package com.finalproject.document.management.controller;
 
-import com.finalproject.document.management.entity.Department;
-import com.finalproject.document.management.entity.Document;
-import com.finalproject.document.management.entity.Search;
-import com.finalproject.document.management.entity.User;
-import com.finalproject.document.management.service.DepartmentService;
-import com.finalproject.document.management.service.DocumentCommentService;
-import com.finalproject.document.management.service.DocumentService;
-import com.finalproject.document.management.service.UserService;
+import com.finalproject.document.management.entity.*;
+import com.finalproject.document.management.service.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,14 +17,16 @@ public class UserController {
     private final DepartmentService departmentService;
     private final DocumentCommentService documentCommentService;
     private final DocumentService documentService;
+    private final TransactionService transactionService;
     @Value("${headersUser}")
     private List<String> headers;
 
-    public UserController(UserService userService, DepartmentService departmentService, DocumentCommentService documentCommentService, DocumentService documentService) {
+    public UserController(UserService userService, DepartmentService departmentService, DocumentCommentService documentCommentService, DocumentService documentService, TransactionService transactionService) {
         this.userService = userService;
         this.departmentService = departmentService;
         this.documentCommentService = documentCommentService;
         this.documentService = documentService;
+        this.transactionService = transactionService;
     }
 
     @RequestMapping("/getUsers")
@@ -80,6 +76,15 @@ public class UserController {
         User user = userService.findById(id);
         model.addAttribute(user);
         return user;
+    }
+
+    @GetMapping("/view/{id}")
+    public String viewUser(@PathVariable Long id, Model model) {
+        User user = userService.findById(id);
+        List<TransactionUser> transactions = transactionService.findAllByUser(user.getUserId());
+        model.addAttribute("user", user);
+        model.addAttribute("transactions", transactions);
+        return "users/view-user";
     }
 
 
@@ -151,6 +156,7 @@ public class UserController {
         if (departmentId != null) {
             Department department = departmentService.findById(departmentId);
             user.setDepartment(department);
+            user.setDepartmentId(departmentId);
         }
         if (password != null) {
             // Generate bcrypt hash

@@ -40,7 +40,7 @@ public class User implements Comparable<User>{
     private Long departmentId;
 
     @JsonManagedReference
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
     @JoinColumn(name="department_id")
     private Department department;
 

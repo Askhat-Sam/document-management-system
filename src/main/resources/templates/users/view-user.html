@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <script type="text/javascript" src="../static/js/code.jquery.com_jquery-3.7.1.min.js"
+            th:src="@{/js/code.jquery.com_jquery-3.7.1.min.js}"></script>
+    <script type="text/javascript" src="../static/js/main.js" th:src="@{/js/main.js}"></script>
+
+    <title>Document Management System</title>
+</head>
+<body>
+<div class="main-container">
+    <div class="flex-container header-container">
+        <div class="navbar-div">Document Management Service</div>
+        <div class="navbar-div">
+            <p>User: <span sec:authentication="principal.username"></span> <span sec:authentication="principal.authorities"></span></p>
+        </div>
+        <div class="empty-div navbar-div"></div>
+        <div class="navbar-div">Notifications</div>
+        <div>
+            <form action="#" th:action="@{/logout}" method="POST" class="navbar-header">
+                <input type="submit" value="Logout" class=""/>
+            </form>
+        </div>
+    </div>
+    <div class="flex-container">
+        <div class="side-panel">
+            <div>
+                <a class="" th:href="@{/document-management/documents/getDocuments}">
+                    Documents
+                </a>
+            </div>
+            <div>
+                <a class="" th:href="@{/document-management/users/getUsers}">
+                    Users
+                </a>
+            </div>
+            <div>
+                <a class="" th:href="@{/document-management/documents/downloadList}">
+                    Export as list
+                </a>
+            </div>
+        </div>
+        <div class="body-container">
+            <div class="navbar flex-container-column">
+                <div class="section-header centered-div">1. User info</div>
+                <div class="section-body">
+                <form action="#" th:action="@{/document-management/users/updateUser}" th:object="${user}" method="POST" class="edit-form">
+                    <div class="">
+                        <label for="id" class="edit-label">Id</label>
+                        <input type="text" id="id" name="id" th:field="*{id}" class="" readonly/>
+                    </div>
+                    <div class="">
+                        <label for="userId" class="edit-label">User id</label>
+                        <input type="text" id="userId" name="userId" th:field="*{userId}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="firstName" class="edit-label">First name</label>
+                        <input type="text" id="firstName" name="firstName" th:field="*{firstName}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="lastName" class="edit-label">Last name</label>
+                        <input type="text" id="lastName" name="lastName" th:field="*{lastName}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="email" class="edit-label">Email</label>
+                        <input type="text" id="email" name="email" th:field="*{email}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="departmentId" class="edit-label">Department id</label>
+                        <input type="text" id="departmentId" name="departmentId" th:field="*{departmentId}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="role" class="edit-label">Role</label>
+                        <input type="text" id="role" name="role" th:field="*{role}" class=""/>
+                    </div>
+                    <div class="">
+                        <label for="password" class="edit-label">Password</label>
+                        <input type="text" id="password" name="password" th:field="*{password}" class=""/>
+                    </div>
+                    <button type="submit" class="action-button">Save</button>
+                </form>
+                </div>
+                <div class="section-header centered-div">2. User transactions</div>
+                <div class="section-body">
+                    <div class="table-container">
+                        <table class="">
+                            <thead>
+                            <tr class="table-header">
+                                <th>Id</th>
+                                <th>Date</th>
+                                <th>User</th>
+                                <th>User id</th>
+                                <th>Transaction type</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-body">
+                            <tr th:each="transaction : ${transactions}" class="" style="height: 20px">
+                                <td th:text="${transaction.id}" />
+                                <td th:text="${transaction.date}" />
+                                <td th:text="${transaction.user}" />
+                                <td th:text="${transaction.userId}" />
+                                <td th:text="${transaction.transactionType}" />
+
+                                <td>
+                                    <!--To change to icons-->
+                                    <a  class="action-tool-edit">
+                                        download
+                                    </a>
+                                    <a  class="action-tool-edit">View</a>
+                                    <a class="action-btn-delete"
+                                       onclick="if (!(confirm('Are you sure you want to delete this document?'))) return false">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+</html>
