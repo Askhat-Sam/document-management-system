@@ -2,6 +2,7 @@ package com.finalproject.document.management.controller;
 
 import com.finalproject.document.management.entity.*;
 import com.finalproject.document.management.service.*;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -10,8 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 //@RestController
 @Controller
+@AllArgsConstructor
 @RequestMapping("/document-management/users")
 public class UserController {
     private final UserService userService;
@@ -23,23 +26,15 @@ public class UserController {
     @Value("${headersUser}")
     private List<String> headers;
 
-    public UserController(UserService userService, DepartmentService departmentService, DocumentCommentService documentCommentService, DocumentService documentService, DocumentTransactionService documentTransactionService, UserTransactionService userTransactionService) {
-        this.userService = userService;
-        this.departmentService = departmentService;
-        this.documentCommentService = documentCommentService;
-        this.documentService = documentService;
-        this.documentTransactionService = documentTransactionService;
-        this.userTransactionService = userTransactionService;
-    }
 
     @RequestMapping("/getUsers")
     public String showUsers(@RequestParam(name = "page", required = false) Integer page,
-                                @RequestParam(name = "size", required = false) Integer size,
-                                @RequestParam(name = "sortBy", required = false) String sortBy,
-                                @RequestParam(name = "sortDirection", required = false) String sortDirection,
-                                @RequestParam(name = "keyword", required = false) String keyword,
-                                @RequestParam(name = "column", required = false) String column,
-                                Model model) {
+                            @RequestParam(name = "size", required = false) Integer size,
+                            @RequestParam(name = "sortBy", required = false) String sortBy,
+                            @RequestParam(name = "sortDirection", required = false) String sortDirection,
+                            @RequestParam(name = "keyword", required = false) String keyword,
+                            @RequestParam(name = "column", required = false) String column,
+                            Model model) {
         Search search = new Search();
         List<User> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
         User user = new User();
@@ -53,29 +48,17 @@ public class UserController {
         model.addAttribute("headers", headers);
         return "users/users";
     }
-//@RequestMapping("/getUsers")
-//public List<User>  showUsers(@RequestParam(name = "page", required = false) Integer page,
-//                        @RequestParam(name = "size", required = false) Integer size,
-//                        @RequestParam(name = "sortBy", required = false) String sortBy,
-//                        @RequestParam(name = "sortDirection", required = false) String sortDirection,
-//                        @RequestParam(name = "keyword", required = false) String keyword,
-//                        @RequestParam(name = "column", required = false) String column,
-//                        Model model) {
-//    List<User> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
-//
-//    return users;
-//}
+
 
     @RequestMapping("/getUser/{id}")
     public User getUserById(@PathVariable("id") Long id) {
         User user = userService.findById(id);
-        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%" + user);
         return userService.findById(id);
     }
 
     @RequestMapping("/getOne")
     @ResponseBody
-    public User findById(Long id, Model model){
+    public User findById(Long id, Model model) {
         User user = userService.findById(id);
         model.addAttribute(user);
         return user;
@@ -104,9 +87,9 @@ public class UserController {
             @RequestParam("email") String email,
             @RequestParam("departmentId") Long departmentId,
             @RequestParam("role") String role,
-            @RequestParam("password") String password){
+            @RequestParam("password") String password) {
         //generate bcrypt hash
-        String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
+        String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt()) +".q";
         Department department = departmentService.findById(departmentId);
 
         // Create a new user
@@ -117,20 +100,11 @@ public class UserController {
         return "redirect:/document-management/users/getUsers";
     }
 
-    @GetMapping("/deleteUser")
+
+    @GetMapping("/deleteUser") //TO BE FIXED
     public String deleteUser(@RequestParam Long id) {
         // Get user by id
         User user = userService.findById(id);
-
-        List<Document> documents = documentService.findByUserId(id);
-
-//        for (Document document : documents) {
-//            document.setAuthorId(null);
-//        }
-
-        System.out.println("To be deleted: " + user);
-
-//        System.out.println("@@@@@@@Comments made by this user: " + id + " followos: " + documentComments);
 
         userService.deleteUserById(user);
         return "redirect:/document-management/users/getUsers";
@@ -167,9 +141,9 @@ public class UserController {
             user.setDepartmentId(departmentId);
         }
         if (password != null) {
-            // Generate bcrypt hash
-//            String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt()) +".q";
-            user.setPassword(password);
+//             Generate bcrypt hash
+            String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt()) +".q";
+            user.setPassword(passwordHashed);
         }
         if (role != null) {
             user.setRole(role);
@@ -179,6 +153,21 @@ public class UserController {
 
         return "redirect:/document-management/users/getUsers";
     }
+
+    //restcontroller endpoints
+
+    //@RequestMapping("/getUsers")
+//public List<User>  showUsers(@RequestParam(name = "page", required = false) Integer page,
+//                        @RequestParam(name = "size", required = false) Integer size,
+//                        @RequestParam(name = "sortBy", required = false) String sortBy,
+//                        @RequestParam(name = "sortDirection", required = false) String sortDirection,
+//                        @RequestParam(name = "keyword", required = false) String keyword,
+//                        @RequestParam(name = "column", required = false) String column,
+//                        Model model) {
+//    List<User> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
+//
+//    return users;
+//}
 
 //    @GetMapping("/downloadList")
 //    public String downloadList() throws IOException, IllegalAccessException {

@@ -7,24 +7,15 @@ import com.finalproject.document.management.entity.Search;
 import com.finalproject.document.management.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/document-management/documents")
@@ -39,7 +30,7 @@ public class DocumentController {
 
     @Value("${headersDocument}")
     private List<String> headers;
-
+    private static final Logger logger = Logger.getLogger(DocumentController.class.getName());
     @GetMapping("/getDocuments")
     public String getDocuments(@RequestParam(name = "page", required = false) Integer page,
                                @RequestParam(name = "size", required = false) Integer size,
@@ -51,10 +42,11 @@ public class DocumentController {
         Search search = new Search();
 
         List<Document> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
-        model.addAttribute("documents", documents);
 
+        model.addAttribute("documents", documents);
         model.addAttribute("search", search);
         model.addAttribute("headers", headers);
+
         return "documents/documents";
     }
 
@@ -80,79 +72,17 @@ public class DocumentController {
     }
 
     @GetMapping("/viewFile")
-    public ResponseEntity<byte[]> openPdf(@RequestParam("link") String link) {
-        try {
-            // Load the PDF file as a resource from the classpath
-            Resource resource = new ClassPathResource(link);
-
-            // Read the file's content into a byte array
-            byte[] content = Files.readAllBytes(resource.getFile().toPath());
-
-            // Set headers to inform the browser to display the PDF
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=" + link);
-            headers.add(HttpHeaders.CONTENT_TYPE, "application/pdf");
-
-            return new ResponseEntity<>(content, headers, HttpStatus.OK);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<byte[]> viewFile(@RequestParam("link") String link) {
+        return documentService.viewFile(link);
     }
 
     @GetMapping("/downloadFile")
     public ResponseEntity<byte[]> downloadFile(@RequestParam("link") String link) {
-        try {
-            // Load the PDF file as a resource from the classpath
-            Resource resource = new ClassPathResource(link);
-
-            // Read the file's content into a byte array
-            byte[] content = Files.readAllBytes(resource.getFile().toPath());
-
-            // Set headers to inform the browser to display the PDF
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + link);
-            headers.add(HttpHeaders.CONTENT_TYPE, "application/pdf");
-
-            return new ResponseEntity<>(content, headers, HttpStatus.OK);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return documentService.downloadFile(link);
     }
 
 
-    @PostMapping("/uploadFile")
-    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes,
-                             @RequestParam("documentId") Long documentId,
-                             Model model) {
-        if (file.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
-            return "redirect:/uploadStatus";
-        }
 
-        try {
-            // Save the file to the specified directory
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get("src/main/resources/documentsUploaded/" + file.getOriginalFilename());
-            Files.write(path, bytes);
-
-            // Send the file path to the previous page link field
-            redirectAttributes.addFlashAttribute("message", "documentsUploaded/" + file.getOriginalFilename());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            redirectAttributes.addFlashAttribute("message", "File upload failed");
-        }
-        System.out.println("You successfully uploaded '" + file.getOriginalFilename() + "'");
-
-        return "redirect:/document-management/documents/addNewRevisionPage?documentId=" + documentId;
-    }
-
-    @GetMapping("/uploadStatus")
-    public String uploadStatus() {
-        return "documents/uploadStatus";
-    }
 
     @GetMapping("/downloadListAsExcel")
     public ResponseEntity<byte[]> downloadListAsExcel() {
@@ -220,51 +150,21 @@ public class DocumentController {
     @PostMapping("/updateDocument")
     public String updateDocument(@ModelAttribute Document document) {
         // Retrieve the existing document from the database
-        Document existingDocument = documentService.findById(document.getId());
 
-        // Update the fields that are not null in the submitted form
-        if (document.getDocumentCode() != null) {
-            existingDocument.setDocumentCode(document.getDocumentCode());
-        }
-        if (document.getDocumentType() != null) {
-            existingDocument.setDocumentType(document.getDocumentType());
-        }
-        if (document.getName() != null) {
-            existingDocument.setName(document.getName());
-        }
-        if (document.getRevisionNumber() != null) {
-            existingDocument.setRevisionNumber(document.getRevisionNumber());
-        }
-        if (document.getStatusId() != null) {
-            existingDocument.setStatusId(document.getStatusId());
-        }
-        if (document.getCreationDate() != null) {
-            existingDocument.setCreationDate(document.getCreationDate());
-        }
-        if (document.getModificationDate() != null) {
-            existingDocument.setModificationDate(document.getModificationDate());
-        }
-        if (document.getAuthorId() != null) {
-            existingDocument.setAuthorId(document.getAuthorId());
-        }
-        if (document.getLink() != null) {
-            existingDocument.setLink(document.getLink());
-        }
-
-        // Update the document in the database
-        documentService.update(existingDocument);
+        documentService.updateDocument(document);
 
         return "redirect:/document-management/documents/getDocuments";
     }
 
     @GetMapping("/addNewCommentPage")
     public String addNewCommentPage(@RequestParam Long documentId,
-                                     Model model) {
+                                    Model model) {
         model.addAttribute("documentId", documentId);
         DocumentComment comment = new DocumentComment();
         model.addAttribute("comment", comment);
         return "documents/add-comment";
     }
+
     @PostMapping("/addComment")
     public String addComment(@RequestParam Long documentId,
                              @RequestParam Long userId,
@@ -440,6 +340,17 @@ public class DocumentController {
 //
 //        documentService.update(document);
 //        return "Comment has been added into document with id " + documentId;
+//    }
+//
+//    @PostMapping("/uploadFile")
+//    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes,
+//                             @RequestParam("documentId") Long documentId,
+//                             Model model) {
+//        documentService.uploadfile(file, redirectAttributes, documentId, model);
+//
+//        System.out.println("You successfully uploaded '" + file.getOriginalFilename() + "'");
+//
+//        return "redirect:/document-management/documents/addNewRevisionPage?documentId=" + documentId;
 //    }
 
 }

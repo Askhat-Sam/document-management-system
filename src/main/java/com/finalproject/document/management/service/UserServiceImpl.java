@@ -48,9 +48,6 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
-    //    public UserServiceImpl(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
     @Override
     public List<User> findAll(Integer page, Integer size, String sortBy, String sortDirection, String keyword, String column) {
         Pageable pageable = doPagingAndSorting(page, size, sortBy, sortDirection);

@@ -60,7 +60,7 @@ public class TransactionAspect {
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         userBeforeUpdate.getId(),
-                        "User Id was changed from '" + userBeforeUpdate.getUserId() + "' to '" + userAfterUpdate.getUserId() + "'"
+                        "User Id has been changed from '" + userBeforeUpdate.getUserId() + "' to '" + userAfterUpdate.getUserId() + "'"
                 ));
             }
             if (!userAfterUpdate.getFirstName().equals(userBeforeUpdate.getFirstName())) {
@@ -68,7 +68,7 @@ public class TransactionAspect {
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         userBeforeUpdate.getId(),
-                        "User first name was changed from '" + userBeforeUpdate.getFirstName() + "' to '" + userAfterUpdate.getFirstName() + "'"
+                        "User first name has been changed from '" + userBeforeUpdate.getFirstName() + "' to '" + userAfterUpdate.getFirstName() + "'"
                 ));
             }
             if (!userAfterUpdate.getLastName().equals(userBeforeUpdate.getLastName())) {
@@ -76,7 +76,7 @@ public class TransactionAspect {
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         userBeforeUpdate.getId(),
-                        "User last name was changed from '" + userBeforeUpdate.getLastName() + "' to '" + userAfterUpdate.getLastName() + "'"
+                        "User last name has been changed from '" + userBeforeUpdate.getLastName() + "' to '" + userAfterUpdate.getLastName() + "'"
                 ));
             }
             if (!userAfterUpdate.getEmail().equals(userBeforeUpdate.getEmail())) {
@@ -84,7 +84,7 @@ public class TransactionAspect {
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         userBeforeUpdate.getId(),
-                        "User email was changed from '" + userBeforeUpdate.getEmail() + "' to '" + userAfterUpdate.getEmail() + "'"
+                        "User email has been changed from '" + userBeforeUpdate.getEmail() + "' to '" + userAfterUpdate.getEmail() + "'"
                 ));
             }
             if (!userAfterUpdate.getDepartment().getName().equals(userBeforeUpdate.getDepartment().getName())) {
@@ -92,7 +92,7 @@ public class TransactionAspect {
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         userBeforeUpdate.getId(),
-                        "User department was changed from '" + userBeforeUpdate.getDepartment().getName() + "' to '" + userAfterUpdate.getDepartment().getName() + "'"
+                        "User department has been changed from '" + userBeforeUpdate.getDepartment().getName() + "' to '" + userAfterUpdate.getDepartment().getName() + "'"
                 ));
             }
             if (!userAfterUpdate.getRole().equals(userBeforeUpdate.getRole())) {
@@ -100,7 +100,7 @@ public class TransactionAspect {
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         userBeforeUpdate.getId(),
-                        "User role was changed from '" + userBeforeUpdate.getRole() + "' to '" + userAfterUpdate.getRole() + "'"
+                        "User role has been changed from '" + userBeforeUpdate.getRole() + "' to '" + userAfterUpdate.getRole() + "'"
                 ));
             }
             if (!userAfterUpdate.getPassword().equals(userBeforeUpdate.getPassword())) {
@@ -108,7 +108,7 @@ public class TransactionAspect {
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         userBeforeUpdate.getId(),
-                        "User password was changed"
+                        "User (" + userBeforeUpdate.getUserId() + ") password has been changed"
                 ));
             }
             // Check changes of other fields if necessary

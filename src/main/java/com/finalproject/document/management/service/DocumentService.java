@@ -2,6 +2,11 @@ package com.finalproject.document.management.service;
 
 import com.finalproject.document.management.entity.Document;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -20,4 +25,9 @@ public interface DocumentService {
 
     ResponseEntity<byte[]> downloadListAsExcel();
     List<Document> findByUserId(Long id);
+
+    void uploadfile(MultipartFile file, RedirectAttributes redirectAttributes, Long documentId, Model model);
+    ResponseEntity<byte[]> viewFile(String link);
+    ResponseEntity<byte[]> downloadFile(String link);
+    void updateDocument(Document document);
 }

@@ -9,6 +9,8 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,6 +18,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,10 +41,8 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @Service
 @AllArgsConstructor
 public class DocumentServiceImpl implements DocumentService {
-    private DocumentRepository documentRepository;
-    @Autowired
-    EntityManager entityManager;
-
+    private final DocumentRepository documentRepository;
+    private final EntityManager entityManager;
     private static final Logger logger = Logger.getLogger(DocumentServiceImpl.class.getName());
 
     @Override
@@ -215,6 +218,107 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public List<Document> findByUserId(Long id) {
         return documentRepository.findByUserId(id);
+    }
+
+    @Override
+    public void uploadfile(MultipartFile file, RedirectAttributes redirectAttributes, Long documentId, Model model) {
+        if (file.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
+//            return "redirect:/uploadStatus";
+        }
+
+        try {
+            // Save the file to the specified directory
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get("src/main/resources/documentsUploaded/" + file.getOriginalFilename());
+            Files.write(path, bytes);
+
+            // Send the file path to the previous page link field
+            redirectAttributes.addFlashAttribute("message", "documentsUploaded/" + file.getOriginalFilename());
+
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Document cannot be uploaded", e);
+            redirectAttributes.addFlashAttribute("message", "File upload failed");
+        }
+    }
+
+    @Override
+    public ResponseEntity<byte[]> viewFile(String link) {
+        try {
+            // Load the PDF file as a resource from the classpath
+            Resource resource = new ClassPathResource(link);
+
+            // Read the file's content into a byte array
+            byte[] content = Files.readAllBytes(resource.getFile().toPath());
+
+            // Set headers to inform the browser to display the PDF
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=" + link);
+            headers.add(HttpHeaders.CONTENT_TYPE, "application/pdf");
+
+            return new ResponseEntity<>(content, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Document cannot be displayed", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<byte[]> downloadFile(String link) {
+        try {
+            // Load the PDF file as a resource from the classpath
+            Resource resource = new ClassPathResource(link);
+
+            // Read the file's content into a byte array
+            byte[] content = Files.readAllBytes(resource.getFile().toPath());
+
+            // Set headers to inform the browser to display the PDF
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + link);
+            headers.add(HttpHeaders.CONTENT_TYPE, "application/pdf");
+
+            return new ResponseEntity<>(content, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Document cannot be downloaded", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void updateDocument(Document document) {
+        Document existingDocument = findById(document.getId());
+
+        // Update the fields that are not null in the submitted form
+        if (document.getDocumentCode() != null) {
+            existingDocument.setDocumentCode(document.getDocumentCode());
+        }
+        if (document.getDocumentType() != null) {
+            existingDocument.setDocumentType(document.getDocumentType());
+        }
+        if (document.getName() != null) {
+            existingDocument.setName(document.getName());
+        }
+        if (document.getRevisionNumber() != null) {
+            existingDocument.setRevisionNumber(document.getRevisionNumber());
+        }
+        if (document.getStatusId() != null) {
+            existingDocument.setStatusId(document.getStatusId());
+        }
+        if (document.getCreationDate() != null) {
+            existingDocument.setCreationDate(document.getCreationDate());
+        }
+        if (document.getModificationDate() != null) {
+            existingDocument.setModificationDate(document.getModificationDate());
+        }
+        if (document.getAuthorId() != null) {
+            existingDocument.setAuthorId(document.getAuthorId());
+        }
+        if (document.getLink() != null) {
+            existingDocument.setLink(document.getLink());
+        }
+
+        // Update the document in the database
+        update(existingDocument);
     }
 
     private static Pageable doPagingAndSorting(Integer page, Integer size, String sortBy, String sortDirection) {
