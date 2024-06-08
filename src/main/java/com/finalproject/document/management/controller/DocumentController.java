@@ -26,16 +26,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-//@RestController
 @Controller
 @RequestMapping("/document-management/documents")
 @AllArgsConstructor
 public class DocumentController {
-    private DocumentService documentService;
-    private DocumentTypeService documentTypeService;
-    private DocumentStatusService documentStatusService;
+    private final DocumentService documentService;
+    private final UserService userService;
+    private final DocumentTypeService documentTypeService;
+    private final DocumentStatusService documentStatusService;
+    private final DocumentCommentService documentCommentService;
     private final DocumentRevisionService documentRevisionService;
-    private UserService userService;
+
     @Value("${headersDocument}")
     private List<String> headers;
 
@@ -68,8 +69,13 @@ public class DocumentController {
     public String viewDocument(@PathVariable Long id, Model model) {
         Document document = documentService.findById(id);
         List<DocumentRevision> revisions = documentRevisionService.findAllByDocumentId(document.getId());
+        List<DocumentComment> comments = documentCommentService.findAll();
+        DocumentComment comment = new DocumentComment();
+
         model.addAttribute("document", document);
         model.addAttribute("revisions", revisions);
+        model.addAttribute("comments", comments);
+        model.addAttribute("comment", comment);
         return "documents/view-document";
     }
 
@@ -171,26 +177,16 @@ public class DocumentController {
             @RequestParam("modificationDate") String modificationDate,
             @RequestParam("authorId") Long authorId) {
 
-        String link = "src/main/resources/documentSource/";
+        String link = "TBD";
 
-        // Move the file into "documentsUploaded" folder
-        String newLink = documentService.uploadDocument(name + ".pdf", link, "upload");
-        // Fetch related entities
-//        DocumentType documentType = documentTypeService.findById(documentTypeId);
-//        DocumentStatus documentStatus = documentStatusService.findByID(statusId);
-//        User author = userService.findById(authorId);
-
-        // Create a new document
-//        Document document = new Document(documentCode, documentType, name, revisionNumber, documentStatus, creationDate, modificationDate, author, newLink);
+//        // Move the file into "documentsUploaded" folder
+//        String newLink = documentService.uploadDocument(name + ".pdf", link, "upload");
 
         // Create a new document
         Document document = new Document(documentCode, documentTypeId, name, revisionNumber, statusId, creationDate, modificationDate, authorId, link);
-//        Document document = new Document(documentCode, documentType, name, revisionNumber, documentStatus,
-//                creationDate, modificationDate, user, newLink);
-        System.out.println(document);
 
         // Add document into database
-        documentService.update(document);
+        documentService.save(document);
         return "redirect:/document-management/documents/getDocuments";
     }
 
@@ -261,27 +257,29 @@ public class DocumentController {
         return "redirect:/document-management/documents/getDocuments";
     }
 
+    @GetMapping("/addNewCommentPage")
+    public String addNewCommentPage(@RequestParam Long documentId,
+                                     Model model) {
+        model.addAttribute("documentId", documentId);
+        DocumentComment comment = new DocumentComment();
+        model.addAttribute("comment", comment);
+        return "documents/add-comment";
+    }
     @PostMapping("/addComment")
     public String addComment(@RequestParam Long documentId,
                              @RequestParam Long userId,
                              @RequestParam String comment) {
         Document document = documentService.findById(documentId);
 
+        DocumentComment documentComment = new DocumentComment(documentId, userId,
+                new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
+                comment);
         // Add comment to the document
-        document.addComment(new DocumentComment(userId, new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()), comment));
+        document.addComment(documentComment);
 
         documentService.update(document);
-        return "Comment has been added into document with id " + documentId;
+        return "redirect:/document-management/documents/view/" + documentId;
     }
-
-    //to be removed previous version
-//    @GetMapping("/downloadList")
-//    public String downloadList() throws IOException, IllegalAccessException {
-//        List<Document> documents = documentService.findAll();
-//        documentService.downloadList(documents);
-//        return "redirect:/document-management/documents/getDocuments";
-//    }
-
 
     @GetMapping("/addNewRevisionPage")
     public String addNewRevisionPage(@RequestParam Long documentId,
@@ -311,7 +309,7 @@ public class DocumentController {
     }
 
 
-//RestController
+//RestController endpoints
 
     //    @PostMapping("/addNewDocument")
 //    public String addDocument(
@@ -346,13 +344,13 @@ public class DocumentController {
 //        return "Document with reference: " + documentCode + " has been added into database";
 //    }
 
-    //    @GetMapping("/getDocuments")
-//    public List<Document>  getDocuments(@RequestParam(name = "page", required = false) Integer page,
-//                               @RequestParam(name = "size", required = false) Integer size,
-//                               @RequestParam(name = "sortBy", required = false) String sortBy,
-//                               @RequestParam(name = "sortDirection", required = false) String sortDirection,
-//                               @RequestParam(name = "keyword", required = false) String keyword,
-//                               @RequestParam(name = "column", required = false) String column) {
+//    @GetMapping("/getDocuments")
+//    public List<Document> getDocuments(@RequestParam(name = "page", required = false) Integer page,
+//                                       @RequestParam(name = "size", required = false) Integer size,
+//                                       @RequestParam(name = "sortBy", required = false) String sortBy,
+//                                       @RequestParam(name = "sortDirection", required = false) String sortDirection,
+//                                       @RequestParam(name = "keyword", required = false) String keyword,
+//                                       @RequestParam(name = "column", required = false) String column) {
 //        List<Document> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
 //        return documents;
 //    }
@@ -429,6 +427,19 @@ public class DocumentController {
 //        }
 //        documentService.update(document);
 //        return "Document with id: " + id + " has been successfully updated in database";
+//    }
+
+//    @PostMapping("/addComment")
+//    public String addComment(@RequestParam Long documentId,
+//                             @RequestParam Long userId,
+//                             @RequestParam String comment) {
+//        Document document = documentService.findById(documentId);
+//
+//        // Add comment to the document
+//        document.addComment(new DocumentComment(userId, new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()), comment));
+//
+//        documentService.update(document);
+//        return "Comment has been added into document with id " + documentId;
 //    }
 
 }

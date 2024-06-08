@@ -1,25 +1,44 @@
-//package com.finalproject.document.management.service;
-//
-//import com.finalproject.document.management.entity.Transaction;
-//import com.finalproject.document.management.entity.TransactionDocument;
-//import com.finalproject.document.management.entity.TransactionUser;
-//import com.finalproject.document.management.repository.DocumentTransactionRepository;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.List;
-//@Service
-//public class DocumentTransactionServiceImpl implements DocumentTransactionService{
-//    @Autowired
-//    private DocumentTransactionRepository  documentTransactionRepository;
-//    @Override
-//    public List<TransactionDocument> findAll(String keyword) {
-//        return null;
-//    }
-//
-//
-//    @Override
-//    public <T extends Transaction> void save(T transaction) {
-//        documentTransactionRepository.save(transaction);
-//    }
-//}
+package com.finalproject.document.management.service;
+
+import com.finalproject.document.management.entity.TransactionDocument;
+import com.finalproject.document.management.entity.TransactionEntity;
+import com.finalproject.document.management.repository.DocumentTransactionRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class DocumentTransactionServiceImpl implements DocumentTransactionService {
+
+    private final DocumentTransactionRepository documentTransactionRepository;
+
+    public DocumentTransactionServiceImpl(DocumentTransactionRepository documentTransactionRepository) {
+        this.documentTransactionRepository = documentTransactionRepository;
+    }
+
+    @Override
+    public List<TransactionEntity> findAll(String keyword) {
+        return null;
+    }
+
+
+    @Override
+    public List<TransactionEntity> findAllByDocument(Long documentId) {
+        return null;
+    }
+
+    @Override
+    public void save(TransactionEntity transaction) {
+        documentTransactionRepository.save(transaction);
+    }
+
+    @Override
+    public List<TransactionEntity> findAllByUser(String userId) {
+        return null;
+    }
+
+
+    public List<TransactionEntity> findAllByDocumentId(Long documentId) {
+        return documentTransactionRepository.findAllByDocumentId(documentId);
+    }
+}

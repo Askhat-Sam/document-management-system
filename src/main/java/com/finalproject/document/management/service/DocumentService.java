@@ -12,6 +12,7 @@ public interface DocumentService {
     Document findById(Long id);
 
     void update(Document document);
+    void save(Document document);
 
     void deleteDocumentById(Long id);
 

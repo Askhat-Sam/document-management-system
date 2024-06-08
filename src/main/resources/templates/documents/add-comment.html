@@ -50,18 +50,20 @@
         </div>
         <div class="body-container">
             <div class="navbar flex-container">
-                <div class="section-header centered-div">1. Document info</div>
+                <div class="section-header centered-div">1. Add new comment</div>
                 <div class="section-body">
-                    <form action="" th:action="@{/document-management/documents/addNewDocument}" th:object="${document}" method="POST" class="edit-form">
-                        <input type="text" class="add-input" placeholder="Document code" th:field="*{documentCode}">
-                        <input type="text" class="add-input" placeholder="Document type Id" th:field="*{documentTypeId}">
-                        <input type="text" class="add-input" placeholder="Title" th:field="*{name}">
-                        <input type="text" class="add-input" placeholder="Revision umber" th:field="*{revisionNumber}">
-                        <input type="text" class="add-input" placeholder="Status Id" th:field="*{statusId}">
-                        <input type="date" class="add-input" placeholder="Creation date" th:field="*{creationDate}">
-                        <input type="date" class="add-input" placeholder="Modification date" th:field="*{modificationDate}">
-                        <input type="text" class="add-input" placeholder="Author" th:field="*{authorId}">
-                        <input type="text" class="add-input" placeholder="Link" th:field="*{link}">
+                    <form action="" th:action="@{/document-management/documents/addComment}" th:object="${comment}" method="POST" class="edit-form">
+                        <div class="flex-container-column">
+                            <div class="flex-container-row">
+                                <input type="text" class="add-input" placeholder="Document id"  name="documentId" th:value="${documentId}">
+                                <input type="text" class="add-input"  placeholder="User id" th:field = "*{userId}">
+                                <input type="date" class="add-input"  placeholder="Date" th:field = "*{date}">
+                            </div>
+                            <div class="flex-container-row">
+                                <input type="text" class="add-input"  placeholder="Comment" th:field = "*{comment}">
+                            </div>
+
+                        </div>
                         <button type="submit" class="action-button">Save</button>
                     </form>
                 </div>

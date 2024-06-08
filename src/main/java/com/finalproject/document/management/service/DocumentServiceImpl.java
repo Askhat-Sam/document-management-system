@@ -87,7 +87,6 @@ public class DocumentServiceImpl implements DocumentService {
         return documentRepository.findAll();
     }
 
-    //Issue with using OPTIONAL ????
     @Override
     public Document findById(Long id) {
         entityManager.clear();
@@ -109,6 +108,11 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public void update(Document document) {
+        documentRepository.save(document);
+    }
+
+    @Override
+    public void save(Document document) {
         documentRepository.save(document);
     }
 

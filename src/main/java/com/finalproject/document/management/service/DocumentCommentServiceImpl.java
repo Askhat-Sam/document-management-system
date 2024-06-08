@@ -14,6 +14,11 @@ public class DocumentCommentServiceImpl implements DocumentCommentService{
     }
 
     @Override
+    public List<DocumentComment> findAll() {
+        return documentCommentRepository.findAll();
+    }
+
+    @Override
     public List<DocumentComment> findByUserId(Long id) {
         return documentCommentRepository.findByUserId(id);
     }

@@ -38,19 +38,11 @@ public class DocumentComment {
     @JoinColumn(name="document_id")
     private Document document;
 
-    public DocumentComment(Long userId, String comment) {
-        this.userId = userId;
-        this.comment = comment;
-    }
 
-    public DocumentComment(Long userId, String date, String comment) {
+    public DocumentComment(Long documentId, Long userId, String date, String comment) {
+        this.documentId = documentId;
         this.userId = userId;
         this.date = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
-        this.comment = comment;
-    }
-
-    public DocumentComment(Long userId, String comment, int documentId) {
-        this.userId = userId;
         this.comment = comment;
     }
 

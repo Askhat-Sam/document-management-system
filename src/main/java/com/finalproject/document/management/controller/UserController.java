@@ -4,11 +4,11 @@ import com.finalproject.document.management.entity.*;
 import com.finalproject.document.management.service.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 //@RestController
 @Controller
@@ -18,16 +18,18 @@ public class UserController {
     private final DepartmentService departmentService;
     private final DocumentCommentService documentCommentService;
     private final DocumentService documentService;
-    private final TransactionService transactionService;
+    private final DocumentTransactionService documentTransactionService;
+    private final UserTransactionService userTransactionService;
     @Value("${headersUser}")
     private List<String> headers;
 
-    public UserController(UserService userService, DepartmentService departmentService, DocumentCommentService documentCommentService, DocumentService documentService, TransactionService transactionService) {
+    public UserController(UserService userService, DepartmentService departmentService, DocumentCommentService documentCommentService, DocumentService documentService, DocumentTransactionService documentTransactionService, UserTransactionService userTransactionService) {
         this.userService = userService;
         this.departmentService = departmentService;
         this.documentCommentService = documentCommentService;
         this.documentService = documentService;
-        this.transactionService = transactionService;
+        this.documentTransactionService = documentTransactionService;
+        this.userTransactionService = userTransactionService;
     }
 
     @RequestMapping("/getUsers")
@@ -82,7 +84,7 @@ public class UserController {
     @GetMapping("/view/{id}")
     public String viewUser(@PathVariable Long id, Model model) {
         User user = userService.findById(id);
-        List<TransactionUser> transactions = transactionService.findAllByUser(user.getUserId());
+        List<TransactionEntity> transactions = userTransactionService.findAllByUser(user.getUserId());
         model.addAttribute("user", user);
         model.addAttribute("transactions", transactions);
         return "users/view-user";
@@ -104,11 +106,11 @@ public class UserController {
             @RequestParam("role") String role,
             @RequestParam("password") String password){
         //generate bcrypt hash
-//        String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
+        String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
         Department department = departmentService.findById(departmentId);
 
         // Create a new user
-        User newUser = new User(userId, firstName, lastName, email, department, role, password, 1);
+        User newUser = new User(userId, firstName, lastName, email, department, role, pw_hash, 1);
 
         userService.save(newUser);
 

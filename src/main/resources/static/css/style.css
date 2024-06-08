@@ -7,6 +7,7 @@ table {
     color: white;
     padding: 5px 10px;
     border-radius: 5px;
+    margin-top: 5px:
 }
 .add-input {
     margin: 5px;
@@ -24,6 +25,14 @@ table {
     padding: 0px;
     width: 100%;
 }
+.container-login{
+    display: flex;
+        flex-direction: row;
+        margin: 0px;
+        padding: 0px;
+        width: 600px;
+        font: 40px;
+}
 .container-main{
     height: 100vh;
 }
@@ -39,6 +48,18 @@ table {
     margin: 5px;
 }
 
+.edit-input{
+    width: 500px;
+    margin: 5px;
+}
+.login-form{
+ display: flex;
+ background: rgb(0,32,91);
+        flex-direction: row;
+        margin: 0px;
+        padding: 0px;
+        width: 600px;;
+}
 
 .main-container{
     border: 1px solid grey;
@@ -64,13 +85,25 @@ table {
 .flex-container {
    display: flex;
 }
+.flex-container-row-navbar{
+    display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+}
 .flex-container-column {
    display: flex;
    flex-direction: column;
 }
 
+.flex-container-row {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-evenly;
+   align-items: center;
+}
+
 .navbar-div {
-       padding: 5px;
+       padding: 5px 20px;
        color: white;
        font-weight: 500;
 }
@@ -113,7 +146,7 @@ td, th{
     padding-left: 4px;
 }
 .table-header {
-    background: rgb(0,32,91);
+    background: rgb(0,47,138);
      line-height: 35px;
      color: white;
 }

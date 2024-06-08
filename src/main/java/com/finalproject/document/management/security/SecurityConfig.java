@@ -53,4 +53,22 @@ public class SecurityConfig {
                 );
         return http.build();
     }
+
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(csrf -> csrf.disable())
+//                .authorizeHttpRequests(configurer ->
+//                        configurer
+//                                .anyRequest().permitAll()  // Permit all requests without authentication
+//                )
+//                .formLogin(form -> form.disable()) // Disable form login
+//                .httpBasic(httpBasic -> httpBasic.disable()) // Disable basic authentication
+//                .logout(logout -> logout.permitAll()) // Permit all logout requests
+//                .exceptionHandling(configurer ->
+//                        configurer
+//                                .accessDeniedPage("/access-denied") // Access denied page configuration
+//                );
+//        return http.build();
+//    }
 }

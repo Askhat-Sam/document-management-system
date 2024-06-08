@@ -16,12 +16,22 @@
 </head>
 <body>
 <div class="main-container">
-    <div class="flex-container header-container">
-        <div>Document Management Service</div>
-        <div>User Name: John.S (MANAGER)</div>
-        <div class="empty-div"></div>
-        <div>Notifications</div>
-        <div>Logout</div>
+    <div class="flex-container-row-navbar header-container">
+        <div class="flex-container-row">
+            <div class="navbar-div">Document Management Service</div>
+            <div class="navbar-div flex-container-row">
+                <div>User: <span sec:authentication="principal.username"></span> <span
+                        sec:authentication="principal.authorities"></span></div>
+            </div>
+        </div>
+        <div class="flex-container-row">
+            <div class="navbar-div">Notifications</div>
+            <div>
+                <form action="#" th:action="@{/logout}" method="POST" class="navbar-header">
+                    <input type="submit" value="Logout" class=""/>
+                </form>
+            </div>
+        </div>
     </div>
     <div class="flex-container">
         <div class="side-panel">
@@ -43,24 +53,30 @@
             <div class="navbar flex-container-column">
                 <div class="section-header centered-div">1. Revision info</div>
                 <div class="section-body">
-                    <form action="#" th:action="@{/document-management/documents/addNewRevision}" th:object="${documentRevision}" method="POST">
-                    <input type="text" name="documentId" th:value="${documentId}">
-                    <input type="text" class="add-input" placeholder="User id" th:field="*{userId}">
-                    <input type="date" class="" placeholder="Date" th:field="*{date}">
-                    <input type="text" class="" placeholder="Revision number" th:field="*{revisionNumber}">
-                    <input type="text" class="" placeholder="Status Id" th:field="*{statusId}">
-                    <input type="text" class="" placeholder="Description" th:field="*{description}">
-                     <input type="text" placeholder="Link"  name="link" th:value="${message}">
-                    <input type="text" class="" placeholder="Validated by user" th:field="*{validatingUserId}">
-                    <button type="submit" class="action-button">Save</button>
-                </form>
+                    <form action="#" th:action="@{/document-management/documents/addNewRevision}"
+                          th:object="${documentRevision}" method="POST">
+                        <input type="text" name="documentId" th:value="${documentId}">
+                        <input type="text" class="add-input" placeholder="User id" th:field="*{userId}">
+                        <input type="date" class="add-input" placeholder="Date" th:field="*{date}">
+                        <input type="text" class="add-input" placeholder="Revision number" th:field="*{revisionNumber}">
+                        <input type="text" class="add-input" placeholder="Status Id" th:field="*{statusId}">
+                        <input type="text" class="add-input" placeholder="Description" th:field="*{description}">
+                        <input type="text" class="add-input" placeholder="Validated by user" th:field="*{validatingUserId}">
+                        <input type="text" placeholder="Link" name="link" th:value="${message}">
+
+
+
+                        <button type="submit" class="action-button">Save</button>
+                    </form>
+                    <form method="POST" enctype="multipart/form-data"
+                          action="/document-management/documents/uploadFile">
+                        <input type="hidden" name="documentId" th:value="${documentId}">
+                        <input type="file" name="file"/>
+                        <button type="submit">Upload</button>
+                    </form>
                 </div>
             </div>
-            <form method="POST" enctype="multipart/form-data" action="/document-management/documents/uploadFile">
-                <input type="hidden" name="documentId" th:value="${documentId}">
-                <input type="file" name="file" />
-                <button type="submit">Upload</button>
-            </form>
+
 
             <div th:if="${message}">
                 <p th:text="${message}"></p>
