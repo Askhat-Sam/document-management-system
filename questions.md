@@ -76,7 +76,7 @@ http://localhost:8080/document-management/documents/addRevision?userId=3&documen
 ---------------------------------------------------------------------------------------------------------------------
 
 // GET - Get all users
-http://localhost:8080/document-management/users/getUsers
+http://localhost:8080/document-management/users/getUser
 
 // GET - Getting all users sorted by column id (replace sortBy value for required column name). Defaulting sorting direction is ascending.
 http://localhost:8080/document-management/users/getUsers?sortBy=id
@@ -97,8 +97,9 @@ http://localhost:8080/document-management/users/addNewUser?userId=Stephen.K&firs
 // POST - Updating the user by id
 http://localhost:8080/document-management/documents/updateDocument?id=3&documentReference=POL-777
 
-// GET - Deleting the user by id
-http://localhost:8080/document-management/users/deleteUser?id=9
+[//]: # (// GET - Deleting the user by id)
+
+[//]: # (http://localhost:8080/document-management/users/deleteUser?id=9)
 
 // GET - Search for user by keyword (e.g Policy) and in certain column (e.g type)
 http://localhost:8080/document-management/users/getUsers?keyword=john&column=firstName
