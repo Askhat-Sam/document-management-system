@@ -1,5 +1,6 @@
 package com.finalproject.document.management.service;
 
+import com.finalproject.document.management.dto.UserDTO;
 import com.finalproject.document.management.entity.Department;
 import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.User;
@@ -49,48 +50,55 @@ public class UserServiceImpl implements UserService {
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
     @Override
-    public List<User> findAll(Integer page, Integer size, String sortBy, String sortDirection, String keyword, String column) {
+    public List<UserDTO> findAll(Integer page, Integer size, String sortBy, String sortDirection, String keyword, String column) {
         Pageable pageable = doPagingAndSorting(page, size, sortBy, sortDirection);
         List<User> users;
+        List<UserDTO> usersDTO =new ArrayList<>();
         if (pageable != null) {
             users = userRepository.findAll(pageable).toList();
+            usersDTO = users.stream().map(this::fromEntityToDTO).collect(Collectors.toList());
         } else {
             users = userRepository.findAll();
         }
 
-        List<User> usersFiltered = new ArrayList<>();
+        List<UserDTO> usersFiltered = new ArrayList<>();
 
         //if searching by keyword in certain column. Uses "contains" to search by the part of word.
         if (keyword != null && column != null) {
             switch (column) {
                 case "Id":
-                    usersFiltered = users.stream().filter(u -> Long.toString(u.getId()).contains(keyword)).collect(Collectors.toList());
+                    usersFiltered = usersDTO.stream().filter(u -> Long.toString(u.getId()).contains(keyword)).collect(Collectors.toList());
                     return usersFiltered;
                 case "User Id":
-                    usersFiltered = users.stream().filter(u -> u.getUserId().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+                    usersFiltered = usersDTO.stream().filter(u -> u.getUserId().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
                 case "First name":
-                    usersFiltered = users.stream().filter(u -> u.getFirstName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+                    usersFiltered = usersDTO.stream().filter(u -> u.getFirstName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
                 case "Last name":
-                    usersFiltered = users.stream().filter(u -> u.getLastName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+                    usersFiltered = usersDTO.stream().filter(u -> u.getLastName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
                 case "Email":
-                    usersFiltered = users.stream().filter(u -> u.getEmail().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+                    usersFiltered = usersDTO.stream().filter(u -> u.getEmail().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
                 case "Department Id":
-                    usersFiltered = users.stream().filter(u -> Long.toString(u.getDepartmentId()).contains(keyword)).collect(Collectors.toList());
+                    usersFiltered = usersDTO.stream().filter(u -> Long.toString(u.getDepartmentId()).contains(keyword)).collect(Collectors.toList());
                     return usersFiltered;
                 case "Role":
-                    usersFiltered = users.stream().filter(u -> u.getRole().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+                    usersFiltered = usersDTO.stream().filter(u -> u.getRole().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
                 case "All":
-                    return users;
+                    return usersDTO;
             }
             return usersFiltered;
         }
-        return users;
+        return usersDTO;
     }
+
+    public UserDTO fromEntityToDTO(User user){
+        return new UserDTO(user.getId(), user.getUserId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getDepartment(), user.getRole());
+    }
+
 
     @Override
     public List<User> findAll() {
@@ -206,30 +214,6 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    //    @Override
-//    @Cacheable(cacheNames = "users", unless = "#result == null")
-//    public User findById(Long theId) {
-//        cacheManager.getCache("users").evict(theId);
-//        Optional<User> result = userRepository.findById(theId);
-//        System.out.println("result: " + result);
-//
-//        User theUser = null;
-//
-//        if (result.isPresent()) {
-//            theUser = result.get();
-//            if (theUser != null) {
-//                System.out.println("Fetched user from database: " + theUser);
-//            } else {
-//                System.out.println("User not found with id: " + theId);
-//            }
-//            System.out.println("result.get(): " + theUser);
-//        } else {
-//            throw new RuntimeException("Did not find user id: " + theId);
-//        }
-//        return theUser;
-//
-//    }
 
     @Override
     public User findUserByIdWithDocuments(Long id) {
