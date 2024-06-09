@@ -1,5 +1,6 @@
 package com.finalproject.document.management.controller;
 
+import com.finalproject.document.management.dto.DocumentCommentDTO;
 import com.finalproject.document.management.dto.DocumentDTO;
 import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.DocumentComment;
@@ -8,8 +9,6 @@ import com.finalproject.document.management.entity.Search;
 import com.finalproject.document.management.service.*;
 import com.finalproject.document.management.service.interfaces.DocumentCommentService;
 import com.finalproject.document.management.service.interfaces.DocumentRevisionService;
-import com.finalproject.document.management.service.interfaces.DocumentStatusService;
-import com.finalproject.document.management.service.interfaces.DocumentTypeService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +27,6 @@ import java.util.logging.Logger;
 public class DocumentController {
     private final DocumentService documentService;
     private final UserService userService;
-    private final DocumentTypeService documentTypeService;
-    private final DocumentStatusService documentStatusService;
     private final DocumentCommentService documentCommentService;
     private final DocumentRevisionService documentRevisionService;
 
@@ -71,7 +68,7 @@ public class DocumentController {
     public String viewDocument(@PathVariable Long id, Model model) {
         Document document = documentService.findById(id);
         List<DocumentRevision> revisions = documentRevisionService.findAllByDocumentId(document.getId());
-        List<DocumentComment> comments = documentCommentService.findAll();
+        List<DocumentCommentDTO> comments = documentCommentService.findAll();
         DocumentComment comment = new DocumentComment();
 
         model.addAttribute("document", document);
