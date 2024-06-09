@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Table(name="user")
 public class User implements Comparable<User>{
 
@@ -41,6 +42,8 @@ public class User implements Comparable<User>{
 
     @Column(name="role")
     private String role;
+    @Column(name="status")
+    private String status;
 
     @Column(name="password")
     private String password;
@@ -52,13 +55,14 @@ public class User implements Comparable<User>{
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     private List<Document> documents;
 
-    public User(String userId, String firstName, String lastName, String email, String department, String role, String password, int active) {
+    public User(String userId, String firstName, String lastName, String email, String department, String role, String status, String password, int active) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.department = department;
         this.role = role;
+        this.status =status;
         this.password = password;
         this.active = active;
     }
@@ -71,21 +75,6 @@ public class User implements Comparable<User>{
         this.department = department;
         this.role = role;
         this.password = password;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userId='" + userId + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", department=" + department +
-                ", role='" + role + '\'' +
-                ", password='" + password + '\'' +
-
-                '}';
     }
 
     @Override

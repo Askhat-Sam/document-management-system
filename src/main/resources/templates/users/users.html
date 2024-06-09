@@ -85,7 +85,7 @@
                                 <td th:text="${user.firstName}"/>
                                 <td th:text="${user.lastName}"/>
                                 <td th:text="${user.email}"/>
-                                <td th:text="${user.getDepartment().getName()}"/>
+                                <td th:text="${user.getDepartment()}"/>
 <!--                                <td th:text="${user.departmentId}"/>-->
                                 <td th:text="${user.role}"/>
                                 <td>
@@ -133,11 +133,11 @@
                     <input type="text" class="form-control mb-4 w-75"  placeholder="First name" th:field = "*{firstName}">
                     <input type="text" class="form-control mb-4 w-75"  placeholder="Last name" th:field = "*{lastName}">
                     <input type="text" class="form-control mb-4 w-75" placeholder="Email" th:field = "*{email}">
-                    <input type="text" class="form-control mb-4 w-75"  placeholder="Department ID" th:field = "*{departmentId}">
+                    <input type="text" class="form-control mb-4 w-75"  placeholder="Department ID" th:field = "*{department}">
                     <input type="text" class="form-control mb-4 w-75"  placeholder="Role" th:field = "*{role}">
                     <input type="text" class="form-control mb-4 w-75"  placeholder="Password" th:field = "*{password}">
                     <button type="submit" class="">Save</button>
-                </form>
+                </form>s
             </div>
         </div>
     </div>
