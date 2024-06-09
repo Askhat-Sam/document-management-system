@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Table(name="document_comment")
 public class DocumentComment {
     @Id
@@ -23,12 +25,7 @@ public class DocumentComment {
     private Long id;
     @Column(name="document_id", insertable=false, updatable=false)
     private Long documentId;
-    @Column(name="user_id",  insertable=false, updatable=false)
-    private Long userId;
-    @JsonBackReference
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name="user_id")
-    private User user;
+    private String userId;
     @Column(name="date")
     private String date;
     @Column(name="comment")
@@ -39,19 +36,10 @@ public class DocumentComment {
     private Document document;
 
 
-    public DocumentComment(Long documentId, Long userId, String date, String comment) {
+    public DocumentComment(Long documentId, String userId, String date, String comment) {
         this.documentId = documentId;
         this.userId = userId;
         this.date = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
         this.comment = comment;
-    }
-
-    @Override
-    public String toString() {
-        return "DocumentComment{" +
-                "id=" + id +
-                ", userId='" + userId + '\'' +
-                ", comment='" + comment + '\'' +
-                '}';
     }
 }

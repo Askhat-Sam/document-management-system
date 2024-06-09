@@ -6,11 +6,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Table(name = "document_revision")
 public class DocumentRevision {
     @Id
@@ -18,57 +20,45 @@ public class DocumentRevision {
     @Column(name = "id")
     private Long id;
     @Column(name = "user_id")
-    private Long userId;
+    private String userId;
     @Column(name = "document_id", insertable=false, updatable=false)
     private Long documentId;
     @Column(name = "date")
     private String date;
     @Column(name = "revision_number")
     private Long revisionNumber;
-    @Column(name = "statusId")
-    private Long statusId;
+    @Column(name = "status")
+    private String status;
     @Column(name = "description")
     private String description;
     @Column(name = "link")
     private String link;
-    @Column(name = "validated_user_id")
-    private Long validatingUserId;
+    @Column(name = "validated_user")
+    private String validatingUser;
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name="document_id")
     private Document document;
 
-    public DocumentRevision(Long documentId, String date, Long revisionNumber, Long statusId, String link, Long validatingUserId) {
+    public DocumentRevision(Long documentId, String date, Long revisionNumber, String status, String link, String validatingUserId) {
         this.documentId = documentId;
         this.date = date;
         this.revisionNumber = revisionNumber;
-        this.statusId = statusId;
+        this.status = status;
         this.link = link;
-        this.validatingUserId = validatingUserId;
+        this.validatingUser = validatingUser;
     }
 
-    public DocumentRevision(Long userId, Long revisionNumber, Long statusId, String date, String description, String link, Long validatingUserId) {
+    public DocumentRevision(String userId, Long revisionNumber, String status, String date, String description, String link, String validatingUser) {
         this.userId =userId;
         this.revisionNumber =revisionNumber;
-        this.statusId =statusId;
+        this.status =status;
         this.date =date;
         this.description =description;
         this.link =link;
-        this.validatingUserId =validatingUserId;
+        this.validatingUser =validatingUser;
 
     }
 
-    @Override
-    public String toString() {
-        return "DocumentRevision{" +
-                "id=" + id +
-                ", documentId=" + documentId +
-                ", date='" + date + '\'' +
-                ", revisionNumber=" + revisionNumber +
-                ", statusId=" + statusId +
-                ", link='" + link + '\'' +
-                ", validatedUserId=" + validatingUserId +
-                '}';
-    }
 }

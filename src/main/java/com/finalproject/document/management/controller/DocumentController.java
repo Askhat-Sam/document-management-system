@@ -2,6 +2,7 @@ package com.finalproject.document.management.controller;
 
 import com.finalproject.document.management.dto.DocumentCommentDTO;
 import com.finalproject.document.management.dto.DocumentDTO;
+import com.finalproject.document.management.dto.DocumentRevisionDTO;
 import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.DocumentComment;
 import com.finalproject.document.management.entity.DocumentRevision;
@@ -67,7 +68,7 @@ public class DocumentController {
     @GetMapping("/view/{id}")
     public String viewDocument(@PathVariable Long id, Model model) {
         Document document = documentService.findById(id);
-        List<DocumentRevision> revisions = documentRevisionService.findAllByDocumentId(document.getId());
+        List<DocumentRevisionDTO> revisions = documentRevisionService.findAllByDocumentId(document.getId());
         List<DocumentCommentDTO> comments = documentCommentService.findAll();
         DocumentComment comment = new DocumentComment();
 
@@ -175,7 +176,7 @@ public class DocumentController {
 
     @PostMapping("/addComment")
     public String addComment(@RequestParam Long documentId,
-                             @RequestParam Long userId,
+                             @RequestParam String userId,
                              @RequestParam String comment) {
         Document document = documentService.findById(documentId);
 
@@ -199,18 +200,18 @@ public class DocumentController {
     }
 
     @PostMapping("/addNewRevision")
-    public String addNewRevision(@RequestParam Long userId,
+    public String addNewRevision(@RequestParam String userId,
                                  @RequestParam Long documentId,
                                  @RequestParam String date,
                                  @RequestParam Long revisionNumber,
-                                 @RequestParam Long statusId,
+                                 @RequestParam String status,
                                  @RequestParam String description,
                                  @RequestParam String link,
-                                 @RequestParam Long validatingUserId) {
+                                 @RequestParam String validatingUser) {
         Document document = documentService.findById(documentId);
 
         // Add comment to the document
-        document.addRevision(new DocumentRevision(userId, revisionNumber, statusId, date, description, link, validatingUserId));
+        document.addRevision(new DocumentRevision(userId, revisionNumber, status, date, description, link, validatingUser));
 
         documentService.update(document);
         return "redirect:/document-management/documents/view/" + documentId;
