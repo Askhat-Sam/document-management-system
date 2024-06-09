@@ -25,7 +25,7 @@ public class Document {
     private String documentCode;
 
     @Column(name = "document_type")
-    private Long documentType;
+    private String documentType;
 
     @Column(name = "name")
     private String name;
@@ -34,7 +34,7 @@ public class Document {
     private Long revisionNumber;
 
     @Column(name = "status")
-    private Long status;
+    private String status;
 
     @Column(name = "creation_date")
     private String creationDate;
@@ -42,8 +42,8 @@ public class Document {
     @Column(name = "modification_date")
     private String modificationDate;
 
-    @Column(name = "author_id")
-    private Long authorId;
+    @Column(name = "author")
+    private String author;
 
     @Column(name = "link")
     private String link;
@@ -56,13 +56,7 @@ public class Document {
     @OneToMany(mappedBy = "document", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<DocumentRevision> revisions;
 
-
-    @JsonManagedReference
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "author_id", insertable = false, updatable = false)
-    private User user;
-
-    public Document(String documentCode, Long documentType, String name, Long revisionNumber, Long status, String creationDate, String modificationDate, Long authorId, String link) {
+    public Document(String documentCode, String documentType, String name, Long revisionNumber, String status, String creationDate, String modificationDate, String author, String link) {
         this.documentCode = documentCode;
         this.documentType = documentType;
         this.name = name;
@@ -70,7 +64,7 @@ public class Document {
         this.status = status;
         this.creationDate = creationDate;
         this.modificationDate = modificationDate;
-        this.authorId = authorId;
+        this.author = author;
         this.link = link;
     }
 

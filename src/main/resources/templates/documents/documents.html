@@ -74,7 +74,6 @@
                                 <th>Creation date</th>
                                 <th>Modification date</th>
                                 <th>Author</th>
-<!--                                <th>Link (To be removed)</th>-->
                                 <th>Actions</th>
                             </tr>
                             </thead>
@@ -82,23 +81,15 @@
                             <tr th:each="document : ${documents}" class="" style="height: 20px">
                                 <td th:text="${document.id}" />
                                 <td th:text="${document.documentCode}" />
-                                <td th:text="${document.documentTypeId}"/>
+                                <td th:text="${document.documentType}"/>
                                 <td th:text="${document.name}"/>
                                 <td th:text="${document.revisionNumber}"/>
-                                <td th:text="${document.statusId}"/>
+                                <td th:text="${document.status}"/>
                                 <td th:text="${document.creationDate}"/>
                                 <td th:text="${document.modificationDate}"/>
-                                <td th:text="${document.authorId}"/>
-<!--                                <td th:text="${document.link}"/>-->
-
+                                <td th:text="${document.author}"/>
                                 <td>
                                     <!--To change to icons-->
-<!--                                    <a th:href="@{/document-management/documents/downloadFile(link=${document.link})}" class="action-tool-edit">-->
-<!--                                        Download-->
-<!--                                    </a>-->
-<!--                                    <a th:href="@{/document-management/documents/viewFile(link=${document.link})}" class="action-tool-edit">-->
-<!--                                        Open-->
-<!--                                    </a>-->
                                     <a th:href="@{/document-management/documents/view/{id}(id=${document.id})}" class="action-tool-edit">
                                         Edit
                                     </a>
@@ -123,7 +114,5 @@
         </div>
     </div>
 </body>
-
-<!-- Modal form for add tool-->
 
 </html>

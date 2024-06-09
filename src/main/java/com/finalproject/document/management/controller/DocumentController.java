@@ -35,6 +35,10 @@ public class DocumentController {
 
     @Value("${headersDocument}")
     private List<String> headers;
+    @Value("${documentStatuses}")
+    private List<String> documentStatuses;
+    @Value("${documentTypes}")
+    private List<String> documentTypes;
     private static final Logger logger = Logger.getLogger(DocumentController.class.getName());
     @GetMapping("/getDocuments")
     public String getDocuments(@RequestParam(name = "page", required = false) Integer page,
@@ -51,6 +55,7 @@ public class DocumentController {
         model.addAttribute("documents", documents);
         model.addAttribute("search", search);
         model.addAttribute("headers", headers);
+
 
         return "documents/documents";
     }
@@ -97,28 +102,29 @@ public class DocumentController {
     @GetMapping("/addNewDocumentPage")
     public String addNewDocumentPage(Model model) {
         Document document = new Document();
+        List<String> userIds = userService.findAllUserIds();
         model.addAttribute("document", document);
+        model.addAttribute("documentTypes", documentTypes);
+        model.addAttribute("documentStatuses", documentStatuses);
+        model.addAttribute("userIds", userIds);
         return "documents/add-document";
     }
 
     @PostMapping("/addNewDocument")
     public String addDocument(
             @RequestParam("documentCode") String documentCode,
-            @RequestParam("documentTypeId") Long documentTypeId,
+            @RequestParam("documentType") String documentType,
             @RequestParam("name") String name,
             @RequestParam("revisionNumber") Long revisionNumber,
-            @RequestParam("statusId") Long statusId,
+            @RequestParam("status") String status,
             @RequestParam("creationDate") String creationDate,
             @RequestParam("modificationDate") String modificationDate,
-            @RequestParam("authorId") Long authorId) {
+            @RequestParam("author") String author) {
 
         String link = "TBD";
 
-//        // Move the file into "documentsUploaded" folder
-//        String newLink = documentService.uploadDocument(name + ".pdf", link, "upload");
-
         // Create a new document
-        Document document = new Document(documentCode, documentTypeId, name, revisionNumber, statusId, creationDate, modificationDate, authorId, link);
+        Document document = new Document(documentCode, documentType, name, revisionNumber, status, creationDate, modificationDate, author, link);
 
         // Add document into database
         documentService.save(document);

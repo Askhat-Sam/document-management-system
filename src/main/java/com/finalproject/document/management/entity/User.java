@@ -51,10 +51,6 @@ public class User implements Comparable<User>{
     @Column(name="active")
     private int active;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
-    private List<Document> documents;
-
     public User(String userId, String firstName, String lastName, String email, String department, String role, String status, String password, int active) {
         this.userId = userId;
         this.firstName = firstName;

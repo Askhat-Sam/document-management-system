@@ -19,4 +19,15 @@ public class DocumentDTO {
     private String modificationDate;
     private String author;
     private String link;
+
+    public DocumentDTO(String documentCode, String documentType, String name, Long revisionNumber, String status, String creationDate, String modificationDate, String author) {
+        this.documentCode = documentCode;
+        this.documentType = documentType;
+        this.name = name;
+        this.revisionNumber = revisionNumber;
+        this.status = status;
+        this.creationDate = creationDate;
+        this.modificationDate = modificationDate;
+        this.author = author;
+    }
 }

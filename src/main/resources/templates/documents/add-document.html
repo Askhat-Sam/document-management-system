@@ -60,7 +60,9 @@
                         <input type="text" class="add-input" placeholder="Status Id" th:field="*{statusId}">
                         <input type="date" class="add-input" placeholder="Creation date" th:field="*{creationDate}">
                         <input type="date" class="add-input" placeholder="Modification date" th:field="*{modificationDate}">
-                        <input type="text" class="add-input" placeholder="Author" th:field="*{authorId}">
+                        <select th:field="*{author}" name="author" class="search-list" aria-label="">
+                            <option th:each="userId : ${userIds}" th:value="${userId}" th:text="${userId}"></option>
+                        </select>
                         <input type="text" class="add-input" placeholder="Link" th:field="*{link}">
                         <button type="submit" class="action-button">Save</button>
                     </form>

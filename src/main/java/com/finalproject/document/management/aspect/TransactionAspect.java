@@ -212,13 +212,13 @@ public class TransactionAspect {
                 ));
             }
             // Check changes of documentTypeId
-            if (!documentAfterUpdate.getDocumentTypeId().equals(documentBeforeUpdate.getDocumentTypeId())) {
+            if (!documentAfterUpdate.getDocumentType().equals(documentBeforeUpdate.getDocumentType())) {
                 transactionList.add(new TransactionUser(
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         documentBeforeUpdate.getId(),
-                        "Document type has been changed from '" + documentBeforeUpdate.getDocumentTypeId() +
-                                "' to '" + documentAfterUpdate.getDocumentTypeId() + "'"
+                        "Document type has been changed from '" + documentBeforeUpdate.getDocumentType() +
+                                "' to '" + documentAfterUpdate.getDocumentType() + "'"
                 ));
             }
             // Check changes of document name
@@ -242,13 +242,13 @@ public class TransactionAspect {
                 ));
             }
             // Check changes of document status id
-            if (!documentAfterUpdate.getStatusId().equals(documentBeforeUpdate.getStatusId())) {
+            if (!documentAfterUpdate.getStatus().equals(documentBeforeUpdate.getStatus())) {
                 transactionList.add(new TransactionUser(
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         documentBeforeUpdate.getId(),
-                        "Document status id number has been changed from '" + documentBeforeUpdate.getStatusId() +
-                                "' to '" + documentAfterUpdate.getStatusId() + "'"
+                        "Document status id number has been changed from '" + documentBeforeUpdate.getStatus() +
+                                "' to '" + documentAfterUpdate.getStatus() + "'"
                 ));
             }
             // Check changes of document creation date
@@ -272,13 +272,13 @@ public class TransactionAspect {
                 ));
             }
             // Check changes of document author id
-            if (!documentAfterUpdate.getAuthorId().equals(documentBeforeUpdate.getAuthorId())) {
+            if (!documentAfterUpdate.getAuthor().equals(documentBeforeUpdate.getAuthor())) {
                 transactionList.add(new TransactionUser(
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         documentBeforeUpdate.getId(),
-                        "Document author id has been changed from '" + documentBeforeUpdate.getAuthorId() +
-                                "' to '" + documentAfterUpdate.getAuthorId() + "'"
+                        "Document author id has been changed from '" + documentBeforeUpdate.getAuthor() +
+                                "' to '" + documentAfterUpdate.getAuthor() + "'"
                 ));
             }
             // Check changes of other fields if necessary

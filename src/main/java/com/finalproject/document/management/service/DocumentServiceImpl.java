@@ -87,7 +87,10 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     public DocumentDTO fromEntityToDTO(Document document) {
-        return new DocumentDTO();
+
+        return new DocumentDTO(document.getDocumentCode(), document.getDocumentType(), document.getName(),
+                document.getRevisionNumber(), document.getStatus(), document.getCreationDate(), document.getModificationDate(),
+                document.getAuthor());
     }
 
     @Override
@@ -177,13 +180,13 @@ public class DocumentServiceImpl implements DocumentService {
             Row row = sheet.createRow(rowIndex++);
             row.createCell(0).setCellValue(d.getId());
             row.createCell(1).setCellValue(d.getDocumentCode());
-            row.createCell(2).setCellValue(d.getDocumentTypeId());
+            row.createCell(2).setCellValue(d.getDocumentType());
             row.createCell(3).setCellValue(d.getName());
             row.createCell(4).setCellValue(d.getRevisionNumber());
-            row.createCell(5).setCellValue(d.getStatusId());
+            row.createCell(5).setCellValue(d.getStatus());
             row.createCell(6).setCellValue(d.getCreationDate());
             row.createCell(7).setCellValue(d.getModificationDate());
-            row.createCell(8).setCellValue(d.getAuthorId());
+            row.createCell(8).setCellValue(d.getAuthor());
             row.createCell(9).setCellValue(d.getLink());
         }
 
@@ -221,8 +224,8 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public List<Document> findByUserId(Long id) {
-        return documentRepository.findByUserId(id);
+    public List<Document> findByUserId(String userId) {
+        return documentRepository.findByUserId(userId);
     }
 
     @Override
@@ -315,8 +318,8 @@ public class DocumentServiceImpl implements DocumentService {
         if (document.getModificationDate() != null) {
             existingDocument.setModificationDate(document.getModificationDate());
         }
-        if (document.getAuthorId() != null) {
-            existingDocument.setAuthorId(document.getAuthorId());
+        if (document.getAuthor() != null) {
+            existingDocument.setAuthor(document.getAuthor());
         }
         if (document.getLink() != null) {
             existingDocument.setLink(document.getLink());

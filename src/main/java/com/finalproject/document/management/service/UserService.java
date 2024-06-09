@@ -12,6 +12,7 @@ public interface UserService {
     List<User> findAll();
     void update(User user);
     void save(User user);
+    List<String> findAllUserIds();
 
     void deleteUserById(User user);
 
@@ -20,6 +21,5 @@ public interface UserService {
 
     ResponseEntity<byte[]> downloadListAsExcel();
 
-    User findUserByIdWithDocuments(Long id);
 
 }
