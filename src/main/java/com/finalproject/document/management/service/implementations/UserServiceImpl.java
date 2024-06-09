@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDTO fromEntityToDTO(User user) {
-        return new UserDTO(user.getId(), user.getUserId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getDepartment(), user.getRole());
+        return new UserDTO(user.getId(), user.getUserId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getDepartment(), user.getRole(), user.getStatus());
     }
 
 

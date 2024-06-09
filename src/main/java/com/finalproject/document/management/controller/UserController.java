@@ -89,12 +89,13 @@ public class UserController {
             @RequestParam("email") String email,
             @RequestParam("departmentId") String department,
             @RequestParam("role") String role,
+            @RequestParam("role") String status,
             @RequestParam("password") String password) {
         //generate bcrypt hash
         String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt()) +".q";
 
         // Create a new user
-        User newUser = new User(userId, firstName, lastName, email, department, role, pw_hash, 1);
+        User newUser = new User(userId, firstName, lastName, email, department, role, status, pw_hash, 1);
 
         userService.save(newUser);
 
