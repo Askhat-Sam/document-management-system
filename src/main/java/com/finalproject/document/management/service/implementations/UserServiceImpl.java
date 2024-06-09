@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> findAll(Integer page, Integer size, String sortBy, String sortDirection, String keyword, String column) {
         Pageable pageable = doPagingAndSorting(page, size, sortBy, sortDirection);
         List<User> users;
-        List<UserDTO> usersDTO =new ArrayList<>();
+        List<UserDTO> usersDTO = new ArrayList<>();
         if (pageable != null) {
             users = userRepository.findAll(pageable).toList();
             usersDTO = users.stream().map(this::fromEntityToDTO).collect(Collectors.toList());
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
                     usersFiltered = usersDTO.stream().filter(u -> u.getEmail().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
                 case "Department Id":
-                    usersFiltered = usersDTO.stream().filter(u -> Long.toString(u.getDepartmentId()).contains(keyword)).collect(Collectors.toList());
+                    usersFiltered = usersDTO.stream().filter(u -> u.getDepartment().contains(keyword)).collect(Collectors.toList());
                     return usersFiltered;
                 case "Role":
                     usersFiltered = usersDTO.stream().filter(u -> u.getRole().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
         return usersDTO;
     }
 
-    public UserDTO fromEntityToDTO(User user){
+    public UserDTO fromEntityToDTO(User user) {
         return new UserDTO(user.getId(), user.getUserId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getDepartment(), user.getRole());
     }
 
@@ -171,7 +171,7 @@ public class UserServiceImpl implements UserService {
             row.createCell(2).setCellValue(u.getFirstName());
             row.createCell(3).setCellValue(u.getLastName());
             row.createCell(4).setCellValue(u.getEmail());
-            row.createCell(5).setCellValue(u.getDepartmentId());
+            row.createCell(5).setCellValue(u.getDepartment());
             row.createCell(6).setCellValue(u.getRole());
         }
 
@@ -183,7 +183,7 @@ public class UserServiceImpl implements UserService {
                     cell.setCellStyle(styleBody);
                 }
                 // Apply style to the headers
-                if (cell.getRowIndex()==0) {
+                if (cell.getRowIndex() == 0) {
                     cell.setCellStyle(headerCellStyle);
                 }
             }

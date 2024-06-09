@@ -87,12 +87,12 @@ public class TransactionAspect {
                         "User email has been changed from '" + userBeforeUpdate.getEmail() + "' to '" + userAfterUpdate.getEmail() + "'"
                 ));
             }
-            if (!userAfterUpdate.getDepartment().getName().equals(userBeforeUpdate.getDepartment().getName())) {
+            if (!userAfterUpdate.getDepartment().equals(userBeforeUpdate.getDepartment())) {
                 transactionList.add(new TransactionUser(
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         userBeforeUpdate.getId(),
-                        "User department has been changed from '" + userBeforeUpdate.getDepartment().getName() + "' to '" + userAfterUpdate.getDepartment().getName() + "'"
+                        "User department has been changed from '" + userBeforeUpdate.getDepartment() + "' to '" + userAfterUpdate.getDepartment() + "'"
                 ));
             }
             if (!userAfterUpdate.getRole().equals(userBeforeUpdate.getRole())) {

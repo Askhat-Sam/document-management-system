@@ -1,5 +1,6 @@
 package com.finalproject.document.management.controller;
 
+import com.finalproject.document.management.dto.UserDTO;
 import com.finalproject.document.management.entity.*;
 import com.finalproject.document.management.service.*;
 import com.finalproject.document.management.service.interfaces.DepartmentService;
@@ -40,11 +41,8 @@ public class UserController {
                             @RequestParam(name = "column", required = false) String column,
                             Model model) {
         Search search = new Search();
-        List<User> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
+        List<UserDTO> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
         User user = new User();
-        // Add default department
-        Department department = new Department();
-        user.setDepartment(department);
 
         model.addAttribute(user);
         model.addAttribute("users", users);
@@ -89,12 +87,11 @@ public class UserController {
             @RequestParam("firstName") String firstName,
             @RequestParam("lastName") String lastName,
             @RequestParam("email") String email,
-            @RequestParam("departmentId") Long departmentId,
+            @RequestParam("departmentId") String department,
             @RequestParam("role") String role,
             @RequestParam("password") String password) {
         //generate bcrypt hash
         String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt()) +".q";
-        Department department = departmentService.findById(departmentId);
 
         // Create a new user
         User newUser = new User(userId, firstName, lastName, email, department, role, pw_hash, 1);
@@ -120,7 +117,7 @@ public class UserController {
                              @RequestParam(name = "firstName", required = false) String firstName,
                              @RequestParam(name = "lastName", required = false) String lastName,
                              @RequestParam(name = "email", required = false) String email,
-                             @RequestParam(name = "departmentId", required = false) Long departmentId,
+                             @RequestParam(name = "departmentId", required = false) String department,
                              @RequestParam(name = "password", required = false) String password,
                              @RequestParam(name = "active", required = false) Integer active,
                              @RequestParam(name = "role", required = false) String role) {
@@ -139,10 +136,8 @@ public class UserController {
         if (email != null) {
             user.setEmail(email);
         }
-        if (departmentId != null) {
-            Department department = departmentService.findById(departmentId);
+        if (department != null) {
             user.setDepartment(department);
-            user.setDepartmentId(departmentId);
         }
         if (password != null) {
 //             Generate bcrypt hash
@@ -158,42 +153,4 @@ public class UserController {
         return "redirect:/document-management/users/getUsers";
     }
 
-    //restcontroller endpoints
-
-    //@RequestMapping("/getUsers")
-//public List<User>  showUsers(@RequestParam(name = "page", required = false) Integer page,
-//                        @RequestParam(name = "size", required = false) Integer size,
-//                        @RequestParam(name = "sortBy", required = false) String sortBy,
-//                        @RequestParam(name = "sortDirection", required = false) String sortDirection,
-//                        @RequestParam(name = "keyword", required = false) String keyword,
-//                        @RequestParam(name = "column", required = false) String column,
-//                        Model model) {
-//    List<User> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
-//
-//    return users;
-//}
-
-//    @GetMapping("/downloadList")
-//    public String downloadList() throws IOException, IllegalAccessException {
-//        List<User> documents = userService.findAll();
-//        userService.downloadList(documents);
-//        return "redirect:/document-management/users/getUsers";
-//    }
-
-
-//    @PostMapping("/addNewUser")
-//    public String addNewUser(@RequestBody User user){
-////        // Generate bcrypt hash
-////        String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
-////
-////        // Create a new user
-////        User newUser = new User(userId, firstName, lastName, email, passwordHashed, 1);
-////
-////        // Add role to use
-////        newUser.add(new Role(roleId,userRole));
-//
-//        userService.update(user);
-//
-//        return "redirect:/document-management/users";
-//    }
 }
