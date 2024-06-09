@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Table(name = "document")
 public class Document {
     @Id
@@ -22,8 +24,8 @@ public class Document {
     @Column(name = "document_code")
     private String documentCode;
 
-    @Column(name = "document_type_id")
-    private Long documentTypeId;
+    @Column(name = "document_type")
+    private Long documentType;
 
     @Column(name = "name")
     private String name;
@@ -31,8 +33,8 @@ public class Document {
     @Column(name = "revision_number")
     private Long revisionNumber;
 
-    @Column(name = "status_id")
-    private Long statusId;
+    @Column(name = "status")
+    private Long status;
 
     @Column(name = "creation_date")
     private String creationDate;
@@ -54,47 +56,22 @@ public class Document {
     @OneToMany(mappedBy = "document", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<DocumentRevision> revisions;
 
-    @JsonManagedReference
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "status_id", insertable = false, updatable = false)
-    private DocumentStatus documentStatus;
-
-    @JsonManagedReference
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "document_type_id", insertable = false, updatable = false)
-    private DocumentType documentType;
 
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id", insertable = false, updatable = false)
     private User user;
 
-    public Document(String documentCode, Long documentTypeId, String name, Long revisionNumber, Long statusId, String creationDate, String modificationDate, Long authorId, String link) {
+    public Document(String documentCode, Long documentType, String name, Long revisionNumber, Long status, String creationDate, String modificationDate, Long authorId, String link) {
         this.documentCode = documentCode;
-        this.documentTypeId = documentTypeId;
+        this.documentType = documentType;
         this.name = name;
         this.revisionNumber = revisionNumber;
-        this.statusId = statusId;
+        this.status = status;
         this.creationDate = creationDate;
         this.modificationDate = modificationDate;
         this.authorId = authorId;
         this.link = link;
-    }
-
-    @Override
-    public String toString() {
-        return "Document{" +
-                "id=" + id +
-                ", documentCode='" + documentCode + '\'' +
-                ", documentTypeId=" + documentTypeId +
-                ", name='" + name + '\'' +
-                ", revisionNumber=" + revisionNumber +
-                ", statusId=" + statusId +
-                ", creationDate='" + creationDate + '\'' +
-                ", modificationDate='" + modificationDate + '\'' +
-                ", authorId=" + authorId +
-                ", link='" + link + '\'' +
-                '}';
     }
 
     public void addComment(DocumentComment comment) {

@@ -1,5 +1,6 @@
 package com.finalproject.document.management.service;
 
+import com.finalproject.document.management.dto.DocumentDTO;
 import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.repository.DocumentRepository;
 import jakarta.persistence.EntityManager;
@@ -8,7 +9,6 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -23,8 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -46,43 +44,50 @@ public class DocumentServiceImpl implements DocumentService {
     private static final Logger logger = Logger.getLogger(DocumentServiceImpl.class.getName());
 
     @Override
-    public List<Document> findAll(Integer pageNo, Integer pageSize, String sortBy, String sortDirection,  String  keyword, String column) {
+    public List<DocumentDTO> findAll(Integer pageNo, Integer pageSize, String sortBy, String sortDirection, String  keyword, String column) {
         Pageable pageable = doPagingAndSorting(pageNo, pageSize, sortBy, sortDirection);
         List<Document> documents;
+        List<DocumentDTO> documentsDTO = new ArrayList<>();
         if (pageable != null) {
             documents = documentRepository.findAll(pageable).toList();
+            documentsDTO = documents.stream().map(this::fromEntityToDTO).collect(Collectors.toList());
         } else {
             documents = documentRepository.findAll();
+            documentsDTO = documents.stream().map(this::fromEntityToDTO).collect(Collectors.toList());
         }
 
-        List<Document> documentsFiltered = new ArrayList<>();
+        List<DocumentDTO> documentsFiltered = new ArrayList<>();
 
         //if searching by keyword in certain column. Uses "contains" to search by the part of word.
         if (keyword!=null&&column!=null){
             switch(column) {
-                case "Id": documentsFiltered = documents.stream().filter(d -> Long.toString(d.getId()).contains(keyword)).collect(Collectors.toList());
+                case "Id": documentsFiltered = documentsDTO.stream().filter(d -> Long.toString(d.getId()).contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Document Code": documentsFiltered = documents.stream().filter(d -> d.getDocumentCode().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+                case "Document Code": documentsFiltered = documentsDTO.stream().filter(d -> d.getDocumentCode().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
-//                case "Document Type Id": documentsFiltered = documents.stream().filter(d ->  Long.toString(d.getDocumentTypeId()).contains(keyword)).collect(Collectors.toList());
-//                    return documentsFiltered;
-                case "Title": documentsFiltered = documents.stream().filter(d -> d.getName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+                case "Document Type Id": documentsFiltered = documentsDTO.stream().filter(d ->  d.getDocumentType().toLowerCase().contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-//                case "Status Id": documentsFiltered = documents.stream().filter(d -> Long.toString(d.getStatusId()).contains(keyword)).collect(Collectors.toList());
-//                    return documentsFiltered;
-                case "Creation Date": documentsFiltered = documents.stream().filter(d -> d.getCreationDate().contains(keyword)).collect(Collectors.toList());
+                case "Title": documentsFiltered = documentsDTO.stream().filter(d -> d.getName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Modification Date": documentsFiltered = documents.stream().filter(d -> d.getModificationDate().contains(keyword)).collect(Collectors.toList());
+                case "Status Id": documentsFiltered = documentsDTO.stream().filter(d -> d.getStatus().toLowerCase().contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Revision Number": documentsFiltered = documents.stream().filter(d -> Long.toString(d.getRevisionNumber()).equals(keyword)).collect(Collectors.toList());
+                case "Creation Date": documentsFiltered = documentsDTO.stream().filter(d -> d.getCreationDate().contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-//                case "Author Id": documentsFiltered = documents.stream().filter(d -> Long.toString(d.getAuthorId()).contains(keyword)).collect(Collectors.toList());
-//                    return documentsFiltered;
-                case "All": return documents;
+                case "Modification Date": documentsFiltered = documentsDTO.stream().filter(d -> d.getModificationDate().contains(keyword)).collect(Collectors.toList());
+                    return documentsFiltered;
+                case "Revision Number": documentsFiltered = documentsDTO.stream().filter(d -> Long.toString(d.getRevisionNumber()).equals(keyword)).collect(Collectors.toList());
+                    return documentsFiltered;
+                case "Author Id": documentsFiltered = documentsDTO.stream().filter(d -> d.getAuthor().toLowerCase().contains(keyword)).collect(Collectors.toList());
+                    return documentsFiltered;
+                case "All": return documentsDTO;
             }
             return documentsFiltered;
         }
-        return documents;
+        return documentsDTO;
+    }
+
+    public DocumentDTO fromEntityToDTO(Document document) {
+        return new DocumentDTO();
     }
 
     @Override
@@ -301,8 +306,8 @@ public class DocumentServiceImpl implements DocumentService {
         if (document.getRevisionNumber() != null) {
             existingDocument.setRevisionNumber(document.getRevisionNumber());
         }
-        if (document.getStatusId() != null) {
-            existingDocument.setStatusId(document.getStatusId());
+        if (document.getStatus() != null) {
+            existingDocument.setStatus(document.getStatus());
         }
         if (document.getCreationDate() != null) {
             existingDocument.setCreationDate(document.getCreationDate());

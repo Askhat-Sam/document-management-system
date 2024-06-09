@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
             usersDTO = users.stream().map(this::fromEntityToDTO).collect(Collectors.toList());
         } else {
             users = userRepository.findAll();
+            usersDTO = users.stream().map(this::fromEntityToDTO).collect(Collectors.toList());
         }
 
         List<UserDTO> usersFiltered = new ArrayList<>();

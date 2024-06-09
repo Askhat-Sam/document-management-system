@@ -1,5 +1,6 @@
 package com.finalproject.document.management.service;
 
+import com.finalproject.document.management.dto.DocumentDTO;
 import com.finalproject.document.management.entity.Document;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -11,7 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 public interface DocumentService {
-    List<Document> findAll(Integer page, Integer size, String sortBy, String sortDirection, String  keyword, String column);
+    List<DocumentDTO> findAll(Integer page, Integer size, String sortBy, String sortDirection, String  keyword, String column);
     List<Document> findAll();
 
     Document findById(Long id);

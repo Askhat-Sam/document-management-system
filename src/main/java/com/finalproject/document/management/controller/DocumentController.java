@@ -1,5 +1,6 @@
 package com.finalproject.document.management.controller;
 
+import com.finalproject.document.management.dto.DocumentDTO;
 import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.DocumentComment;
 import com.finalproject.document.management.entity.DocumentRevision;
@@ -45,7 +46,7 @@ public class DocumentController {
                                Model model) {
         Search search = new Search();
 
-        List<Document> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
+        List<DocumentDTO> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
 
         model.addAttribute("documents", documents);
         model.addAttribute("search", search);
