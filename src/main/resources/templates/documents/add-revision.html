@@ -56,16 +56,19 @@
                     <form action="#" th:action="@{/document-management/documents/addNewRevision}"
                           th:object="${documentRevision}" method="POST">
                         <input type="text" name="documentId" th:value="${documentId}">
-                        <input type="text" class="add-input" placeholder="User id" th:field="*{userId}">
+                        <select th:field="*{userId}" name="userId" class="search-list" aria-label="">
+                            <option th:each="userId : ${userIds}" th:value="${userId}" th:text="${userId}"></option>
+                        </select>
                         <input type="date" class="add-input" placeholder="Date" th:field="*{date}">
                         <input type="text" class="add-input" placeholder="Revision number" th:field="*{revisionNumber}">
-                        <input type="text" class="add-input" placeholder="Status Id" th:field="*{statusId}">
+                        <select th:field="*{status}" name="status" class="search-list" aria-label="">
+                            <option th:each="statusOption : ${documentRevisionStatuses}" th:value="${statusOption}" th:text="${statusOption}"></option>
+                        </select>
                         <input type="text" class="add-input" placeholder="Description" th:field="*{description}">
-                        <input type="text" class="add-input" placeholder="Validated by user" th:field="*{validatingUserId}">
+                        <select th:field="*{validatingUser}" name="validatingUser" class="search-list" aria-label="">
+                            <option th:each="userId : ${userIds}" th:value="${userId}" th:text="${userId}"></option>
+                        </select>
                         <input type="text" placeholder="Link" name="link" th:value="${message}">
-
-
-
                         <button type="submit" class="action-button">Save</button>
                     </form>
                     <form method="POST" enctype="multipart/form-data"

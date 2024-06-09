@@ -16,7 +16,6 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 @Table(name="document_comment")
 public class DocumentComment {
     @Id
@@ -25,6 +24,7 @@ public class DocumentComment {
     private Long id;
     @Column(name="document_id", insertable=false, updatable=false)
     private Long documentId;
+    @Column(name="user_id")
     private String userId;
     @Column(name="date")
     private String date;
@@ -42,4 +42,5 @@ public class DocumentComment {
         this.date = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
         this.comment = comment;
     }
+
 }

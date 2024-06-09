@@ -63,8 +63,10 @@
                                     <input type="text" id="documentCode" name="documentCode" th:field="*{documentCode}" class="edit-input"/>
                                 </div>
                                 <div class="">
-                                    <label for="documentCode" class="edit-label">Document type Id</label>
-                                    <input type="text" id="documentTypeId" name="documentTypeId" th:field="*{documentTypeId}" class="edit-input"/>
+                                    <span>Document type</span>
+                                    <select th:field="*{documentType}" name="documentType" class="search-list" aria-label="">
+                                        <option th:each="documentTypeOption : ${documentTypes}" th:value="${documentTypeOption}" th:text="${documentTypeOption}"></option>
+                                    </select>
                                 </div>
                                 <div class="">
                                     <label for="name" class="edit-label">Title</label>
@@ -77,8 +79,10 @@
                             </div>
                             <div class="flex-container-column">
                                 <div class="">
-                                    <label for="statusId" class="edit-label">Status</label>
-                                    <input type="text" id="statusId" name="statusId" th:field="*{statusId}" class="edit-input"/>
+                                    <span>Status</span>
+                                    <select th:field="*{status}" name="status" class="search-list" aria-label="">
+                                        <option th:each="documentStatusOption : ${documentStatuses}" th:value="${documentStatusOption}" th:text="${documentStatusOption}"></option>
+                                    </select>
                                 </div>
                                 <div class="">
                                     <label for="creationDate" class="edit-label">Creation Date</label>
@@ -89,12 +93,14 @@
                                     <input type="date" id="modificationDate" name="modificationDate" th:field="*{modificationDate}" class="edit-input"/>
                                 </div>
                                 <div class="">
-                                    <label for="authorId" class="edit-label">Author</label>
-                                    <input type="text" id="authorId" name="authorId" th:field="*{authorId}" class="edit-input"/>
+                                    <span>Author</span>
+                                    <select th:field="*{author}" name="author" class="search-list" aria-label="">
+                                        <option th:each="userId : ${userIds}" th:value="${userId}" th:text="${userId}"></option>
+                                    </select>
                                 </div>
                                 <div class="">
                                     <label for="link" class="edit-label">Link</label>
-                                    <input type="text" id="link" name="link" th:field="*{link}" class="edit-input"/>
+                                    <input type="text" id="link" name="link" th:value="TBD" class="edit-input" readonly/>
                                 </div>
                             </div>
                         </div>
@@ -126,10 +132,10 @@
                                     <td th:text="${revision.documentId}" />
                                     <td th:text="${revision.date}" />
                                     <td th:text="${revision.revisionNumber}" />
-                                    <td th:text="${revision.statusId}" />
+                                    <td th:text="${revision.status}" />
                                     <td th:text="${revision.description}" />
                                     <td th:text="${revision.link}" />
-                                    <td th:text="${revision.validatingUserId}" />
+                                    <td th:text="${revision.validatingUser}" />
 
                                     <td>
                                         <!--To change to icons-->

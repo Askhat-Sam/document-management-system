@@ -29,9 +29,15 @@ public class DocumentCommentServiceImpl implements DocumentCommentService {
 
 
     @Override
-    public List<DocumentCommentDTO> findByUserId(Long id) {
+    public List<DocumentCommentDTO> findByUserId(String userid) {
 
-        return documentCommentRepository.findByUserId(id).stream()
+        return documentCommentRepository.findByUserId(userid).stream()
+                .map(this::fromEntityToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DocumentCommentDTO> findAllByDocumentId(Long id) {
+        return documentCommentRepository.findAllByDocumentId(id).stream()
                 .map(this::fromEntityToDTO).collect(Collectors.toList());
     }
 }

@@ -88,7 +88,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     public DocumentDTO fromEntityToDTO(Document document) {
 
-        return new DocumentDTO(document.getDocumentCode(), document.getDocumentType(), document.getName(),
+        return new DocumentDTO(document.getId(), document.getDocumentCode(), document.getDocumentType(), document.getName(),
                 document.getRevisionNumber(), document.getStatus(), document.getCreationDate(), document.getModificationDate(),
                 document.getAuthor());
     }
@@ -100,7 +100,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Document findById(Long id) {
-        entityManager.clear();
+//        entityManager.clear();
 
         Optional<Document> result =documentRepository.findById(id);
 

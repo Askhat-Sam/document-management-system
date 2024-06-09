@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,6 +39,8 @@ public class DocumentController {
     private List<String> documentStatuses;
     @Value("${documentTypes}")
     private List<String> documentTypes;
+    @Value("${documentRevisionStatuses}")
+    private List<String> documentRevisionStatuses;;
     private static final Logger logger = Logger.getLogger(DocumentController.class.getName());
     @GetMapping("/getDocuments")
     public String getDocuments(@RequestParam(name = "page", required = false) Integer page,
@@ -69,13 +73,16 @@ public class DocumentController {
     public String viewDocument(@PathVariable Long id, Model model) {
         Document document = documentService.findById(id);
         List<DocumentRevisionDTO> revisions = documentRevisionService.findAllByDocumentId(document.getId());
-        List<DocumentCommentDTO> comments = documentCommentService.findAll();
+        List<DocumentCommentDTO> comments = documentCommentService.findAllByDocumentId(id);
         DocumentComment comment = new DocumentComment();
-
+        List<String> userIds = userService.findAllUserIds();
         model.addAttribute("document", document);
         model.addAttribute("revisions", revisions);
         model.addAttribute("comments", comments);
         model.addAttribute("comment", comment);
+        model.addAttribute("documentStatuses", documentStatuses);
+        model.addAttribute("documentTypes", documentTypes);
+        model.addAttribute("userIds", userIds);
         return "documents/view-document";
     }
 
@@ -89,8 +96,13 @@ public class DocumentController {
         return documentService.downloadFile(link);
     }
 
-
-
+    @PostMapping("/uploadFile")
+    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes,
+                             @RequestParam("documentId") Long documentId,
+                             Model model) {
+        documentService.uploadfile(file, redirectAttributes, documentId, model);
+        return "redirect:/document-management/documents/addNewRevisionPage?documentId=" + documentId;
+    }
 
     @GetMapping("/downloadListAsExcel")
     public ResponseEntity<byte[]> downloadListAsExcel() {
@@ -193,9 +205,13 @@ public class DocumentController {
     @GetMapping("/addNewRevisionPage")
     public String addNewRevisionPage(@RequestParam Long documentId,
                                      Model model) {
-        model.addAttribute("documentId", documentId);
+        List<String> userIds = userService.findAllUserIds();
         DocumentRevision documentRevision = new DocumentRevision();
+        model.addAttribute("userIds", userIds);
+        model.addAttribute("documentId", documentId);
         model.addAttribute("documentRevision", documentRevision);
+        model.addAttribute("documentRevisionStatuses", documentRevisionStatuses);
+
         return "documents/add-revision";
     }
 
@@ -216,150 +232,4 @@ public class DocumentController {
         documentService.update(document);
         return "redirect:/document-management/documents/view/" + documentId;
     }
-
-
-//RestController endpoints
-
-    //    @PostMapping("/addNewDocument")
-//    public String addDocument(
-//            @RequestParam("documentCode") String documentCode,
-//            @RequestParam("documentTypeId") Long documentTypeId,
-//            @RequestParam("name") String name,
-//            @RequestParam("revisionNumber") int revisionNumber,
-//            @RequestParam("statusId") Long statusId,
-//            @RequestParam("creationDate") String creationDate,
-//            @RequestParam("modificationDate") String modificationDate,
-//            @RequestParam("authorId") Long authorId,
-//            @RequestParam("link") String link) {
-//
-//        // Move the file into "documentsUploaded" folder
-//        String newLink = documentService.uploadDocument(link, "upload");
-//
-//        // Get document type
-//        DocumentType documentType = documentTypeService.findById(documentTypeId);
-//
-//        // Get document status object
-//        DocumentStatus documentStatus = documentStatusService.findByID(statusId);
-//
-//        // Get user by authorId
-//        User user = userService.findById(authorId);
-//
-//        // Create a new document
-//        Document document = new Document(documentCode, documentType, name, revisionNumber, documentStatus,
-//                creationDate, modificationDate, user, newLink);
-//
-//        // Add document into database
-//        documentService.update(document);
-//        return "Document with reference: " + documentCode + " has been added into database";
-//    }
-
-//    @GetMapping("/getDocuments")
-//    public List<Document> getDocuments(@RequestParam(name = "page", required = false) Integer page,
-//                                       @RequestParam(name = "size", required = false) Integer size,
-//                                       @RequestParam(name = "sortBy", required = false) String sortBy,
-//                                       @RequestParam(name = "sortDirection", required = false) String sortDirection,
-//                                       @RequestParam(name = "keyword", required = false) String keyword,
-//                                       @RequestParam(name = "column", required = false) String column) {
-//        List<Document> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
-//        return documents;
-//    }
-//    @PostMapping("/addRevision")
-//    public String addRevision(
-//                             @RequestParam Long userId,
-//                             @RequestParam Long documentId,
-//                             @RequestParam String date,
-//                              @RequestParam Long revisionNumber,
-//                             @RequestParam Long statusId,
-//                              @RequestParam String description,
-//                              @RequestParam String link,
-//                              @RequestParam Long validatingUserId) {
-//        Document document = documentService.findById(documentId);
-//
-//        // Add comment to the document
-//        document.addRevision(new DocumentRevision(userId, revisionNumber, statusId, date, description, link, validatingUserId));
-//
-//        documentService.update(document);
-//        return "Revision has been added into document with id " + documentId;
-//    }
-
-
-//    @GetMapping("/newDocument")
-//    public String newDocument(){
-//        return "documents/add-document";
-//    }
-
-    //    @PostMapping("/updateDocument")
-//    public String updateDocument(
-//            @RequestParam(name="id", required = false) Long id,
-//            @RequestParam(name="documentCode", required = false) String documentCode,
-//            @RequestParam(name="documentTypeId", required = false) Long documentTypeId,
-//            @RequestParam(name="name", required = false) String name,
-//            @RequestParam(name="revisionNumber", required = false) Long revisionNumber,
-//            @RequestParam(name="statusId", required = false) Long statusId,
-//            @RequestParam(name="creationDate", required = false) String creationDate,
-//            @RequestParam(name="modificationDate", required = false) String modificationDate,
-//            @RequestParam(name="authorId", required = false) Long authorId,
-//            @RequestParam(name="link", required = false) String link) {
-//
-//        // Move the file into "documentsUploaded" folder
-////        String newLink = documentService.uploadDocument(link, "upload");
-//
-//        Document document = documentService.findById(id);
-//
-//        // Get document type
-//        if (documentTypeId!=null) {
-//            DocumentType documentType = documentTypeService.findById(documentTypeId);
-//            document.setDocumentType(documentType);
-//        }
-//        // Get document status object
-//        if (statusId!=null) {
-//            DocumentStatus documentStatus = documentStatusService.findByID(statusId);
-//            document.setDocumentStatus(documentStatus);
-//        }
-//        // Get user by authorId
-//        if (authorId!=null) {
-//            User user = userService.findById(authorId);
-//        }
-//
-//        if (documentCode != null) {
-//            document.setDocumentCode(documentCode);
-//        } else if (name != null) {
-//            document.setName(name);
-//        } else if (String.valueOf(revisionNumber) != null) {
-//            document.setRevisionNumber(revisionNumber);
-//        } else if (creationDate != null) {
-//            document.setCreationDate(creationDate);
-//        } else if (modificationDate != null) {
-//            document.setModificationDate(modificationDate);
-//        } else if (link != null) {
-//            document.setLink(link);
-//        }
-//        documentService.update(document);
-//        return "Document with id: " + id + " has been successfully updated in database";
-//    }
-
-//    @PostMapping("/addComment")
-//    public String addComment(@RequestParam Long documentId,
-//                             @RequestParam Long userId,
-//                             @RequestParam String comment) {
-//        Document document = documentService.findById(documentId);
-//
-//        // Add comment to the document
-//        document.addComment(new DocumentComment(userId, new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()), comment));
-//
-//        documentService.update(document);
-//        return "Comment has been added into document with id " + documentId;
-//    }
-//
-//    @PostMapping("/uploadFile")
-//    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes,
-//                             @RequestParam("documentId") Long documentId,
-//                             Model model) {
-//        documentService.uploadfile(file, redirectAttributes, documentId, model);
-//
-//        System.out.println("You successfully uploaded '" + file.getOriginalFilename() + "'");
-//
-//        return "redirect:/document-management/documents/addNewRevisionPage?documentId=" + documentId;
-//    }
-
 }

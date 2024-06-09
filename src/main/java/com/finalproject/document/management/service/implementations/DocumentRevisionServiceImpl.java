@@ -31,6 +31,9 @@ public class DocumentRevisionServiceImpl implements DocumentRevisionService {
     }
 
     public DocumentRevisionDTO fromEntityToDTO(DocumentRevision documentRevision) {
-        return new DocumentRevisionDTO();
+        return new DocumentRevisionDTO(documentRevision.getId(), documentRevision.getUserId(),
+                documentRevision.getDocumentId(), documentRevision.getDate(), documentRevision.getRevisionNumber(),
+                documentRevision.getStatus(), documentRevision.getDescription(), documentRevision.getLink(),
+                documentRevision.getValidatingUser());
     }
 }

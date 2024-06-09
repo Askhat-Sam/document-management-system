@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface DocumentCommentService {
     List<DocumentCommentDTO> findAll();
-    List<DocumentCommentDTO> findByUserId(Long id);
+    List<DocumentCommentDTO> findByUserId(String userId);
+    List<DocumentCommentDTO> findAllByDocumentId(Long id);
 }
