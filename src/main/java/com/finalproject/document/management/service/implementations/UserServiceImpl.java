@@ -2,7 +2,6 @@ package com.finalproject.document.management.service.implementations;
 
 import com.finalproject.document.management.dto.UserDTO;
 import com.finalproject.document.management.entity.User;
-import com.finalproject.document.management.repository.DepartmentRepository;
 import com.finalproject.document.management.repository.UserRepository;
 import com.finalproject.document.management.service.UserService;
 import jakarta.persistence.EntityManager;
@@ -34,8 +33,6 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    DepartmentRepository departmentRepository;
 
     @Autowired
     EntityManager entityManager;

@@ -1,9 +1,11 @@
 package com.finalproject.document.management.controller;
 
 import com.finalproject.document.management.dto.UserDTO;
-import com.finalproject.document.management.entity.*;
-import com.finalproject.document.management.service.*;
-import com.finalproject.document.management.service.interfaces.DepartmentService;
+import com.finalproject.document.management.entity.Search;
+import com.finalproject.document.management.entity.TransactionEntity;
+import com.finalproject.document.management.entity.User;
+import com.finalproject.document.management.service.DocumentService;
+import com.finalproject.document.management.service.UserService;
 import com.finalproject.document.management.service.interfaces.DocumentCommentService;
 import com.finalproject.document.management.service.interfaces.DocumentTransactionService;
 import com.finalproject.document.management.service.interfaces.UserTransactionService;
@@ -23,14 +25,18 @@ import java.util.List;
 @RequestMapping("/document-management/users")
 public class UserController {
     private final UserService userService;
-    private final DepartmentService departmentService;
     private final DocumentCommentService documentCommentService;
     private final DocumentService documentService;
     private final DocumentTransactionService documentTransactionService;
     private final UserTransactionService userTransactionService;
     @Value("${headersUser}")
     private List<String> headers;
-
+    @Value("${departments}")
+    private List<String> departments;
+    @Value("${roles}")
+    private List<String> roles;
+    @Value("${statuses}")
+    private List<String> statuses;
 
     @RequestMapping("/getUsers")
     public String showUsers(@RequestParam(name = "page", required = false) Integer page,
@@ -48,6 +54,9 @@ public class UserController {
         model.addAttribute("users", users);
         model.addAttribute("search", search);
         model.addAttribute("headers", headers);
+        model.addAttribute("departments", departments);
+        model.addAttribute("roles", roles);
+        model.addAttribute("statuses", statuses);
         return "users/users";
     }
 
@@ -87,9 +96,9 @@ public class UserController {
             @RequestParam("firstName") String firstName,
             @RequestParam("lastName") String lastName,
             @RequestParam("email") String email,
-            @RequestParam("departmentId") String department,
+            @RequestParam("department") String department,
             @RequestParam("role") String role,
-            @RequestParam("role") String status,
+            @RequestParam("status") String status,
             @RequestParam("password") String password) {
         //generate bcrypt hash
         String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt()) +".q";
