@@ -1,20 +1,16 @@
-package com.finalproject.document.management.service;
+package com.finalproject.document.management.service.implementations;
 
 import com.finalproject.document.management.dto.UserDTO;
-import com.finalproject.document.management.entity.Department;
-import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.repository.DepartmentRepository;
 import com.finalproject.document.management.repository.UserRepository;
+import com.finalproject.document.management.service.UserService;
 import jakarta.persistence.EntityManager;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,13 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 

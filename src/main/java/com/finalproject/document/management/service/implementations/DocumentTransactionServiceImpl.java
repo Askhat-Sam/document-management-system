@@ -1,8 +1,8 @@
-package com.finalproject.document.management.service;
+package com.finalproject.document.management.service.implementations;
 
-import com.finalproject.document.management.entity.TransactionDocument;
 import com.finalproject.document.management.entity.TransactionEntity;
 import com.finalproject.document.management.repository.DocumentTransactionRepository;
+import com.finalproject.document.management.service.interfaces.DocumentTransactionService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

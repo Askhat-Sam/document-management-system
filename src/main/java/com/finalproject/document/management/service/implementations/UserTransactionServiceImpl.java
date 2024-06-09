@@ -1,12 +1,13 @@
-package com.finalproject.document.management.service;
+package com.finalproject.document.management.service.implementations;
 
 import com.finalproject.document.management.entity.TransactionEntity;
 import com.finalproject.document.management.repository.UserTransactionRepository;
+import com.finalproject.document.management.service.interfaces.UserTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 @Service
-public class UserTransactionServiceImpl implements UserTransactionService{
+public class UserTransactionServiceImpl implements UserTransactionService {
     @Autowired
     private UserTransactionRepository userTransactionRepository;
     @Override

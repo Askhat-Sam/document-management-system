@@ -2,6 +2,10 @@ package com.finalproject.document.management.controller;
 
 import com.finalproject.document.management.entity.*;
 import com.finalproject.document.management.service.*;
+import com.finalproject.document.management.service.interfaces.DepartmentService;
+import com.finalproject.document.management.service.interfaces.DocumentCommentService;
+import com.finalproject.document.management.service.interfaces.DocumentTransactionService;
+import com.finalproject.document.management.service.interfaces.UserTransactionService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;

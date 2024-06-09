@@ -36,13 +36,8 @@ public class User implements Comparable<User>{
     @Column(name="email")
     private String email;
 
-    @Column(insertable=false, updatable=false, name="department_id")
-    private Long departmentId;
-
-    @JsonManagedReference
-    @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
-    @JoinColumn(name="department_id")
-    private Department department;
+    @Column(name="department")
+    private String department;
 
     @Column(name="role")
     private String role;
@@ -57,7 +52,7 @@ public class User implements Comparable<User>{
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     private List<Document> documents;
 
-    public User(String userId, String firstName, String lastName, String email, Department department, String role, String password, int active) {
+    public User(String userId, String firstName, String lastName, String email, String department, String role, String password, int active) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -68,12 +63,12 @@ public class User implements Comparable<User>{
         this.active = active;
     }
 
-    public User(String userId, String firstName, String lastName, String email, Long departmentId, String role, String password) {
+    public User(String userId, String firstName, String lastName, String email, String department, String role, String password) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.departmentId = departmentId;
+        this.department = department;
         this.role = role;
         this.password = password;
     }
@@ -86,17 +81,11 @@ public class User implements Comparable<User>{
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", departmentId='" + departmentId + '\'' +
                 ", department=" + department +
                 ", role='" + role + '\'' +
                 ", password='" + password + '\'' +
-                ", active=" + active +
-//                ", documents=" + documents +
-                '}';
-    }
 
-    public Department getDepartment() {
-        return department;
+                '}';
     }
 
     @Override
@@ -105,7 +94,7 @@ public class User implements Comparable<User>{
                 .thenComparing(User::getFirstName)
                 .thenComparing(User::getLastName)
                 .thenComparing(User::getEmail)
-                .thenComparing(User::getDepartmentId)
+                .thenComparing(User::getDepartment)
                 .thenComparing(User::getRole)
                 .compare(this, o);
     }
