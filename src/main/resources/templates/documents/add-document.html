@@ -54,16 +54,19 @@
                 <div class="section-body">
                     <form action="" th:action="@{/document-management/documents/addNewDocument}" th:object="${document}" method="POST" class="edit-form">
                         <input type="text" class="add-input" placeholder="Document code" th:field="*{documentCode}">
-                        <input type="text" class="add-input" placeholder="Document type Id" th:field="*{documentTypeId}">
+                        <select th:field="*{documentType}" name="documentType" class="search-list" aria-label="">
+                            <option th:each="documentTypeOption : ${documentTypes}" th:value="${documentTypeOption}" th:text="${documentTypeOption}"></option>
+                        </select>
                         <input type="text" class="add-input" placeholder="Title" th:field="*{name}">
                         <input type="text" class="add-input" placeholder="Revision umber" th:field="*{revisionNumber}">
-                        <input type="text" class="add-input" placeholder="Status Id" th:field="*{statusId}">
+                        <select th:field="*{status}" name="status" class="search-list" aria-label="">
+                            <option th:each="documentStatusOption : ${documentStatuses}" th:value="${documentStatusOption}" th:text="${documentStatusOption}"></option>
+                        </select>
                         <input type="date" class="add-input" placeholder="Creation date" th:field="*{creationDate}">
                         <input type="date" class="add-input" placeholder="Modification date" th:field="*{modificationDate}">
                         <select th:field="*{author}" name="author" class="search-list" aria-label="">
                             <option th:each="userId : ${userIds}" th:value="${userId}" th:text="${userId}"></option>
                         </select>
-                        <input type="text" class="add-input" placeholder="Link" th:field="*{link}">
                         <button type="submit" class="action-button">Save</button>
                     </form>
                 </div>
