@@ -1,8 +1,9 @@
-package com.finalproject.document.management.service;
+package com.finalproject.document.management.service.implementations;
 
 import com.finalproject.document.management.dto.DocumentDTO;
 import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.repository.DocumentRepository;
+import com.finalproject.document.management.service.interfaces.DocumentService;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import org.apache.commons.io.output.ByteArrayOutputStream;

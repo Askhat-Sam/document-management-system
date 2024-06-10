@@ -3,7 +3,7 @@ package com.finalproject.document.management.service.implementations;
 import com.finalproject.document.management.dto.UserDTO;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.repository.UserRepository;
-import com.finalproject.document.management.service.UserService;
+import com.finalproject.document.management.service.interfaces.UserService;
 import jakarta.persistence.EntityManager;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.*;
@@ -33,7 +33,6 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     EntityManager entityManager;
 
@@ -92,8 +91,9 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserDTO> findAll() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(this::fromEntityToDTO).collect(Collectors.toList());
     }
 
 
@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long theId) {
-        entityManager.clear();
+//        entityManager.clear();
         Optional<User> result = userRepository.findById(theId);
         return result.orElseThrow(() -> new RuntimeException("Did not find user id: " + theId));
     }
@@ -210,11 +210,6 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-//    @Override
-//    public User findUserByIdWithDocuments(Long id) {
-//        return userRepository.findUserWithDocuments(id);
-//    }
 
     private static Pageable doPagingAndSorting(Integer page, Integer size, String sortBy, String sortDirection) {
         if (sortBy != null) {

@@ -91,23 +91,15 @@
                                 <td th:text="${user.status}"/>
                                 <td>
                                     <!--To change to icons-->
-                                    <a th:href="@{/document-management/users/view/{id}(id=${user.id})}" class="action-tool-edit">Edit</a>
+                                    <a th:href="@{/document-management/users/view/{id}(id=${user.id})}" class="action-tool-edit" sec:authorize="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER','ROLE_ADMIN')">Edit</a>
 
-                                    <a th:href="@{/document-management/users/deleteUser(id=${user.id})}"
-                                       class="action-btn-delete"
-                                       onclick="if (!(confirm('Are you sure you want to delete this user?'))) return false">
-                                        Delete
-                                    </a>
-<!--                                    <button type="button" class="" data-bs-toggle="modal" data-bs-target="#editModalUser">-->
-<!--                                        Edit user TEST-->
-<!--                                    </button>-->
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="centered-div">
-                        <button type="button" class="add-user action-button" data-bs-toggle="modal" data-bs-target="#addModalUser">
+                        <button type="button" class="add-user action-button" data-bs-toggle="modal" data-bs-target="#addModalUser" sec:authorize="hasRole('ROLE_ADMIN')">
                             Add user
                         </button>
                     </div>

@@ -4,8 +4,8 @@ import com.finalproject.document.management.dto.UserDTO;
 import com.finalproject.document.management.entity.Search;
 import com.finalproject.document.management.entity.TransactionEntity;
 import com.finalproject.document.management.entity.User;
-import com.finalproject.document.management.service.DocumentService;
-import com.finalproject.document.management.service.UserService;
+import com.finalproject.document.management.service.interfaces.DocumentService;
+import com.finalproject.document.management.service.interfaces.UserService;
 import com.finalproject.document.management.service.interfaces.DocumentCommentService;
 import com.finalproject.document.management.service.interfaces.DocumentTransactionService;
 import com.finalproject.document.management.service.interfaces.UserTransactionService;
@@ -150,9 +150,10 @@ public class UserController {
             user.setDepartment(department);
         }
         if (password != null) {
-//             Generate bcrypt hash
-            String passwordHashed = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt()) +".q";
-            user.setPassword(passwordHashed);
+            //generate bcrypt hash
+            String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
+
+            user.setPassword(pw_hash);
         }
         if (role != null) {
             user.setRole(role);

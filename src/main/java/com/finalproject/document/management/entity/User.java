@@ -73,6 +73,17 @@ public class User implements Comparable<User>{
         this.password = password;
     }
 
+    public User(Long id, String userId, String firstName, String lastName, String email, String department, String role, String status) {
+        this.id = id;
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.department = department;
+        this.role = role;
+        this.status = status;
+    }
+
     @Override
     public int compareTo(User o) {
         return Comparator.comparing(User::getUserId)

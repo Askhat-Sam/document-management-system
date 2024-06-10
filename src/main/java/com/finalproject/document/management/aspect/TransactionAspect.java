@@ -3,9 +3,9 @@ package com.finalproject.document.management.aspect;
 import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.TransactionUser;
 import com.finalproject.document.management.entity.User;
-import com.finalproject.document.management.service.DocumentService;
+import com.finalproject.document.management.service.interfaces.DocumentService;
 import com.finalproject.document.management.service.interfaces.DocumentTransactionService;
-import com.finalproject.document.management.service.UserService;
+import com.finalproject.document.management.service.interfaces.UserService;
 import com.finalproject.document.management.service.interfaces.UserTransactionService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
@@ -39,7 +39,7 @@ public class TransactionAspect {
     }
 
 
-    @Before("execution(* com.finalproject.document.management.service.UserService.update(..)) ")
+    @Before("execution(* com.finalproject.document.management.service.interfaces.UserService.update(..)) ")
     public void beforeUserUpdate(JoinPoint joinPoint) {
 
         // Get the user object passed to the update method
@@ -120,7 +120,7 @@ public class TransactionAspect {
         transactionList.forEach(t -> userTransactionService.save(t));
     }
 
-    @Around("execution(* com.finalproject.document.management.service.UserService.save(..)) ")
+    @Around("execution(* com.finalproject.document.management.service.interfaces.UserService.save(..)) ")
     public void beforeAddNewUser(ProceedingJoinPoint joinPoint) throws Throwable {
 
         // Get the user object passed to the save method
@@ -147,7 +147,7 @@ public class TransactionAspect {
         transactionList.forEach(t -> userTransactionService.save(t));
     }
 
-    @AfterReturning("execution(* com.finalproject.document.management.service.UserService.downloadListAsExcel(..)) ")
+    @AfterReturning("execution(* com.finalproject.document.management.service.interfaces.UserService.downloadListAsExcel(..)) ")
     public void afterDownloadingUserList(JoinPoint joinPoint) throws Throwable {
 
         // List for keeping transactions
@@ -167,7 +167,7 @@ public class TransactionAspect {
         transactionList.forEach(t -> userTransactionService.save(t));
     }
 
-    @AfterReturning("execution(* com.finalproject.document.management.service.DocumentService.downloadListAsExcel(..)) ")
+    @AfterReturning("execution(* com.finalproject.document.management.service.interfaces.DocumentService.downloadListAsExcel(..)) ")
     public void afterDownloadingDocumentList(JoinPoint joinPoint) throws Throwable {
 
         // List for keeping transactions
@@ -187,7 +187,7 @@ public class TransactionAspect {
         transactionList.forEach(t -> userTransactionService.save(t));
     }
 
-    @Before("execution(* com.finalproject.document.management.service.DocumentServiceImpl.update(..)) ")
+    @Before("execution(* com.finalproject.document.management.service.implementations.DocumentServiceImpl.update(..)) ")
     public void beforeDocumentUpdate(JoinPoint joinPoint){
 
         // Get the user object passed to the update method
