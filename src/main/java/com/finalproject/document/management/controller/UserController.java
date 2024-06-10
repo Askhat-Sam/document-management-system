@@ -101,7 +101,7 @@ public class UserController {
             @RequestParam("status") String status,
             @RequestParam("password") String password) {
         //generate bcrypt hash
-        String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt()) +".q";
+        String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
 
         // Create a new user
         User newUser = new User(userId, firstName, lastName, email, department, role, status, pw_hash, 1);
