@@ -64,23 +64,22 @@ public class DocumentServiceImpl implements DocumentService {
             switch(column) {
                 case "Id": documentsFiltered = documentsDTO.stream().filter(d -> Long.toString(d.getId()).contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Document Code": documentsFiltered = documentsDTO.stream().filter(d -> d.getDocumentCode().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+                case "Document code": documentsFiltered = documentsDTO.stream().filter(d -> d.getDocumentCode().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Document Type Id": documentsFiltered = documentsDTO.stream().filter(d ->  d.getDocumentType().toLowerCase().contains(keyword)).collect(Collectors.toList());
+                case "Document type": documentsFiltered = documentsDTO.stream().filter(d ->  d.getDocumentType().toLowerCase().contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
                 case "Title": documentsFiltered = documentsDTO.stream().filter(d -> d.getName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Status Id": documentsFiltered = documentsDTO.stream().filter(d -> d.getStatus().toLowerCase().contains(keyword)).collect(Collectors.toList());
+                case "Status": documentsFiltered = documentsDTO.stream().filter(d -> d.getStatus().toLowerCase().contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Creation Date": documentsFiltered = documentsDTO.stream().filter(d -> d.getCreationDate().contains(keyword)).collect(Collectors.toList());
+                case "Creation date": documentsFiltered = documentsDTO.stream().filter(d -> d.getCreationDate().contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Modification Date": documentsFiltered = documentsDTO.stream().filter(d -> d.getModificationDate().contains(keyword)).collect(Collectors.toList());
+                case "Modification date": documentsFiltered = documentsDTO.stream().filter(d -> d.getModificationDate().contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Revision Number": documentsFiltered = documentsDTO.stream().filter(d -> Long.toString(d.getRevisionNumber()).equals(keyword)).collect(Collectors.toList());
+                case "Revision number": documentsFiltered = documentsDTO.stream().filter(d -> Long.toString(d.getRevisionNumber()).equals(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Author Id": documentsFiltered = documentsDTO.stream().filter(d -> d.getAuthor().toLowerCase().contains(keyword)).collect(Collectors.toList());
+                case "Author": documentsFiltered = documentsDTO.stream().filter(d -> d.getAuthor().toLowerCase().contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "All": return documentsDTO;
             }
             return documentsFiltered;
         }

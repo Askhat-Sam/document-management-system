@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value="SELECT * FROM user WHERE user.id = :id", nativeQuery = true)
-    User getOldUserById(@Param("id") Long id);
+    User findUserById(@Param("id") Long id);
     @Query("SELECT u.userId FROM User u")
     List<String> findAllUserIds();
 }

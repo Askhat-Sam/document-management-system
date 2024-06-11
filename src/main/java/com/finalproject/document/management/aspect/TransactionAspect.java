@@ -47,7 +47,7 @@ public class TransactionAspect {
         User userAfterUpdate = (User) userJointPoint;
 
         // Get old version of user from DB
-        User userBeforeUpdate = userService.getOldUserById(userAfterUpdate.getId());
+        User userBeforeUpdate = userService.findUserById(userAfterUpdate.getId());
 
         // List for keeping transactions
         List<TransactionUser> transactionList = new ArrayList<>();
@@ -103,21 +103,24 @@ public class TransactionAspect {
                         "User role has been changed from '" + userBeforeUpdate.getRole() + "' to '" + userAfterUpdate.getRole() + "'"
                 ));
             }
-            if (!userAfterUpdate.getPassword().equals(userBeforeUpdate.getPassword())) {
-                transactionList.add(new TransactionUser(
-                        new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
-                        SecurityContextHolder.getContext().getAuthentication().getName(),
-                        userBeforeUpdate.getId(),
-                        "User (" + userBeforeUpdate.getUserId() + ") password has been changed"
-                ));
-            }
+//            if (!userAfterUpdate.getPassword().equals(userBeforeUpdate.getPassword())) {
+//                transactionList.add(new TransactionUser(
+//                        new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
+//                        SecurityContextHolder.getContext().getAuthentication().getName(),
+//                        userBeforeUpdate.getId(),
+//                        "User (" + userBeforeUpdate.getUserId() + ") password has been changed"
+//                ));
+//            }
             // Check changes of other fields if necessary
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         request.setAttribute("transactionList", transactionList);
         // Save each userTransaction in transactionList into DB
-        transactionList.forEach(t -> userTransactionService.save(t));
+        if (transactionList.size()>0){
+            transactionList.forEach(t -> userTransactionService.save(t));
+        }
+
     }
 
     @Around("execution(* com.finalproject.document.management.service.interfaces.UserService.save(..)) ")

@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
                 case "Id":
                     usersFiltered = usersDTO.stream().filter(u -> Long.toString(u.getId()).contains(keyword)).collect(Collectors.toList());
                     return usersFiltered;
-                case "User Id":
+                case "User id":
                     usersFiltered = usersDTO.stream().filter(u -> u.getUserId().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
                 case "First name":
@@ -71,14 +71,15 @@ public class UserServiceImpl implements UserService {
                 case "Email":
                     usersFiltered = usersDTO.stream().filter(u -> u.getEmail().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
-                case "Department Id":
+                case "Department":
                     usersFiltered = usersDTO.stream().filter(u -> u.getDepartment().contains(keyword)).collect(Collectors.toList());
                     return usersFiltered;
                 case "Role":
                     usersFiltered = usersDTO.stream().filter(u -> u.getRole().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
-                case "All":
-                    return usersDTO;
+                case "Status":
+                    usersFiltered = usersDTO.stream().filter(u -> u.getStatus().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+                    return usersFiltered;
             }
             return usersFiltered;
         }
@@ -104,6 +105,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void save(User user) {
         userRepository.save(user);
     }
@@ -114,22 +116,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(Long theId) {
-//        entityManager.clear();
-        Optional<User> result = userRepository.findById(theId);
-        return result.orElseThrow(() -> new RuntimeException("Did not find user id: " + theId));
+    public UserDTO findById(Long theId) {
+        User user = userRepository.findById(theId).get();
+        UserDTO userDTO = new UserDTO(user.getId(), user.getUserId(), user.getFirstName(), user.getLastName(),
+                user.getEmail(), user.getDepartment(), user.getRole(), user.getStatus());
+        return userDTO;
     }
 
     @Override
-    public User getOldUserById(Long theId) {
+    public User findUserById(Long theId) {
         entityManager.clear();
-        return userRepository.getOldUserById(theId);
-    }
-
-
-    @Override
-    public void deleteUserById(User theUser) {
-        userRepository.delete(theUser);
+        return userRepository.findUserById(theId);
     }
 
     public ResponseEntity<byte[]> downloadListAsExcel() {

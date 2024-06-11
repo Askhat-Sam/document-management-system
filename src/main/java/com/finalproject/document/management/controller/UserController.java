@@ -39,7 +39,7 @@ public class UserController {
     private List<String> statuses;
 
     @RequestMapping("/getUsers")
-    public String showUsers(@RequestParam(name = "page", required = false) Integer page,
+    public String getUsers(@RequestParam(name = "page", required = false) Integer page,
                             @RequestParam(name = "size", required = false) Integer size,
                             @RequestParam(name = "sortBy", required = false) String sortBy,
                             @RequestParam(name = "sortDirection", required = false) String sortDirection,
@@ -62,25 +62,28 @@ public class UserController {
 
 
     @RequestMapping("/getUser/{id}")
-    public User getUserById(@PathVariable("id") Long id) {
-        User user = userService.findById(id);
+    public UserDTO getUserById(@PathVariable("id") Long id) {
         return userService.findById(id);
     }
 
     @RequestMapping("/getOne")
     @ResponseBody
-    public User findById(Long id, Model model) {
-        User user = userService.findById(id);
+    public UserDTO findById(Long id, Model model) {
+        UserDTO user = userService.findById(id);
         model.addAttribute(user);
         return user;
     }
 
     @GetMapping("/view/{id}")
     public String viewUser(@PathVariable Long id, Model model) {
-        User user = userService.findById(id);
+        UserDTO user = userService.findById(id);
         List<TransactionEntity> transactions = userTransactionService.findAllByUser(user.getUserId());
         model.addAttribute("user", user);
         model.addAttribute("transactions", transactions);
+        model.addAttribute("statuses", statuses);
+        model.addAttribute("departments", departments);
+        model.addAttribute("roles", roles);
+
         return "users/view-user";
     }
 
@@ -111,17 +114,7 @@ public class UserController {
         return "redirect:/document-management/users/getUsers";
     }
 
-
-    @GetMapping("/deleteUser") //TO BE FIXED
-    public String deleteUser(@RequestParam Long id) {
-        // Get user by id
-        User user = userService.findById(id);
-
-        userService.deleteUserById(user);
-        return "redirect:/document-management/users/getUsers";
-    }
-
-    @PostMapping("/updateUser")
+    @PostMapping("/updateUser") ////////TO MOVE TO SERVICE
     public String updateUser(@RequestParam(name = "id", required = false) Long id,
                              @RequestParam(name = "userId", required = false) String userId,
                              @RequestParam(name = "firstName", required = false) String firstName,
@@ -130,9 +123,10 @@ public class UserController {
                              @RequestParam(name = "departmentId", required = false) String department,
                              @RequestParam(name = "password", required = false) String password,
                              @RequestParam(name = "active", required = false) Integer active,
-                             @RequestParam(name = "role", required = false) String role) {
+                             @RequestParam(name = "role", required = false) String role,
+                             @RequestParam(name = "status", required = false) String status) {
 
-        User user = userService.findById(id);
+        User user = userService.findUserById(id);
 
         if (userId != null) {
             user.setUserId(userId);
@@ -149,7 +143,7 @@ public class UserController {
         if (department != null) {
             user.setDepartment(department);
         }
-        if (password != null) {
+        if (password != "") {
             //generate bcrypt hash
             String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
 
@@ -157,6 +151,9 @@ public class UserController {
         }
         if (role != null) {
             user.setRole(role);
+        }
+        if (status != null) {
+            user.setStatus(status);
         }
 
         userService.update(user);

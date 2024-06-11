@@ -14,10 +14,11 @@ public interface UserService {
     void save(User user);
     List<String> findAllUserIds();
 
-    void deleteUserById(User user);
 
-    User findById(Long id);
-    User getOldUserById(Long id);
+    User findUserById(Long id);
+
+    UserDTO findById(Long id);
+
 
     ResponseEntity<byte[]> downloadListAsExcel();
 
