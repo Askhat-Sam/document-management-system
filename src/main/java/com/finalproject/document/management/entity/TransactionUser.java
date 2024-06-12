@@ -20,11 +20,11 @@ public class TransactionUser implements TransactionEntity{
     @Column(name="user")
     private String user;
     @Column(name="user_id")
-    private Long userId;
+    private String userId;
     @Column(name="transaction_type")
     private String transactionType;
 
-    public TransactionUser(String date, String user, Long userId, String transactionType) {
+    public TransactionUser(String date, String user, String userId, String transactionType) {
         this.date = date;
         this.user = user;
         this.userId = userId;

@@ -85,6 +85,11 @@ table {
 .flex-container {
    display: flex;
 }
+.flex-option-div{
+    display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+}
 .flex-container-row-navbar{
     display: flex;
    flex-direction: row;
@@ -151,7 +156,7 @@ td, th{
      color: white;
 }
 .search-list {
-    width: 300px;
+    width: 500px;
 }
 .section-body{
     border: 1px solid grey;

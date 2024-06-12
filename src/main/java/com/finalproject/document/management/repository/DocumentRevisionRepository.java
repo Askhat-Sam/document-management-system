@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface DocumentRevisionRepository extends JpaRepository<DocumentRevision, Long> {
     List<DocumentRevision> findAllByDocumentId(Long id);
+    DocumentRevision findByRevisionNumber(Long revisionNumber);
 }

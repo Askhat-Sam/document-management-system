@@ -80,20 +80,21 @@
                                 </div>
                             </div>
                             <div class="flex-container-column">
-                                <div class="">
-                                    <label for="email" class="edit-label">Email</label>
-                                    <input type="text" id="email" name="email" th:field="*{email}" class="edit-input"/>
-                                </div>
-                                <div class="">
-                                    <span>Status</span>
-                                    <select th:field="*{department}" name="department" class="search-list"
-                                            aria-label="">
+
+                                <div class="flex-option-div">
+                                    <label  class="edit-label">Department</label>
+                                    <select th:field="*{department}" name="department"
+                                            aria-label="" style="" class="search-list">
                                         <option th:each="departmentOption : ${departments}"
                                                 th:value="${departmentOption}" th:text="${departmentOption}"></option>
                                     </select>
                                 </div>
                                 <div class="">
-                                    <span>Status</span>
+                                    <label for="email" class="edit-label">Email</label>
+                                    <input type="text" id="email" name="email" th:field="*{email}" class="edit-input"/>
+                                </div>
+                                <div class="flex-option-div">
+                                    <label  class="edit-label">Role</label>
                                     <select th:field="*{role}" name="role" class="search-list" aria-label="">
                                         <option th:each="roleOption : ${roles}" th:value="${roleOption}"
                                                 th:text="${roleOption}"></option>
@@ -104,8 +105,8 @@
                                     <input type="text" id="password" name="password"
                                            class="edit-input"/>
                                 </div>
-                                <div class="">
-                                    <span>Status</span>
+                                <div class="flex-option-div">
+                                    <label  class="edit-label">Status</label>
                                     <select th:field="*{status}" name="status" class="search-list" aria-label="">
                                         <option th:each="statusOption : ${statuses}" th:value="${statusOption}"
                                                 th:text="${statusOption}"></option>
@@ -124,8 +125,8 @@
                             <tr class="table-header">
                                 <th>Id</th>
                                 <th>Date</th>
-                                <th>User</th>
-                                <th>User id</th>
+                                <th>Modified by</th>
+                                <th>Modified user/document</th>
                                 <th>Transaction type</th>
                             </tr>
                             </thead>

@@ -22,9 +22,7 @@
                 </div>
             </div>
             <div class="flex-container-row">
-                <div class="navbar-div"><a class="" th:href="@{/document-management/documents/getDocumentValidations}">
-                    Validations list
-                </a></div>
+                <div class="navbar-div">Notifications</div>
                 <div>
                     <form action="#" th:action="@{/logout}" method="POST" class="navbar-header">
                         <input type="submit" value="Logout" class=""/>
@@ -32,8 +30,6 @@
                 </div>
             </div>
         </div>
-
-        documents/document-validations
         <div class="flex-container">
             <div class="side-panel">
                 <div>
@@ -53,17 +49,6 @@
                 </div>
             </div>
             <div class="body-container">
-                <div class="navbar flex-container">
-                    <form th:action="@{/document-management/documents/getDocuments}" th:object="${search}" class="navbar-form" role="search">
-                        <input name="keyword" th:value="${keyword}" class="" type="search" placeholder="Search" aria-label="Search" id="searchText">
-
-                        <select th:field="*{column}" name="column" class="search-list" aria-label="">
-                            <option th:each="tempHeader : ${headers}" th:value="${tempHeader}" th:text="${tempHeader}"></option>
-                        </select>
-
-                        <button class="" type="submit">Search</button>
-                    </form>
-                </div>
                 <div class="main-content">
                     <div class="table-container">
                         <table class="">
@@ -71,43 +56,31 @@
                             <tr class="table-header">
                                 <th>Id</th>
                                 <th>Document code</th>
-                                <th>Type</th>
-                                <th>Title</th>
-                                <th>Revision numnber</th>
-                                <th>Status</th>
-                                <th>Creation date</th>
-                                <th>Modification date</th>
+                                <th>Name</th>
+                                <th>Revision number</th>
                                 <th>Author</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody class="table-body">
-                            <tr th:each="document : ${documents}" class="" style="height: 20px">
-                                <td th:text="${document.id}" />
-                                <td th:text="${document.documentCode}" />
-                                <td th:text="${document.documentType}"/>
-                                <td th:text="${document.name}"/>
-                                <td th:text="${document.revisionNumber}"/>
-                                <td th:text="${document.status}"/>
-                                <td th:text="${document.creationDate}"/>
-                                <td th:text="${document.modificationDate}"/>
-                                <td th:text="${document.author}"/>
+                            <tr th:each="documentValidation : ${documentValidations}" class="" style="height: 20px">
+                                <td th:text="${documentValidation.id}" />
+                                <td th:text="${documentValidation.documentCode}" />
+                                <td th:text="${documentValidation.name}" />
+                                <td th:text="${documentValidation.revisionNumber}" />
+                                <td th:text="${documentValidation.userId}" />
+                                <td th:text="${documentValidation.status}" />
+
                                 <td>
                                     <!--To change to icons-->
-                                    <a th:href="@{/document-management/documents/view/{id}(id=${document.id})}" class="action-tool-edit">
+                                    <a th:href="@{/document-management/documents/view-validation/{id}(id=${documentValidation.id})}" class="action-tool-edit">
                                         Edit
                                     </a>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
-                    </div>
-                    <div class="centered-div">
-                        <div>
-                            <a class="action-button" th:href="@{/document-management/documents/addNewDocumentPage}" sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
-                                Create document
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>

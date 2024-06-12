@@ -3,14 +3,10 @@ package com.finalproject.document.management.controller;
 import com.finalproject.document.management.dto.DocumentCommentDTO;
 import com.finalproject.document.management.dto.DocumentDTO;
 import com.finalproject.document.management.dto.DocumentRevisionDTO;
-import com.finalproject.document.management.entity.Document;
-import com.finalproject.document.management.entity.DocumentComment;
-import com.finalproject.document.management.entity.DocumentRevision;
-import com.finalproject.document.management.entity.Search;
-import com.finalproject.document.management.service.interfaces.DocumentCommentService;
-import com.finalproject.document.management.service.interfaces.DocumentRevisionService;
-import com.finalproject.document.management.service.interfaces.DocumentService;
-import com.finalproject.document.management.service.interfaces.UserService;
+import com.finalproject.document.management.dto.DocumentValidationDTO;
+import com.finalproject.document.management.entity.*;
+import com.finalproject.document.management.service.implementations.DocumentValidationServiceImpl;
+import com.finalproject.document.management.service.interfaces.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +29,8 @@ public class DocumentController {
     private final UserService userService;
     private final DocumentCommentService documentCommentService;
     private final DocumentRevisionService documentRevisionService;
-
+    private final DocumentValidationService documentValidationService;
+    private final DocumentValidationServiceImpl documentValidationServiceImpl;
     @Value("${headersDocument}")
     private List<String> headers;
     @Value("${documentStatuses}")
@@ -227,10 +224,60 @@ public class DocumentController {
                                  @RequestParam String validatingUser) {
         Document document = documentService.findById(documentId);
 
-        // Add comment to the document
-        document.addRevision(new DocumentRevision(userId, revisionNumber, status, date, description, link, validatingUser));
+        // Add revision to the document
+        DocumentRevision documentRevision =new DocumentRevision(userId, revisionNumber, status, date, description, link, validatingUser);
+        document.addRevision(documentRevision);
+
+        DocumentValidation documentValidation = new DocumentValidation(document.getDocumentCode(),document.getName(),
+                revisionNumber, validatingUser, "Awaiting validation");
+
 
         documentService.update(document);
+        documentValidationService.save(documentValidation);
         return "redirect:/document-management/documents/view/" + documentId;
     }
+    @RequestMapping("/getDocumentValidations")
+    public String documentValidationPage(Model model) {
+        List<DocumentValidationDTO> documentValidations = documentValidationService.findAll();
+
+        model.addAttribute("documentValidations",documentValidations);
+
+        return "documents/document-validations";
+    }
+
+    @GetMapping("/view-validation/{id}")
+    public String viewValidation(@PathVariable Long id, Model model) {
+    DocumentValidationDTO documentValidation = documentValidationService.findById(id);
+
+    model.addAttribute("documentValidation", documentValidation);
+    model.addAttribute("documentRevisionStatuses", documentRevisionStatuses);
+
+        return "documents/view-document-validations";
+    }
+
+    @PostMapping("/updateRevision")
+    public String updateRevision(@RequestParam Long id,
+                                 @RequestParam String status,
+                                 Model model) {
+        DocumentValidationDTO documentValidationDTO = documentValidationService.findById(id);
+        // Update status in document validation
+        DocumentValidation documentValidation = DocumentValidationServiceImpl.fromDTOToEntity(documentValidationDTO);
+        documentValidation.setStatus(status);
+        // Update status in document revision
+        DocumentRevision documentRevision = documentRevisionService.findByRevisionNumber(documentValidation.getRevisionNumber());
+        documentRevision.setStatus(status);
+        documentRevisionService.save(documentRevision);
+        documentValidationService.save(documentValidation);
+
+        List<DocumentValidationDTO> documentValidations = documentValidationService.findAll();
+
+
+
+        model.addAttribute("documentValidations",documentValidations);
+
+        return "documents/document-validations";
+    }
+
+
+
 }

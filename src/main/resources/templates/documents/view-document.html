@@ -9,9 +9,11 @@
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-            integrity="sha384-oBqDVmMz4fnFO9gybRMQJE5yXvBBKa1o5FYKpD5bTAnY7A2eHGoP6LE5Adw3l98g" crossorigin="anonymous"></script>
+            integrity="sha384-oBqDVmMz4fnFO9gybRMQJE5yXvBBKa1o5FYKpD5bTAnY7A2eHGoP6LE5Adw3l98g"
+            crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"
-            integrity="sha384-IQsoLXlRHaa7a5gD0U+nbbYd3+i9CXt9qpaYFfE70cbByWV7a3w9QIXwlS8yfi4p" crossorigin="anonymous"></script>
+            integrity="sha384-IQsoLXlRHaa7a5gD0U+nbbYd3+i9CXt9qpaYFfE70cbByWV7a3w9QIXwlS8yfi4p"
+            crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
@@ -23,7 +25,8 @@
         <div class="flex-container-row">
             <div class="navbar-div">Document Management Service</div>
             <div class="navbar-div flex-container-row">
-                <div>User: <span sec:authentication="principal.username"></span> <span sec:authentication="principal.authorities"></span></div>
+                <div>User: <span sec:authentication="principal.username"></span> <span
+                        sec:authentication="principal.authorities"></span></div>
             </div>
         </div>
         <div class="flex-container-row">
@@ -51,7 +54,9 @@
             <div class="navbar flex-container-column">
                 <div class="section-header centered-div">1. Document info</div>
                 <div class="section-body">
-                    <form action="#" th:action="@{/document-management/documents/updateDocument}" th:object="${document}" method="POST" class="edit-form">
+                    <form action="#" th:action="@{/document-management/documents/updateDocument}"
+                          th:object="${document}" method="POST" class="edit-form">
+                        <div class="flex-container-column">
                         <div class="flex-container-row">
                             <div class="flex-container-column">
                                 <div class="">
@@ -60,13 +65,19 @@
                                 </div>
                                 <div class="">
                                     <label for="documentCode" class="edit-label">Document Code</label>
-                                    <input type="text" id="documentCode" name="documentCode" th:field="*{documentCode}" class="edit-input"/>
+                                    <input type="text" id="documentCode" name="documentCode" th:field="*{documentCode}"
+                                           class="edit-input"/>
                                 </div>
-                                <div class="">
-                                    <span>Document type</span>
-                                    <select th:field="*{documentType}" name="documentType" class="search-list" aria-label="">
-                                        <option th:each="documentTypeOption : ${documentTypes}" th:value="${documentTypeOption}" th:text="${documentTypeOption}"></option>
-                                    </select>
+                                <div class="flex-container-column">
+                                    <div class="flex-option-div">
+                                        <label class="edit-label">Document type</label>
+                                        <select th:field="*{documentType}" name="documentType" class="search-list"
+                                                aria-label="">
+                                            <option th:each="documentTypeOption : ${documentTypes}"
+                                                    th:value="${documentTypeOption}"
+                                                    th:text="${documentTypeOption}"></option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="">
                                     <label for="name" class="edit-label">Title</label>
@@ -74,89 +85,103 @@
                                 </div>
                                 <div class="">
                                     <label for="revisionNumber" class="edit-label">Revision Number</label>
-                                    <input type="number" id="revisionNumber" name="revisionNumber" th:field="*{revisionNumber}" class="edit-input"/>
+                                    <input type="number" id="revisionNumber" name="revisionNumber"
+                                           th:field="*{revisionNumber}" class="edit-input"/>
                                 </div>
                             </div>
                             <div class="flex-container-column">
-                                <div class="">
-                                    <span>Status</span>
+                                <div class="flex-option-div">
+                                    <label class="edit-label">Status</label>
                                     <select th:field="*{status}" name="status" class="search-list" aria-label="">
-                                        <option th:each="documentStatusOption : ${documentStatuses}" th:value="${documentStatusOption}" th:text="${documentStatusOption}"></option>
+                                        <option th:each="documentStatusOption : ${documentStatuses}"
+                                                th:value="${documentStatusOption}"
+                                                th:text="${documentStatusOption}"></option>
                                     </select>
                                 </div>
                                 <div class="">
                                     <label for="creationDate" class="edit-label">Creation Date</label>
-                                    <input type="date" id="creationDate" name="creationDate" th:field="*{creationDate}" class="edit-input"/>
+                                    <input type="date" id="creationDate" name="creationDate" th:field="*{creationDate}"
+                                           class="edit-input"/>
                                 </div>
                                 <div class="">
                                     <label for="modificationDate" class="edit-label">Modification Date</label>
-                                    <input type="date" id="modificationDate" name="modificationDate" th:field="*{modificationDate}" class="edit-input"/>
+                                    <input type="date" id="modificationDate" name="modificationDate"
+                                           th:field="*{modificationDate}" class="edit-input"/>
                                 </div>
-                                <div class="">
-                                    <span>Author</span>
-                                    <select th:field="*{author}" name="author" class="search-list" aria-label="">
-                                        <option th:each="userId : ${userIds}" th:value="${userId}" th:text="${userId}"></option>
-                                    </select>
+                                <div class="flex-container-column">
+                                    <div class="flex-option-div">
+                                        <label class="edit-label">Author</label>
+                                        <select th:field="*{author}" name="author" class="search-list" aria-label="">
+                                            <option th:each="userId : ${userIds}" th:value="${userId}"
+                                                    th:text="${userId}"></option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="">
                                     <label for="link" class="edit-label">Link</label>
-                                    <input type="text" id="link" name="link" th:value="TBD" class="edit-input" readonly/>
+                                    <input type="text" id="link" name="link" th:value="TBD" class="edit-input"
+                                           readonly/>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="action-button" sec:authorize="hasAnyRole( 'ROLE_MANAGER','ROLE_ADMIN')">Save</button>
+                            <button type="submit" class="action-button" style="width: 100px;"
+                                    sec:authorize="hasAnyRole( 'ROLE_MANAGER','ROLE_ADMIN')">Save
+                            </button>
+                        </div>
                     </form>
-                    </div>
+                </div>
                 <div class="section-header centered-div">2. Document revisions</div>
                 <div class="section-body">
-                        <div class="table-container">
-                            <table class="">
-                                <thead>
-                                    <tr class="table-header">
-                                        <th>Id</th>
-                                        <th>User id</th>
-                                        <th>Document id</th>
-                                        <th>Date</th>
-                                        <th>Revision number</th>
-                                        <th>Status id</th>
-                                        <th>Description</th>
-                                        <th>Link</th>
-                                        <th>Validating by user</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-body">
-                                <tr th:each="revision : ${revisions}" class="" style="height: 20px">
-                                    <td th:text="${revision.id}" />
-                                    <td th:text="${revision.userId}" />
-                                    <td th:text="${revision.documentId}" />
-                                    <td th:text="${revision.date}" />
-                                    <td th:text="${revision.revisionNumber}" />
-                                    <td th:text="${revision.status}" />
-                                    <td th:text="${revision.description}" />
-                                    <td th:text="${revision.link}" />
-                                    <td th:text="${revision.validatingUser}" />
+                    <div class="table-container">
+                        <table class="">
+                            <thead>
+                            <tr class="table-header">
+                                <th>Id</th>
+                                <th>User id</th>
+                                <th>Document id</th>
+                                <th>Date</th>
+                                <th>Revision number</th>
+                                <th>Status id</th>
+                                <th>Description</th>
+                                <th>Link</th>
+                                <th>Validating by user</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-body">
+                            <tr th:each="revision : ${revisions}" class="" style="height: 20px">
+                                <td th:text="${revision.id}"/>
+                                <td th:text="${revision.userId}"/>
+                                <td th:text="${revision.documentId}"/>
+                                <td th:text="${revision.date}"/>
+                                <td th:text="${revision.revisionNumber}"/>
+                                <td th:text="${revision.status}"/>
+                                <td th:text="${revision.description}"/>
+                                <td th:text="${revision.link}"/>
+                                <td th:text="${revision.validatingUser}"/>
 
-                                    <td>
-                                        <!--To change to icons-->
-                                        <a th:href="@{/document-management/documents/downloadFile(link=${revision.link})}" class="action-tool-edit">
+                                <td>
+                                    <!--To change to icons-->
+                                    <span th:if="${revision.status == 'Validated' || revision.status == 'VALIDATED' }">
+                                        <a th:href="@{/document-management/documents/downloadFile(link=${revision.link})}"
+                                           class="action-tool-edit">
                                             Download
                                         </a>
-                                        <a th:href="@{/document-management/documents/viewFile(link=${revision.link})}" class="action-tool-edit">
+                                        <a th:href="@{/document-management/documents/viewFile(link=${revision.link})}"
+                                           class="action-tool-edit">
                                             Open
                                         </a>
-                                        <a class="action-btn-delete"
-                                           onclick="if (!(confirm('Are you sure you want to delete this document?'))) return false" sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
-                                            Delete
-                                        </a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                    </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
+                </div>
                 <div class="centered-div">
-                    <a class="action-button" th:href="@{/document-management/documents/addNewRevisionPage(documentId=${document.id})}" sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
+                    <a class="action-button"
+                       th:href="@{/document-management/documents/addNewRevisionPage(documentId=${document.id})}"
+                       sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
                         Add new revision</a>
                 </div>
                 <div class="section-header centered-div">3. Document comments</div>
@@ -176,15 +201,15 @@
                             </thead>
                             <tbody class="table-body">
                             <tr th:each="comment : ${comments}" class="" style="height: 20px">
-                                <td th:text="${comment.id}" />
-                                <td th:text="${comment.documentId}" />
-                                <td th:text="${comment.userId}" />
-                                <td th:text="${comment.date}" />
-                                <td th:text="${comment.comment}" />
+                                <td th:text="${comment.id}"/>
+                                <td th:text="${comment.documentId}"/>
+                                <td th:text="${comment.userId}"/>
+                                <td th:text="${comment.date}"/>
+                                <td th:text="${comment.comment}"/>
                                 <td th:text="TBD"/>
                                 <td>
                                     <!--To change to icons-->
-                                    <a  class="action-tool-edit" sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
+                                    <a class="action-tool-edit" sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
                                         Edit
                                     </a>
                                 </td>
@@ -195,11 +220,12 @@
                 </div>
 
                 <div class="centered-div">
-                    <a class="action-button" th:href="@{/document-management/documents/addNewCommentPage(documentId=${document.id})}" sec:authorize="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER','ROLE_ADMIN')">
+                    <a class="action-button"
+                       th:href="@{/document-management/documents/addNewCommentPage(documentId=${document.id})}"
+                       sec:authorize="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER','ROLE_ADMIN')">
                         Add new comment
                     </a>
                 </div>
-
 
 
             </div>
@@ -215,11 +241,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="#" th:action="@{/document-management/documents/addComment}" th:object = "${comment}" method="POST">
-                    <input type="text" class="form-control mb-4 w-75"  placeholder="Document id" th:field = "*{documentId}">
-                    <input type="text" class="form-control mb-4 w-75"  placeholder="User id" th:field = "*{userId}">
-                    <input type="date" class="form-control mb-4 w-75"  placeholder="Date" th:field = "*{date}">
-                    <input type="text" class="form-control mb-4 w-75"  placeholder="Comment" th:field = "*{comment}">
+                <form action="#" th:action="@{/document-management/documents/addComment}" th:object="${comment}"
+                      method="POST">
+                    <input type="text" class="form-control mb-4 w-75" placeholder="Document id"
+                           th:field="*{documentId}">
+                    <input type="text" class="form-control mb-4 w-75" placeholder="User id" th:field="*{userId}">
+                    <input type="date" class="form-control mb-4 w-75" placeholder="Date" th:field="*{date}">
+                    <input type="text" class="form-control mb-4 w-75" placeholder="Comment" th:field="*{comment}">
                     <button type="submit" class="">Save</button>
                 </form>
             </div>

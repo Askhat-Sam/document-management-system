@@ -36,4 +36,13 @@ public class DocumentRevisionServiceImpl implements DocumentRevisionService {
                 documentRevision.getStatus(), documentRevision.getDescription(), documentRevision.getLink(),
                 documentRevision.getValidatingUser());
     }
+
+    public DocumentRevision findByRevisionNumber(Long revisionNumber){
+        return documentRevisionRepository.findByRevisionNumber(revisionNumber);
+    }
+
+    @Override
+    public void save(DocumentRevision documentRevision) {
+        documentRevisionRepository.save(documentRevision);
+    }
 }

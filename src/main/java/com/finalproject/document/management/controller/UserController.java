@@ -12,6 +12,7 @@ import com.finalproject.document.management.service.interfaces.UserTransactionSe
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,13 +67,13 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @RequestMapping("/getOne")
-    @ResponseBody
-    public UserDTO findById(Long id, Model model) {
-        UserDTO user = userService.findById(id);
-        model.addAttribute(user);
-        return user;
-    }
+//    @RequestMapping("/getOne")
+//    @ResponseBody
+//    public UserDTO findById(Long id, Model model) {
+//        UserDTO user = userService.findById(id);
+//        model.addAttribute(user);
+//        return user;
+//    }
 
     @GetMapping("/view/{id}")
     public String viewUser(@PathVariable Long id, Model model) {
@@ -120,41 +121,59 @@ public class UserController {
                              @RequestParam(name = "firstName", required = false) String firstName,
                              @RequestParam(name = "lastName", required = false) String lastName,
                              @RequestParam(name = "email", required = false) String email,
-                             @RequestParam(name = "departmentId", required = false) String department,
+                             @RequestParam(name = "department", required = false) String department,
                              @RequestParam(name = "password", required = false) String password,
                              @RequestParam(name = "active", required = false) Integer active,
                              @RequestParam(name = "role", required = false) String role,
                              @RequestParam(name = "status", required = false) String status) {
 
         User user = userService.findUserById(id);
+        // Get the userId og logged user
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        String loggedUserAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
 
-        if (userId != null) {
-            user.setUserId(userId);
-        }
-        if (firstName != null) {
-            user.setFirstName(firstName);
-        }
-        if (lastName != null) {
-            user.setLastName(lastName);
-        }
-        if (email != null) {
-            user.setEmail(email);
-        }
-        if (department != null) {
-            user.setDepartment(department);
-        }
-        if (password != "") {
-            //generate bcrypt hash
-            String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
+        // Allow save own password for user with role ROLE_EMPLOYEE
+        if ((loggedUserAuthority.equals("[ROLE_EMPLOYEE]") || loggedUserAuthority.equals("[ROLE_MANAGER]"))&&loggedUser.equals(userId)) {
+            if (password != "") {
+                //generate bcrypt hash
+                String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
 
-            user.setPassword(pw_hash);
+                user.setPassword(pw_hash);
+            }
         }
-        if (role != null) {
-            user.setRole(role);
+
+        if (loggedUserAuthority.equals("[ROLE_ADMIN]")){
+            if (userId != null) {
+                user.setUserId(userId);
+            }
+            if (firstName != null) {
+                user.setFirstName(firstName);
+            }
+            if (lastName != null) {
+                user.setLastName(lastName);
+            }
+            if (email != null) {
+                user.setEmail(email);
+            }
+            if (department != null) {
+                user.setDepartment(department);
+            }
+            if (password != "") {
+                //generate bcrypt hash
+                String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
+
+                user.setPassword(pw_hash);
+            }
+            if (role != null) {
+                user.setRole(role);
+            }
+            if (status != null) {
+                user.setStatus(status);
+            }
         }
-        if (status != null) {
-            user.setStatus(status);
-        }
+
+
+
 
         userService.update(user);
 
