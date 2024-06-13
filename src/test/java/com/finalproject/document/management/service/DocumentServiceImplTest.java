@@ -1,12 +1,9 @@
 package com.finalproject.document.management.service;
 
 import com.finalproject.document.management.dto.DocumentDTO;
-import com.finalproject.document.management.dto.UserDTO;
 import com.finalproject.document.management.entity.Document;
-import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.repository.DocumentRepository;
 import com.finalproject.document.management.service.implementations.DocumentServiceImpl;
-import com.finalproject.document.management.service.interfaces.DocumentService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,9 +14,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
