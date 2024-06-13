@@ -19,4 +19,19 @@ public class DocumentDTO {
     private String creationDate;
     private String modificationDate;
     private String author;
+
+    @Override
+    public String toString() {
+        return "DocumentDTO{" +
+                "id=" + id +
+                ", documentCode='" + documentCode + '\'' +
+                ", documentType='" + documentType + '\'' +
+                ", name='" + name + '\'' +
+                ", revisionNumber=" + revisionNumber +
+                ", status='" + status + '\'' +
+                ", creationDate='" + creationDate + '\'' +
+                ", modificationDate='" + modificationDate + '\'' +
+                ", author='" + author + '\'' +
+                '}';
+    }
 }

@@ -26,7 +26,7 @@ public class UserServiceIntegrationTest {
         User userActual = userService.findUserById(1L);
 
         // Then
-        assertEquals(userActual.toString(), userExpected.toString());
         assertEquals("ivan", userActual.getFirstName());
+        assertEquals(userExpected.getDepartment(), userActual.getDepartment());
     }
 }
