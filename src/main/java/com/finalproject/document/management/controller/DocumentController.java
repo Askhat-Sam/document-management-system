@@ -242,18 +242,14 @@ public class DocumentController {
         DocumentDTO document = documentService.findById(documentId);
 
         // Add revision to the document
-        DocumentRevision documentRevision =new DocumentRevision(userId, revisionNumber, status, date, description, link, validatingUser);
+        DocumentRevision documentRevision =new DocumentRevision(userId, documentId, date, revisionNumber,
+                status, description, validatingUser);
 
-        // Convert DTO back to entity before update
-        Document documentUpdated = documentService.convertToEntity(document);
-
-        documentUpdated.addRevision(documentRevision);
+        documentRevisionService.save(documentRevision);
 
         DocumentValidation documentValidation = new DocumentValidation(document.getDocumentCode(), documentId, document.getName(),
                 revisionNumber, validatingUser, "Awaiting validation");
 
-
-        documentService.update(documentUpdated);
         documentValidationService.save(documentValidation);
         return "redirect:/document-management/documents/view/" + documentId;
     }

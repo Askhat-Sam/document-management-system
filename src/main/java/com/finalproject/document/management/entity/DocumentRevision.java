@@ -21,7 +21,7 @@ public class DocumentRevision {
     private Long id;
     @Column(name = "user_id")
     private String userId;
-    @Column(name = "document_id", insertable=false, updatable=false)
+    @Column(name = "document_id")
     private Long documentId;
     @Column(name = "date")
     private String date;
@@ -36,11 +36,6 @@ public class DocumentRevision {
     @Column(name = "validated_user")
     private String validatingUser;
 
-    @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name="document_id")
-    private Document document;
-
     public DocumentRevision(Long documentId, String date, Long revisionNumber, String status, String link, String validatingUserId) {
         this.documentId = documentId;
         this.date = date;
@@ -50,15 +45,24 @@ public class DocumentRevision {
         this.validatingUser = validatingUser;
     }
 
-    public DocumentRevision(String userId, Long revisionNumber, String status, String date, String description, String link, String validatingUser) {
-        this.userId =userId;
-        this.revisionNumber =revisionNumber;
-        this.status =status;
-        this.date =date;
-        this.description =description;
-        this.link =link;
-        this.validatingUser =validatingUser;
-
+    public DocumentRevision(String userId, Long documentId, String date, Long revisionNumber, String status, String description, String validatingUser) {
+        this.userId = userId;
+        this.documentId = documentId;
+        this.date = date;
+        this.revisionNumber = revisionNumber;
+        this.status = status;
+        this.description = description;
+        this.validatingUser = validatingUser;
     }
 
+    public DocumentRevision(Long id, String userId, Long documentId, String date, Long revisionNumber, String status, String description, String validatingUser) {
+        this.id = id;
+        this.userId = userId;
+        this.documentId = documentId;
+        this.date = date;
+        this.revisionNumber = revisionNumber;
+        this.status = status;
+        this.description = description;
+        this.validatingUser = validatingUser;
+    }
 }
