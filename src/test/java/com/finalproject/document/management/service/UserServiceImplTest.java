@@ -1,6 +1,5 @@
 package com.finalproject.document.management.service;
 
-import com.finalproject.document.management.controller.UserController;
 import com.finalproject.document.management.dto.UserDTO;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.repository.UserRepository;
@@ -11,17 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class UserServiceImplTest {
@@ -31,8 +25,14 @@ public class UserServiceImplTest {
 
     @InjectMocks
     private UserServiceImpl userService;
+    @Mock
+    private User user;
+
+    @Mock
+    private UserDTO userDTO;
+
     @InjectMocks
-    UserController userController;
+    private UserServiceImpl userServiceImpl;
 
     @BeforeEach
     public void setUp() {
@@ -40,7 +40,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testFindAll() {
+    public void test_findAll() {
         // given
         List<User> userList = new ArrayList<>();
         userList.add(new User(1L, "ivan.i", "ivan", "ivanov",
@@ -61,36 +61,9 @@ public class UserServiceImplTest {
         Assertions.assertEquals("sergey.s@example.com", userDTOList.get(1).getEmail());
         Assertions.assertEquals("ivanov", userDTOList.get(0).getLastName());
     }
-//    @Test
-//    public void testFindAllWithParameters() {
-//        // given
-//        List<UserDTO> userList = new ArrayList<>();
-//        userList.add(new UserDTO(1L, "ivan.i", "ivan", "ivanov",
-//                "ivanov.i@example.com", "IT", "ROLE_EMPLOYEE", "Active"));
-//        userList.add(new UserDTO(2L, "sergey.s", "sergey", "sergeyev",
-//                "sergey.s@example.com", "Procurement", "ROLE_MANAGER", "Not active"));
-//        userList.add(new UserDTO(3L, "valeriy.b", "valeriy", "vladov",
-//                "valeriy.b@example.com", "Procurement", "ROLE_ADMIN", "Active"));
-//        userList.add(new UserDTO(4L, "sergey.v", "sergey", "valdov",
-//                "sergey.v@example.com", "Procurement", "ROLE_MANAGER", "Not active"));
-//        userList.add(new UserDTO(5L, "anton.s", "anton", "sergeyev",
-//                "anton.s@example.com", "Procurement", "ROLE_ADMIN", "Active"));
-//        Page<User> pageMock = mock(Page.class);
-//        when(pageMock.toList()).thenReturn(userList);
-//        UserRepository userRepositoryMock = mock(UserRepository.class);
-//        when(userRepositoryMock.findAll(any(Pageable.class))).thenReturn(pageMock);
-//
-//        // when
-//        when(userService.findAll(null, null, "role", null, null, null)).thenReturn(userList);
-//        List<UserDTO> userDTOList = userService.findAll(null, null, "role", null, null, null);
-//
-//        // then
-//        Assertions.assertArrayEquals(userList.toArray(), userDTOList.toArray());
-//    }
-
 
     @Test
-    public void testFindAllUserIds() {
+    public void test_findAllUserIds() {
         // Given
         List<User> expectedUserIds =new ArrayList<>();
         User user1 = new User(1L, "ivan.i", "ivan", "ivanov",
@@ -109,14 +82,14 @@ public class UserServiceImplTest {
         List<String> actualUserIds = userService.findAllUserIds();
 
         // Then
-        assertEquals(expectedUserIdsMapped.size(), actualUserIds.size());
+        Assertions.assertEquals(expectedUserIdsMapped.size(), actualUserIds.size());
         for (int i = 0; i < expectedUserIdsMapped.size(); i++) {
-            assertEquals(expectedUserIdsMapped.get(i), actualUserIds.get(i));
+            Assertions.assertEquals(expectedUserIdsMapped.get(i), actualUserIds.get(i));
         }
     }
 
     @Test
-    public void testFindById() {
+    public void test_findById() {
         // Given
         User userExpected= new User(1L, "ivan.i", "ivan", "ivanov",
                 "ivanov.i@example.com", "IT", "ROLE_EMPLOYEE", "Active");
@@ -126,8 +99,73 @@ public class UserServiceImplTest {
         UserDTO userActual = userService.findById(1L);
 
         // Then
-        assertNotNull(userActual); // Ensure user is not null
-        assertEquals(userActual.getUserId(), userExpected.getUserId());
-        assertEquals("ivan", userActual.getFirstName());
+        Assertions.assertNotNull(userActual); // Ensure user is not null
+        Assertions.assertEquals(userActual.getUserId(), userExpected.getUserId());
+        Assertions.assertEquals("ivan", userActual.getFirstName());
+    }
+
+    @Test
+    public void test_fromEntityToDTO() {
+        // Given
+        when(user.getId()).thenReturn(1L);
+        when(user.getUserId()).thenReturn("user123");
+        when(user.getFirstName()).thenReturn("John");
+        when(user.getLastName()).thenReturn("Doe");
+        when(user.getEmail()).thenReturn("john.doe@example.com");
+        when(user.getDepartment()).thenReturn("IT");
+        when(user.getRole()).thenReturn("Engineer");
+        when(user.getStatus()).thenReturn("Active");
+
+        // When
+        UserDTO userDTO = userServiceImpl.fromEntityToDTO(user);
+
+        // Then
+        Assertions.assertEquals((Long) 1L, userDTO.getId());
+        Assertions.assertEquals("user123", userDTO.getUserId());
+        Assertions.assertEquals("John", userDTO.getFirstName());
+        Assertions.assertEquals("Doe", userDTO.getLastName());
+        Assertions.assertEquals("john.doe@example.com", userDTO.getEmail());
+        Assertions.assertEquals("IT", userDTO.getDepartment());
+        Assertions.assertEquals("Engineer", userDTO.getRole());
+        Assertions.assertEquals("Active", userDTO.getStatus());
+    }
+
+    @Test
+    public void test_fromDTOToEntity() {
+        // Given
+        when(userDTO.getId()).thenReturn(1L);
+        when(userDTO.getUserId()).thenReturn("user123");
+        when(userDTO.getFirstName()).thenReturn("John");
+        when(userDTO.getLastName()).thenReturn("Doe");
+        when(userDTO.getEmail()).thenReturn("john.doe@example.com");
+        when(userDTO.getDepartment()).thenReturn("IT");
+        when(userDTO.getRole()).thenReturn("Engineer");
+        when(userDTO.getStatus()).thenReturn("Active");
+
+        // When
+        User user = userServiceImpl.fromDTOToEntity(userDTO);
+
+        // Then
+        Assertions.assertEquals((Long) 1L, user.getId());
+        Assertions.assertEquals("user123", user.getUserId());
+        Assertions.assertEquals("John", user.getFirstName());
+        Assertions.assertEquals("Doe", user.getLastName());
+        Assertions.assertEquals("john.doe@example.com", user.getEmail());
+        Assertions.assertEquals("IT", user.getDepartment());
+        Assertions.assertEquals("Engineer", user.getRole());
+        Assertions.assertEquals("Active", user.getStatus());
+    }
+
+    @Test
+    public void testUpdate() {
+        // Given
+        User userToUpdate = new User();
+        when(userRepository.save(userToUpdate)).thenReturn(userToUpdate);
+
+        // When
+        userService.update(userToUpdate);
+
+        // Then
+        verify(userRepository).save(userToUpdate); // Verify that userRepository.save() is called with the user object
     }
 }

@@ -22,7 +22,14 @@
                 </div>
             </div>
             <div class="flex-container-row">
-                <div class="navbar-div">Notifications</div>
+                <div class="navbar-div"><a class="custom-link"
+                                           th:href="@{/document-management/documents/getDocumentValidations}" sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
+                    Validations list
+                    <span th:if="${countAwaitingValidation != null and countAwaitingValidation != 0}"
+                          th:text="'(+' + ${countAwaitingValidation} + ')'"
+                          style="color: red;">
+                </span>
+                </a></div>
                 <div>
                     <form action="#" th:action="@{/logout}" method="POST" class="navbar-header">
                         <input type="submit" value="Logout" class=""/>
@@ -56,6 +63,7 @@
                             <tr class="table-header">
                                 <th>Id</th>
                                 <th>Document code</th>
+                                <th>Document id</th>
                                 <th>Name</th>
                                 <th>Revision number</th>
                                 <th>Author</th>
@@ -67,6 +75,7 @@
                             <tr th:each="documentValidation : ${documentValidations}" class="" style="height: 20px">
                                 <td th:text="${documentValidation.id}" />
                                 <td th:text="${documentValidation.documentCode}" />
+                                <td th:text="${documentValidation.documentId}" />
                                 <td th:text="${documentValidation.name}" />
                                 <td th:text="${documentValidation.revisionNumber}" />
                                 <td th:text="${documentValidation.userId}" />

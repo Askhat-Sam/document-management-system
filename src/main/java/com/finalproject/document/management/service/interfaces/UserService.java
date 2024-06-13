@@ -21,6 +21,8 @@ public interface UserService {
 
 
     ResponseEntity<byte[]> downloadListAsExcel();
+    UserDTO fromEntityToDTO(User user);
+    User fromDTOToEntity(UserDTO userDTO);
 
 
 }

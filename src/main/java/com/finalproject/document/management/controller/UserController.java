@@ -4,11 +4,7 @@ import com.finalproject.document.management.dto.UserDTO;
 import com.finalproject.document.management.entity.Search;
 import com.finalproject.document.management.entity.TransactionEntity;
 import com.finalproject.document.management.entity.User;
-import com.finalproject.document.management.service.interfaces.DocumentService;
-import com.finalproject.document.management.service.interfaces.UserService;
-import com.finalproject.document.management.service.interfaces.DocumentCommentService;
-import com.finalproject.document.management.service.interfaces.DocumentTransactionService;
-import com.finalproject.document.management.service.interfaces.UserTransactionService;
+import com.finalproject.document.management.service.interfaces.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
-//@RestController
 @Controller
 @AllArgsConstructor
 @RequestMapping("/document-management/users")
@@ -30,6 +24,7 @@ public class UserController {
     private final DocumentService documentService;
     private final DocumentTransactionService documentTransactionService;
     private final UserTransactionService userTransactionService;
+    private  final DocumentValidationService documentValidationService;
     @Value("${headersUser}")
     private List<String> headers;
     @Value("${departments}")
@@ -51,6 +46,8 @@ public class UserController {
         List<UserDTO> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
         User user = new User();
 
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
         model.addAttribute(user);
         model.addAttribute("users", users);
         model.addAttribute("search", search);
@@ -58,6 +55,8 @@ public class UserController {
         model.addAttribute("departments", departments);
         model.addAttribute("roles", roles);
         model.addAttribute("statuses", statuses);
+        model.addAttribute("countAwaitingValidation", countAwaitingValidation);
+        model.addAttribute("loggedUser", loggedUser);
         return "users/users";
     }
 
@@ -79,11 +78,14 @@ public class UserController {
     public String viewUser(@PathVariable Long id, Model model) {
         UserDTO user = userService.findById(id);
         List<TransactionEntity> transactions = userTransactionService.findAllByUser(user.getUserId());
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
         model.addAttribute("user", user);
         model.addAttribute("transactions", transactions);
         model.addAttribute("statuses", statuses);
         model.addAttribute("departments", departments);
         model.addAttribute("roles", roles);
+        model.addAttribute("countAwaitingValidation", countAwaitingValidation);
 
         return "users/view-user";
     }
@@ -171,8 +173,6 @@ public class UserController {
                 user.setStatus(status);
             }
         }
-
-
 
 
         userService.update(user);

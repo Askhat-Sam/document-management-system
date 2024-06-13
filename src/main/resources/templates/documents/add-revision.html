@@ -25,7 +25,14 @@
             </div>
         </div>
         <div class="flex-container-row">
-            <div class="navbar-div">Notifications</div>
+            <div class="navbar-div"><a class="custom-link"
+                                       th:href="@{/document-management/documents/getDocumentValidations}" sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
+                Validations list
+                <span th:if="${countAwaitingValidation != null and countAwaitingValidation != 0}"
+                      th:text="'(' + ${countAwaitingValidation} + ')'"
+                      style="color: red;">
+                </span>
+            </a></div>
             <div>
                 <form action="#" th:action="@{/logout}" method="POST" class="navbar-header">
                     <input type="submit" value="Logout" class=""/>
@@ -56,11 +63,9 @@
                     <form action="#" th:action="@{/document-management/documents/addNewRevision}"
                           th:object="${documentRevision}" method="POST">
                         <input type="text" name="documentId" th:value="${documentId}">
-                        <select th:field="*{userId}" name="userId" class="search-list" aria-label="">
-                            <option th:each="userId : ${userIds}" th:value="${userId}" th:text="${userId}"></option>
-                        </select>
+                        <input type="text" class="add-input" name="userId" th:value="${userId}" readonly>
                         <input type="date" class="add-input" placeholder="Date" th:field="*{date}">
-                        <input type="text" class="add-input" placeholder="Revision number" th:field="*{revisionNumber}">
+                        <input type="number" class="add-input" placeholder="Revision number" th:field="*{revisionNumber}">
                         <select th:field="*{status}" name="status" class="search-list" aria-label="">
                             <option th:each="statusOption : ${documentRevisionStatuses}" th:value="${statusOption}" th:text="${statusOption}"></option>
                         </select>

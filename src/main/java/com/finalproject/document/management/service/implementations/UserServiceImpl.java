@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +50,15 @@ public class UserServiceImpl implements UserService {
         } else {
             users = userRepository.findAll();
             usersDTO = users.stream().map(this::fromEntityToDTO).collect(Collectors.toList());
+        }
+
+
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        String loggedUserAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
+
+        // For the users with role EMPLOYEE and MANAGER filter the  list of user to one (own account)
+        if (loggedUserAuthority.equals("[ROLE_EMPLOYEE]")){
+            usersDTO = usersDTO.stream().filter(u->u.getUserId().equals(loggedUser)).collect(Collectors.toList());
         }
 
         List<UserDTO> usersFiltered = new ArrayList<>();
@@ -89,7 +99,10 @@ public class UserServiceImpl implements UserService {
     public UserDTO fromEntityToDTO(User user) {
         return new UserDTO(user.getId(), user.getUserId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getDepartment(), user.getRole(), user.getStatus());
     }
-
+    public User fromDTOToEntity(UserDTO userDTO) {
+        return new User(userDTO.getId(), userDTO.getUserId(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
+                userDTO.getDepartment(), userDTO.getRole(), userDTO.getStatus());
+    }
 
     @Override
     public List<UserDTO> findAll() {

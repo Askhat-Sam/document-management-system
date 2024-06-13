@@ -5,114 +5,126 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
-    <script type="text/javascript" src="../static/js/code.jquery.com_jquery-3.7.1.min.js" th:src="@{/js/code.jquery.com_jquery-3.7.1.min.js}"></script>
+    <script type="text/javascript" src="../static/js/code.jquery.com_jquery-3.7.1.min.js"
+            th:src="@{/js/code.jquery.com_jquery-3.7.1.min.js}"></script>
     <script type="text/javascript" src="../static/js/main.js" th:src="@{/js/main.js}"></script>
 
     <title>Document Management System</title>
 </head>
 <body>
-    <div class="main-container">
-        <div class="flex-container-row-navbar header-container">
-            <div class="flex-container-row">
-                <div class="navbar-div">Document Management Service</div>
-                <div class="navbar-div flex-container-row">
-                    <div>User: <span sec:authentication="principal.username"></span> <span sec:authentication="principal.authorities"></span></div>
-                </div>
-            </div>
-            <div class="flex-container-row">
-                <div class="navbar-div"><a class="" th:href="@{/document-management/documents/getDocumentValidations}">
-                    Validations list
-                </a></div>
-                <div>
-                    <form action="#" th:action="@{/logout}" method="POST" class="navbar-header">
-                        <input type="submit" value="Logout" class=""/>
-                    </form>
-                </div>
+<div class="main-container">
+    <div class="flex-container-row-navbar header-container">
+        <div class="flex-container-row">
+            <div class="navbar-div">Document Management Service</div>
+            <div class="navbar-div flex-container-row">
+                <div>User: <span sec:authentication="principal.username"></span> <span
+                        sec:authentication="principal.authorities"></span></div>
             </div>
         </div>
-
-        documents/document-validations
-        <div class="flex-container">
-            <div class="side-panel">
-                <div>
-                    <a class="" th:href="@{/document-management/documents/getDocuments}">
-                        Documents
-                    </a>
-                </div>
-                <div>
-                    <a class="" th:href="@{/document-management/users/getUsers}">
-                        Users
-                    </a>
-                </div>
-                <div>
-                    <a class="" th:href="@{/document-management/documents/downloadListAsExcel}">
-                        Export as list
-                    </a>
-                </div>
+        <div class="flex-container-row">
+            <div class="navbar-div"><a class="custom-link"
+                                       th:href="@{/document-management/documents/getDocumentValidations}" sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
+                Validations list
+                <span th:if="${countAwaitingValidation != null and countAwaitingValidation != 0}"
+                      th:text="'(+' + ${countAwaitingValidation} + ')'"
+                      style="color: red;">
+                </span>
+            </a></div>
+            <div>
+                <form action="#" th:action="@{/logout}" method="POST" class="navbar-header">
+                    <input type="submit" value="Logout" class=""/>
+                </form>
             </div>
-            <div class="body-container">
-                <div class="navbar flex-container">
-                    <form th:action="@{/document-management/documents/getDocuments}" th:object="${search}" class="navbar-form" role="search">
-                        <input name="keyword" th:value="${keyword}" class="" type="search" placeholder="Search" aria-label="Search" id="searchText">
+        </div>
+    </div>
 
-                        <select th:field="*{column}" name="column" class="search-list" aria-label="">
-                            <option th:each="tempHeader : ${headers}" th:value="${tempHeader}" th:text="${tempHeader}"></option>
-                        </select>
+    <div class="flex-container">
+        <div class="side-panel">
+            <div>
+                <a class="" th:href="@{/document-management/documents/getDocuments}">
+                    Documents
+                </a>
+            </div>
+            <div>
+                <a class="" th:href="@{/document-management/users/getUsers}">
+                    Users
+                </a>
+            </div>
+            <div>
+                <a class="" th:href="@{/document-management/documents/downloadListAsExcel}" sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
+                    Export as list
+                </a>
+            </div>
+        </div>
+        <div class="body-container">
+            <div class="navbar flex-container">
+                <form th:action="@{/document-management/documents/getDocuments}" th:object="${search}"
+                      class="navbar-form" role="search">
+                    <input name="keyword" th:value="${keyword}" class="" type="search" placeholder="Search"
+                           aria-label="Search" id="searchText">
 
-                        <button class="" type="submit">Search</button>
-                    </form>
+                    <select th:field="*{column}" name="column" class="search-list" aria-label="">
+                        <option th:each="tempHeader : ${headers}" th:value="${tempHeader}"
+                                th:text="${tempHeader}"></option>
+                    </select>
+
+                    <button class="" type="submit">Search</button>
+                </form>
+            </div>
+            <div class="main-content">
+                <div class="table-container">
+                    <table class="">
+                        <thead>
+                        <tr class="table-header">
+                            <th>Id</th>
+                            <th>Document code</th>
+                            <th>Type</th>
+                            <th>Title</th>
+                            <th>Revision number</th>
+                            <th>Status</th>
+                            <th>Creation date</th>
+                            <th>Modification date</th>
+                            <th>Author</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-body">
+                        <tr th:each="document : ${documents}" class="" style="height: 20px">
+                            <td th:text="${document.id}"/>
+                            <td th:text="${document.documentCode}"/>
+                            <td th:text="${document.documentType}"/>
+                            <td th:text="${document.name}"/>
+                            <td th:text="${document.revisionNumber}"/>
+                            <td th:text="${document.status}"/>
+                            <td th:text="${document.creationDate}"/>
+                            <td th:text="${document.modificationDate}"/>
+                            <td th:text="${document.author}"/>
+                            <td>
+                                <!--To change to icons-->
+                                <a th:href="@{/document-management/documents/view/{id}(id=${document.id})}"
+                                   class="action-tool-edit">
+                                    Edit
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="main-content">
-                    <div class="table-container">
-                        <table class="">
-                            <thead>
-                            <tr class="table-header">
-                                <th>Id</th>
-                                <th>Document code</th>
-                                <th>Type</th>
-                                <th>Title</th>
-                                <th>Revision numnber</th>
-                                <th>Status</th>
-                                <th>Creation date</th>
-                                <th>Modification date</th>
-                                <th>Author</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody class="table-body">
-                            <tr th:each="document : ${documents}" class="" style="height: 20px">
-                                <td th:text="${document.id}" />
-                                <td th:text="${document.documentCode}" />
-                                <td th:text="${document.documentType}"/>
-                                <td th:text="${document.name}"/>
-                                <td th:text="${document.revisionNumber}"/>
-                                <td th:text="${document.status}"/>
-                                <td th:text="${document.creationDate}"/>
-                                <td th:text="${document.modificationDate}"/>
-                                <td th:text="${document.author}"/>
-                                <td>
-                                    <!--To change to icons-->
-                                    <a th:href="@{/document-management/documents/view/{id}(id=${document.id})}" class="action-tool-edit">
-                                        Edit
-                                    </a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="centered-div">
-                        <div>
-                            <a class="action-button" th:href="@{/document-management/documents/addNewDocumentPage}" sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
-                                Create document
-                            </a>
-                        </div>
+                <div class="centered-div">
+                    <div>
+                        <a class="action-button" th:href="@{/document-management/documents/addNewDocumentPage}"
+                           sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
+                            Create document
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 
 </html>

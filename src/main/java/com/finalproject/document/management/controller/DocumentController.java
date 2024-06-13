@@ -10,6 +10,7 @@ import com.finalproject.document.management.service.interfaces.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -51,27 +52,30 @@ public class DocumentController {
         Search search = new Search();
 
         List<DocumentDTO> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);
-
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
         model.addAttribute("documents", documents);
         model.addAttribute("search", search);
         model.addAttribute("headers", headers);
-
+        model.addAttribute("countAwaitingValidation", countAwaitingValidation);
 
         return "documents/documents";
     }
 
 
     @GetMapping("/getDocument/{id}")
-    public Document getDocument(@PathVariable("id") Long id) {
+    public DocumentDTO getDocument(@PathVariable("id") Long id) {
         return documentService.findById(id);
     }
 
 
     @GetMapping("/view/{id}")
     public String viewDocument(@PathVariable Long id, Model model) {
-        Document document = documentService.findById(id);
+        DocumentDTO document = documentService.findById(id);
         List<DocumentRevisionDTO> revisions = documentRevisionService.findAllByDocumentId(document.getId());
         List<DocumentCommentDTO> comments = documentCommentService.findAllByDocumentId(id);
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
         DocumentComment comment = new DocumentComment();
         List<String> userIds = userService.findAllUserIds();
         model.addAttribute("document", document);
@@ -81,6 +85,8 @@ public class DocumentController {
         model.addAttribute("documentStatuses", documentStatuses);
         model.addAttribute("documentTypes", documentTypes);
         model.addAttribute("userIds", userIds);
+
+        model.addAttribute("countAwaitingValidation", countAwaitingValidation);
         return "documents/view-document";
     }
 
@@ -111,10 +117,13 @@ public class DocumentController {
     public String addNewDocumentPage(Model model) {
         Document document = new Document();
         List<String> userIds = userService.findAllUserIds();
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
         model.addAttribute("document", document);
         model.addAttribute("documentTypes", documentTypes);
         model.addAttribute("documentStatuses", documentStatuses);
         model.addAttribute("userIds", userIds);
+        model.addAttribute("countAwaitingValidation", countAwaitingValidation);
         return "documents/add-document";
     }
 
@@ -143,7 +152,7 @@ public class DocumentController {
     @GetMapping("/downloadDocument")
     public String downloadDocument(@RequestParam Long id) {
 
-        Document document = documentService.findById(id);
+        DocumentDTO document = documentService.findById(id);
 
         // Move the file into "documentsUploaded" folder
         documentService.uploadDocument(document.getName() + ".pdf", "src/main/resources/documentsUploaded/", "download");
@@ -151,14 +160,14 @@ public class DocumentController {
         return "redirect:/document-management/documents/getDocuments";
     }
 
-    @GetMapping("/deleteDocument")
+    @GetMapping("/deleteDocument") ///??????????????????????????????
     public String deleteDocument(@RequestParam Long id) {
 
-        Document document = documentService.findById(id);
+        DocumentDTO document = documentService.findById(id);
 
 
         // Delete the file from "documentsUploaded" folder
-        documentService.uploadDocument(document.getName() + ".pdf", document.getLink(), "delete");
+//        documentService.uploadDocument(document.getName() + ".pdf", document.getLink(), "delete");
 
         documentService.deleteDocumentById(id);
 
@@ -178,9 +187,14 @@ public class DocumentController {
     @GetMapping("/addNewCommentPage")
     public String addNewCommentPage(@RequestParam Long documentId,
                                     Model model) {
-        model.addAttribute("documentId", documentId);
+
         DocumentComment comment = new DocumentComment();
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", userId);
+        model.addAttribute("documentId", documentId);
         model.addAttribute("comment", comment);
+        model.addAttribute("userId", userId);
+        model.addAttribute("countAwaitingValidation", countAwaitingValidation);
         return "documents/add-comment";
     }
 
@@ -188,15 +202,19 @@ public class DocumentController {
     public String addComment(@RequestParam Long documentId,
                              @RequestParam String userId,
                              @RequestParam String comment) {
-        Document document = documentService.findById(documentId);
+        DocumentDTO document = documentService.findById(documentId);
 
         DocumentComment documentComment = new DocumentComment(documentId, userId,
                 new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                 comment);
-        // Add comment to the document
-        document.addComment(documentComment);
 
-        documentService.update(document);
+        // Convert DTO back to entity before update
+        Document documentUpdated = documentService.convertToEntity(document);
+
+        // Add comment to the document
+        documentUpdated.addComment(documentComment);
+
+        documentService.update(documentUpdated);
         return "redirect:/document-management/documents/view/" + documentId;
     }
 
@@ -205,10 +223,14 @@ public class DocumentController {
                                      Model model) {
         List<String> userIds = userService.findAllUserIds();
         DocumentRevision documentRevision = new DocumentRevision();
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", userId);
         model.addAttribute("userIds", userIds);
+        model.addAttribute("userId", userId);
         model.addAttribute("documentId", documentId);
         model.addAttribute("documentRevision", documentRevision);
         model.addAttribute("documentRevisionStatuses", documentRevisionStatuses);
+        model.addAttribute("countAwaitingValidation", countAwaitingValidation);
 
         return "documents/add-revision";
     }
@@ -222,24 +244,30 @@ public class DocumentController {
                                  @RequestParam String description,
                                  @RequestParam String link,
                                  @RequestParam String validatingUser) {
-        Document document = documentService.findById(documentId);
+        DocumentDTO document = documentService.findById(documentId);
 
         // Add revision to the document
         DocumentRevision documentRevision =new DocumentRevision(userId, revisionNumber, status, date, description, link, validatingUser);
-        document.addRevision(documentRevision);
 
-        DocumentValidation documentValidation = new DocumentValidation(document.getDocumentCode(),document.getName(),
+        // Convert DTO back to entity before update
+        Document documentUpdated = documentService.convertToEntity(document);
+
+        documentUpdated.addRevision(documentRevision);
+
+        DocumentValidation documentValidation = new DocumentValidation(document.getDocumentCode(), documentId, document.getName(),
                 revisionNumber, validatingUser, "Awaiting validation");
 
 
-        documentService.update(document);
+        documentService.update(documentUpdated);
         documentValidationService.save(documentValidation);
         return "redirect:/document-management/documents/view/" + documentId;
     }
     @RequestMapping("/getDocumentValidations")
     public String documentValidationPage(Model model) {
-        List<DocumentValidationDTO> documentValidations = documentValidationService.findAll();
-
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<DocumentValidationDTO> documentValidations = documentValidationService.findAllByUserId(loggedUser);
+        Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
+        model.addAttribute("countAwaitingValidation", countAwaitingValidation);
         model.addAttribute("documentValidations",documentValidations);
 
         return "documents/document-validations";
@@ -247,10 +275,14 @@ public class DocumentController {
 
     @GetMapping("/view-validation/{id}")
     public String viewValidation(@PathVariable Long id, Model model) {
-    DocumentValidationDTO documentValidation = documentValidationService.findById(id);
-
-    model.addAttribute("documentValidation", documentValidation);
-    model.addAttribute("documentRevisionStatuses", documentRevisionStatuses);
+        DocumentValidationDTO documentValidation = documentValidationService.findById(id);
+        DocumentDTO document = documentService.findById(documentValidation.getDocumentId());
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
+        model.addAttribute("countAwaitingValidation", countAwaitingValidation);
+        model.addAttribute("documentValidation", documentValidation);
+        model.addAttribute("documentRevisionStatuses", documentRevisionStatuses);
+        model.addAttribute("document", document);
 
         return "documents/view-document-validations";
     }
@@ -270,14 +302,12 @@ public class DocumentController {
         documentValidationService.save(documentValidation);
 
         List<DocumentValidationDTO> documentValidations = documentValidationService.findAll();
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
 
-
-
+        model.addAttribute("countAwaitingValidation", countAwaitingValidation);
         model.addAttribute("documentValidations",documentValidations);
 
         return "documents/document-validations";
     }
-
-
-
 }

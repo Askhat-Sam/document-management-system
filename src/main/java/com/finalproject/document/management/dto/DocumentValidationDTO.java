@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 public class DocumentValidationDTO {
     private Long id;
     private String documentCode;
+    private Long documentId;
     private String name;
     private Long revisionNumber;
     private String userId;
     private String status;
-
 }

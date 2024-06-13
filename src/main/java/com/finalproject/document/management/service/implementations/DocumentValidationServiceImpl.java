@@ -31,12 +31,18 @@ public class DocumentValidationServiceImpl implements DocumentValidationService 
     @Override
     public DocumentValidationDTO findById(Long id) {
        DocumentValidation documentValidation = documentValidationRepository.findById(id).get();
-        return new DocumentValidationDTO(documentValidation.getId(), documentValidation.getDocumentCode(), documentValidation.getName(),
-                documentValidation.getRevisionNumber(), documentValidation.getUserId(), documentValidation.getStatus());
+        return new DocumentValidationDTO(documentValidation.getId(), documentValidation.getDocumentCode(), documentValidation.getDocumentId(),
+                documentValidation.getName(), documentValidation.getRevisionNumber(), documentValidation.getUserId(),
+                documentValidation.getStatus());
+    }
+
+    @Override
+    public Long countByStatusAndUserId(String status, String userId) {
+        return documentValidationRepository.countByStatusAndUserId(status, userId);
     }
 
     public DocumentValidationDTO fromEntityToDTO(DocumentValidation documentValidation) {
-        return new DocumentValidationDTO(documentValidation.getId(), documentValidation.getDocumentCode(),
+        return new DocumentValidationDTO(documentValidation.getId(), documentValidation.getDocumentCode(),documentValidation.getDocumentId(),
                 documentValidation.getName(),documentValidation.getRevisionNumber(),documentValidation.getUserId(),
                 documentValidation.getStatus());
     }

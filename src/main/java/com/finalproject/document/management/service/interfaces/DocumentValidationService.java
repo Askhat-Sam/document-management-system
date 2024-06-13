@@ -10,4 +10,5 @@ public interface DocumentValidationService {
     List<DocumentValidationDTO> findAllByUserId(String userId);
     DocumentValidation save(DocumentValidation documentValidation);
     DocumentValidationDTO findById(Long id);
+    Long countByStatusAndUserId(String status, String userId);
 }

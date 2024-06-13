@@ -3,9 +3,11 @@ package com.finalproject.document.management.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @Getter
+@Setter
 @NoArgsConstructor
 public class DocumentDTO {
     private Long id;

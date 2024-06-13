@@ -30,7 +30,14 @@
             </div>
         </div>
         <div class="flex-container-row">
-            <div class="navbar-div">Notifications</div>
+            <div class="navbar-div"><a class="custom-link"
+                                       th:href="@{/document-management/documents/getDocumentValidations}" sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
+                Validations list
+                <span th:if="${countAwaitingValidation != null and countAwaitingValidation != 0}"
+                      th:text="'(+' + ${countAwaitingValidation} + ')'"
+                      style="color: red;">
+                </span>
+            </a></div>
             <div>
                 <form action="#" th:action="@{/logout}" method="POST" class="navbar-header">
                     <input type="submit" value="Logout" class=""/>
@@ -98,6 +105,14 @@
                             <button type="submit" class="action-button" style="width: 100px;"
                                     sec:authorize="hasAnyRole( 'ROLE_MANAGER','ROLE_ADMIN')">Save
                             </button>
+
+                            <div class="centered-div">
+                                <a class="action-button"
+                                   th:href="@{/document-management/documents/addNewCommentPage(documentId=${document.id})}"
+                                   sec:authorize="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER','ROLE_ADMIN')">
+                                    Add new comment
+                                </a>
+                            </div>
                         </div>
                     </form>
                 </div>

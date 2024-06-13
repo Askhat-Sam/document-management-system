@@ -18,6 +18,8 @@ public class DocumentValidation {
 
     @Column(name = "document_code")
     private String documentCode;
+    @Column(name = "document_id")
+    private Long documentId;
 
     @Column(name = "name")
     private String name;
@@ -42,6 +44,15 @@ public class DocumentValidation {
     public DocumentValidation(Long id, String documentCode, String name, Long revisionNumber, String userId, String status) {
         this.id = id;
         this.documentCode = documentCode;
+        this.name = name;
+        this.revisionNumber = revisionNumber;
+        this.userId = userId;
+        this.status = status;
+    }
+
+    public DocumentValidation(String documentCode, Long documentId, String name, Long revisionNumber, String userId, String status) {
+        this.documentCode = documentCode;
+        this.documentId = documentId;
         this.name = name;
         this.revisionNumber = revisionNumber;
         this.userId = userId;

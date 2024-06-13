@@ -87,19 +87,18 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     public DocumentDTO fromEntityToDTO(Document document) {
-
         return new DocumentDTO(document.getId(), document.getDocumentCode(), document.getDocumentType(), document.getName(),
                 document.getRevisionNumber(), document.getStatus(), document.getCreationDate(), document.getModificationDate(),
                 document.getAuthor());
     }
 
     @Override
-    public List<Document> findAll() {
-        return documentRepository.findAll();
+    public List<DocumentDTO> findAll() {
+        return documentRepository.findAll().stream().map(this::fromEntityToDTO).collect(Collectors.toList());
     }
 
     @Override
-    public Document findById(Long id) {
+    public DocumentDTO findById(Long id) {
 //        entityManager.clear();
 
         Optional<Document> result =documentRepository.findById(id);
@@ -114,7 +113,8 @@ public class DocumentServiceImpl implements DocumentService {
         } else {
             throw new RuntimeException("Did not find document with id: " + id);
         }
-        return document;
+        return new DocumentDTO(document.getId(), document.getDocumentCode(), document.getDocumentType(), document.getName(),
+                document.getRevisionNumber(), document.getStatus(), document.getCreationDate(), document.getModificationDate(), document.getAuthor());
     }
 
     @Override
@@ -294,7 +294,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public void updateDocument(Document document) {
-        Document existingDocument = findById(document.getId());
+        DocumentDTO existingDocument = findById(document.getId());
 
         // Update the fields that are not null in the submitted form
         if (document.getDocumentCode() != null) {
@@ -321,12 +321,26 @@ public class DocumentServiceImpl implements DocumentService {
         if (document.getAuthor() != null) {
             existingDocument.setAuthor(document.getAuthor());
         }
-        if (document.getLink() != null) {
-            existingDocument.setLink(document.getLink());
-        }
+        
+        // Convert DTO back to the enityty to update DB
+        Document updatedDocument = convertToEntity(existingDocument);
 
         // Update the document in the database
-        update(existingDocument);
+        update(updatedDocument);
+    }
+
+    public Document convertToEntity(DocumentDTO documentDTO) {
+        Document document = new Document();
+        document.setId(documentDTO.getId());
+        document.setDocumentCode(documentDTO.getDocumentCode());
+        document.setDocumentType(documentDTO.getDocumentType());
+        document.setName(documentDTO.getName());
+        document.setRevisionNumber(documentDTO.getRevisionNumber());
+        document.setStatus(documentDTO.getStatus());
+        document.setCreationDate(documentDTO.getCreationDate());
+        document.setModificationDate(documentDTO.getModificationDate());
+        document.setAuthor(documentDTO.getAuthor());
+        return document;
     }
 
     private static Pageable doPagingAndSorting(Integer page, Integer size, String sortBy, String sortDirection) {

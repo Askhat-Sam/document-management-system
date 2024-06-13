@@ -13,9 +13,9 @@ import java.util.List;
 
 public interface DocumentService {
     List<DocumentDTO> findAll(Integer page, Integer size, String sortBy, String sortDirection, String  keyword, String column);
-    List<Document> findAll();
+    List<DocumentDTO> findAll();
 
-    Document findById(Long id);
+    DocumentDTO findById(Long id);
 
     void update(Document document);
     void save(Document document);
@@ -31,4 +31,6 @@ public interface DocumentService {
     ResponseEntity<byte[]> viewFile(String link);
     ResponseEntity<byte[]> downloadFile(String link);
     void updateDocument(Document document);
+    DocumentDTO fromEntityToDTO(Document document);
+    Document convertToEntity(DocumentDTO documentDTO);
 }

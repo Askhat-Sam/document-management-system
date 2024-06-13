@@ -40,6 +40,10 @@ table {
     display: flex;
     justify-content: center;
 }
+.custom-link {
+     text-decoration: none;
+     color: inherit;
+ }
 .edit-form {
     margin: 20px;
 }
@@ -62,12 +66,12 @@ table {
 }
 
 .main-container{
-    border: 1px solid grey;
     margin: 2px;
     height: 100vh;
 }
 .main-content{
     width: 100%;
+    margin-top:0px;
 }
 
 .header-container{
@@ -157,6 +161,12 @@ td, th{
 }
 .search-list {
     width: 500px;
+}
+.search-list-modal {
+    width: 350px;
+    margin-bottom: 25px;
+    border: 1px solid grey;
+
 }
 .section-body{
     border: 1px solid grey;
