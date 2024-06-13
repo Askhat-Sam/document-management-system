@@ -40,4 +40,9 @@ public class DocumentCommentServiceImpl implements DocumentCommentService {
         return documentCommentRepository.findAllByDocumentId(id).stream()
                 .map(this::fromEntityToDTO).collect(Collectors.toList());
     }
+
+    @Override
+    public void update(DocumentComment documentComment) {
+        documentCommentRepository.save(documentComment);
+    }
 }

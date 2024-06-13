@@ -118,6 +118,11 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
+    public Document findByDocumentId(Long id) {
+        return documentRepository.findById(id).get();
+    }
+
+    @Override
     public void update(Document document) {
         documentRepository.save(document);
     }

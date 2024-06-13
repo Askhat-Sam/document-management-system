@@ -22,7 +22,7 @@ public class DocumentComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
-    @Column(name="document_id", insertable=false, updatable=false)
+    @Column(name="document_id")
     private Long documentId;
     @Column(name="user_id")
     private String userId;
@@ -30,11 +30,6 @@ public class DocumentComment {
     private String date;
     @Column(name="comment")
     private String comment;
-    @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name="document_id")
-    private Document document;
-
 
     public DocumentComment(Long documentId, String userId, String date, String comment) {
         this.documentId = documentId;
@@ -43,4 +38,11 @@ public class DocumentComment {
         this.comment = comment;
     }
 
+    public DocumentComment(Long id, Long documentId, String userId, String date, String comment) {
+        this.id = id;
+        this.documentId = documentId;
+        this.userId = userId;
+        this.date = date;
+        this.comment = comment;
+    }
 }

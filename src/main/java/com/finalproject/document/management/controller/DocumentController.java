@@ -202,19 +202,14 @@ public class DocumentController {
     public String addComment(@RequestParam Long documentId,
                              @RequestParam String userId,
                              @RequestParam String comment) {
-        DocumentDTO document = documentService.findById(documentId);
 
         DocumentComment documentComment = new DocumentComment(documentId, userId,
                 new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                 comment);
 
-        // Convert DTO back to entity before update
-        Document documentUpdated = documentService.convertToEntity(document);
-
         // Add comment to the document
-        documentUpdated.addComment(documentComment);
+        documentCommentService.update(documentComment);
 
-        documentService.update(documentUpdated);
         return "redirect:/document-management/documents/view/" + documentId;
     }
 

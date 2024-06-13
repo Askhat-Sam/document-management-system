@@ -48,10 +48,6 @@ public class Document {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "document", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    private List<DocumentComment> comments;
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "document", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<DocumentRevision> revisions;
 
     public Document(String documentCode, String documentType, String name, Long revisionNumber, String status, String creationDate, String modificationDate, String author, String link) {
@@ -90,19 +86,12 @@ public class Document {
         this.author = author;
     }
 
-    public void addComment(DocumentComment comment) {
-        if (comments == null) {
-            comments = new ArrayList<>();
-        }
-        comments.add(comment);
-        comment.setDocument(this);
-    }
 
     public void addRevision(DocumentRevision revision) {
         if (revisions == null) {
             revisions = new ArrayList<>();
         }
         revisions.add(revision);
-        revision.setDocument(this);
+//        revision.setDocument(this);
     }
 }

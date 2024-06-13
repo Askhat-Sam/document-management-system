@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -16,19 +18,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class DocumentRepositoryTest {
     @Autowired
-    private DocumentService documentService;
+    private DocumentRepository documentRepository;
     @Test
     public void test_findById() {
         // Given
         Document documentExpected = new Document("POL-001", "Policy", "Safety policy", 1L,
                 "Validated", "2024-09-01", "2024-09-05", "john.s");
-        documentService.update(documentExpected);
+        documentRepository.save(documentExpected);
         // When
-        DocumentDTO documentActual = documentService.findById(1L);
+        Optional<Document> documentActual = documentRepository.findById(1L);
 
         // Then
-        assertEquals(documentExpected.getDocumentCode(), documentActual.getDocumentCode());
-        assertEquals(documentExpected.getAuthor(), documentActual.getAuthor());
-        assertEquals(documentExpected.getName(), documentActual.getName());
+        assertEquals(documentExpected.getDocumentCode(), documentActual.get().getDocumentCode());
+        assertEquals(documentExpected.getAuthor(), documentActual.get().getAuthor());
+        assertEquals(documentExpected.getName(), documentActual.get().getName());
     }
 }

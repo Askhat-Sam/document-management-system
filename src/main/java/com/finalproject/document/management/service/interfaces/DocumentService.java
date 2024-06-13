@@ -16,6 +16,7 @@ public interface DocumentService {
     List<DocumentDTO> findAll();
 
     DocumentDTO findById(Long id);
+    Document findByDocumentId(Long id);
 
     void update(Document document);
     void save(Document document);
