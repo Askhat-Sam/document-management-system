@@ -104,7 +104,7 @@ public class DocumentController {
     public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes,
                              @RequestParam("documentId") Long documentId,
                              Model model) {
-        documentService.uploadfile(file, redirectAttributes, documentId, model);
+        documentService.uploadFile(file, redirectAttributes, documentId, model);
         return "redirect:/document-management/documents/addNewRevisionPage?documentId=" + documentId;
     }
 

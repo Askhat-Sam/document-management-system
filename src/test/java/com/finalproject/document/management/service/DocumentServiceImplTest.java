@@ -17,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
@@ -145,6 +146,33 @@ class DocumentServiceImplTest {
         // Then
         verify(documentRepository).save(documentToUpdate); // Verify that documentRepository.save() is called with the document object
     }
+
+    @Test
+    public void test_findAllDocumentsByUserIds() {
+        // Given
+        List<Document> expectedDocuments =new ArrayList<>();
+        expectedDocuments.add(new Document(1L,"POL-001", "Policy", "Safety policy", 1L,
+                "Validated", "2024-09-01", "2024-09-05", "john.s"));
+        expectedDocuments.add(new Document(2L,"MAN-001", "Manual", "IT manual", 2L,
+                "In progress", "2023-01-01", "2023-02-05", "john.s"));
+        expectedDocuments.add(new Document(3L,"INS-003", "Instruction", "Working instruction", 3L,
+                "Validated", "2024-01-01", "2024-02-05", "john.s"));
+        when(documentRepository.findByUserId("john.s")).thenReturn(expectedDocuments);
+
+        // When
+        List<DocumentDTO> actualDocuments = documentServiceImpl.findByUserId("john.s");
+        List<Document> actualDocumentsMapped = actualDocuments.stream()
+                .map(d->documentServiceImpl.convertToEntity(d))
+                .toList();
+
+        // Then
+        Assertions.assertEquals(expectedDocuments.size(), actualDocumentsMapped.size());
+        for (int i = 0; i < expectedDocuments.size(); i++) {
+            Assertions.assertEquals(expectedDocuments.get(i).getDocumentCode(), actualDocumentsMapped.get(i).getDocumentCode());
+            Assertions.assertEquals(expectedDocuments.get(i).getAuthor(), actualDocumentsMapped.get(i).getAuthor());
+        }
+    }
+
 
 
 }

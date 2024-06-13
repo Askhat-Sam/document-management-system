@@ -25,9 +25,9 @@ public interface DocumentService {
     String uploadDocument(String fileName, String path, String actionType);
 
     ResponseEntity<byte[]> downloadListAsExcel();
-    List<Document> findByUserId(String userId);
+    List<DocumentDTO> findByUserId(String userId);
 
-    void uploadfile(MultipartFile file, RedirectAttributes redirectAttributes, Long documentId, Model model);
+    void uploadFile(MultipartFile file, RedirectAttributes redirectAttributes, Long documentId, Model model);
     ResponseEntity<byte[]> viewFile(String link);
     ResponseEntity<byte[]> downloadFile(String link);
     void updateDocument(Document document);

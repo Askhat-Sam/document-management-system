@@ -224,12 +224,12 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public List<Document> findByUserId(String userId) {
-        return documentRepository.findByUserId(userId);
+    public List<DocumentDTO> findByUserId(String userId) {
+        return documentRepository.findByUserId(userId).stream().map(this::fromEntityToDTO).collect(Collectors.toList());
     }
 
     @Override
-    public void uploadfile(MultipartFile file, RedirectAttributes redirectAttributes, Long documentId, Model model) {
+    public void uploadFile(MultipartFile file, RedirectAttributes redirectAttributes, Long documentId, Model model) {
         if (file.isEmpty()) {
             redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
 //            return "redirect:/uploadStatus";
