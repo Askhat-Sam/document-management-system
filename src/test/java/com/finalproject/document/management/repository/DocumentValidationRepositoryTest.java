@@ -1,6 +1,5 @@
 package com.finalproject.document.management.repository;
 
-import com.finalproject.document.management.entity.DocumentComment;
 import com.finalproject.document.management.entity.DocumentValidation;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

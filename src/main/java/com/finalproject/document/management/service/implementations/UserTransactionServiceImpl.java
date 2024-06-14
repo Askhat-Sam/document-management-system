@@ -21,9 +21,9 @@ public class UserTransactionServiceImpl implements UserTransactionService {
     }
 
 
-    public List<TransactionEntity>  findAllTransactionsById(Long id) {
-        return userTransactionRepository.findAllById(id);
-    }
+//    public List<TransactionEntity>  findAllTransactionsById(Long id) {
+//        return userTransactionRepository.findAllById(id);
+//    }
 
     public List<TransactionEntity>  findAllByUser(String userId) {
         return userTransactionRepository.findAllByUser(userId);

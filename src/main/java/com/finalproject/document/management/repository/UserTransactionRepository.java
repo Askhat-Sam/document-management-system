@@ -9,6 +9,6 @@ import java.util.List;
 public interface UserTransactionRepository extends JpaRepository<TransactionUser, Long> {
     void save(TransactionEntity transaction);
 
-    List<TransactionEntity> findAllById(Long id);
+//    List<TransactionEntity> findAllById(Long id);
     List<TransactionEntity> findAllByUser(String userId);
 }

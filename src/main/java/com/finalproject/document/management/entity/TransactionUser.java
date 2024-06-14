@@ -31,6 +31,14 @@ public class TransactionUser implements TransactionEntity{
         this.transactionType = transactionType;
     }
 
+    public TransactionUser(Long id, String date, String user, String userId, String transactionType) {
+        this.id = id;
+        this.date = date;
+        this.user = user;
+        this.userId = userId;
+        this.transactionType = transactionType;
+    }
+
     @Override
     public String toString() {
         return "TransactionUser{" +
