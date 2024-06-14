@@ -32,6 +32,15 @@ public class DocumentController {
     private final DocumentRevisionService documentRevisionService;
     private final DocumentValidationService documentValidationService;
     private final DocumentValidationServiceImpl documentValidationServiceImpl;
+    private static final String DOCUMENTS = "documents/documents";
+    private static final String VIEW_DOCUMENTS = "documents/view-document";
+    private static final String ADD_DOCUMENT = "documents/add-document";
+    private static final String REDIRECT_DOCUMENTS = "redirect:/document-management/documents/getDocuments";
+    private static final String ADD_COMMENT = "documents/add-comment";
+    private static final String ADD_REVISION = "documents/add-revision";
+    private static final String REDIRECT_DOCUMENTS_VIEW = "redirect:/document-management/documents/view/";
+    private static final String DOCUMENTS_VALIDATIONS = "documents/document-validations";
+    private static final String VIEW_DOCUMENTS_VALIDATIONS = "documents/view-document-validations";
     @Value("${headersDocument}")
     private List<String> headers;
     @Value("${documentStatuses}")
@@ -59,7 +68,7 @@ public class DocumentController {
         model.addAttribute("headers", headers);
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
 
-        return "documents/documents";
+        return DOCUMENTS;
     }
 
 
@@ -87,7 +96,7 @@ public class DocumentController {
         model.addAttribute("userIds", userIds);
 
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
-        return "documents/view-document";
+        return VIEW_DOCUMENTS;
     }
 
     @GetMapping("/viewFile")
@@ -124,7 +133,7 @@ public class DocumentController {
         model.addAttribute("documentStatuses", documentStatuses);
         model.addAttribute("userIds", userIds);
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
-        return "documents/add-document";
+        return ADD_DOCUMENT;
     }
 
     @PostMapping("/addNewDocument")
@@ -145,7 +154,7 @@ public class DocumentController {
 
         // Add document into database
         documentService.save(document);
-        return "redirect:/document-management/documents/getDocuments";
+        return REDIRECT_DOCUMENTS;
     }
 
 
@@ -157,7 +166,7 @@ public class DocumentController {
         // Move the file into "documentsUploaded" folder
         documentService.uploadDocument(document.getName() + ".pdf", "src/main/resources/documentsUploaded/", "download");
 
-        return "redirect:/document-management/documents/getDocuments";
+        return REDIRECT_DOCUMENTS;
     }
 
     @GetMapping("/deleteDocument") ///??????????????????????????????
@@ -181,7 +190,7 @@ public class DocumentController {
 
         documentService.updateDocument(document);
 
-        return "redirect:/document-management/documents/getDocuments";
+        return REDIRECT_DOCUMENTS;
     }
 
     @GetMapping("/addNewCommentPage")
@@ -195,7 +204,7 @@ public class DocumentController {
         model.addAttribute("comment", comment);
         model.addAttribute("userId", userId);
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
-        return "documents/add-comment";
+        return ADD_COMMENT;
     }
 
     @PostMapping("/addComment")
@@ -210,7 +219,7 @@ public class DocumentController {
         // Add comment to the document
         documentCommentService.update(documentComment);
 
-        return "redirect:/document-management/documents/view/" + documentId;
+        return REDIRECT_DOCUMENTS_VIEW + documentId;
     }
 
     @GetMapping("/addNewRevisionPage")
@@ -227,7 +236,7 @@ public class DocumentController {
         model.addAttribute("documentRevisionStatuses", documentRevisionStatuses);
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
 
-        return "documents/add-revision";
+        return ADD_REVISION;
     }
 
     @PostMapping("/addNewRevision")
@@ -251,7 +260,7 @@ public class DocumentController {
                 revisionNumber, validatingUser, "Awaiting validation");
 
         documentValidationService.save(documentValidation);
-        return "redirect:/document-management/documents/view/" + documentId;
+        return REDIRECT_DOCUMENTS_VIEW + documentId;
     }
     @RequestMapping("/getDocumentValidations")
     public String documentValidationPage(Model model) {
@@ -261,7 +270,7 @@ public class DocumentController {
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
         model.addAttribute("documentValidations",documentValidations);
 
-        return "documents/document-validations";
+        return DOCUMENTS_VALIDATIONS;
     }
 
     @GetMapping("/view-validation/{id}")
@@ -275,7 +284,7 @@ public class DocumentController {
         model.addAttribute("documentRevisionStatuses", documentRevisionStatuses);
         model.addAttribute("document", document);
 
-        return "documents/view-document-validations";
+        return VIEW_DOCUMENTS_VALIDATIONS;
     }
 
     @PostMapping("/updateRevision")
@@ -299,6 +308,6 @@ public class DocumentController {
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
         model.addAttribute("documentValidations",documentValidations);
 
-        return "documents/document-validations";
+        return DOCUMENTS_VALIDATIONS;
     }
 }
