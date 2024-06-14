@@ -77,11 +77,13 @@ public class UserController {
     @GetMapping("/view/{id}")
     public String viewUser(@PathVariable Long id, Model model) {
         UserDTO user = userService.findById(id);
-        List<TransactionEntity> transactions = userTransactionService.findAllByUser(user.getUserId());
+        List<TransactionEntity> transactionsUsers = userTransactionService.findAllByUser(user.getUserId());
+        List<TransactionEntity> transactionsDocuments= userTransactionService.findAllByUser(user.getUserId());
         String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
         Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
         model.addAttribute("user", user);
-        model.addAttribute("transactions", transactions);
+        model.addAttribute("transactionsUsers", transactionsUsers);
+        model.addAttribute("transactionsDocuments", transactionsDocuments);
         model.addAttribute("statuses", statuses);
         model.addAttribute("departments", departments);
         model.addAttribute("roles", roles);

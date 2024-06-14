@@ -2,6 +2,7 @@ package com.finalproject.document.management.aspect;
 
 import com.finalproject.document.management.dto.DocumentDTO;
 import com.finalproject.document.management.entity.Document;
+import com.finalproject.document.management.entity.TransactionDocument;
 import com.finalproject.document.management.entity.TransactionUser;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.implementations.DocumentServiceImpl;
@@ -205,13 +206,13 @@ public class TransactionAspect {
         DocumentDTO documentBeforeUpdate = documentService.findById(documentAfterUpdate.getId());
 
         // List for keeping transactions
-        List<TransactionUser> transactionList = new ArrayList<>();
+        List<TransactionDocument> transactionList = new ArrayList<>();
 
         // Check if the user was updated
         if (!documentAfterUpdate.equals(documentBeforeUpdate)) {
             // Check changes of documentCode
             if (!documentAfterUpdate.getDocumentCode().equals(documentBeforeUpdate.getDocumentCode())) {
-                transactionList.add(new TransactionUser(
+                transactionList.add(new TransactionDocument(
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         documentBeforeUpdate.getDocumentCode(),
@@ -220,7 +221,7 @@ public class TransactionAspect {
             }
             // Check changes of documentTypeId
             if (!documentAfterUpdate.getDocumentType().equals(documentBeforeUpdate.getDocumentType())) {
-                transactionList.add(new TransactionUser(
+                transactionList.add(new TransactionDocument(
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         documentBeforeUpdate.getDocumentCode(),
@@ -230,7 +231,7 @@ public class TransactionAspect {
             }
             // Check changes of document name
             if (!documentAfterUpdate.getName().equals(documentBeforeUpdate.getName())) {
-                transactionList.add(new TransactionUser(
+                transactionList.add(new TransactionDocument(
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         documentBeforeUpdate.getDocumentCode(),
@@ -240,7 +241,7 @@ public class TransactionAspect {
             }
             // Check changes of document revision number
             if (!documentAfterUpdate.getRevisionNumber().equals(documentBeforeUpdate.getRevisionNumber())) {
-                transactionList.add(new TransactionUser(
+                transactionList.add(new TransactionDocument(
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         documentBeforeUpdate.getDocumentCode(),
@@ -250,7 +251,7 @@ public class TransactionAspect {
             }
             // Check changes of document status id
             if (!documentAfterUpdate.getStatus().equals(documentBeforeUpdate.getStatus())) {
-                transactionList.add(new TransactionUser(
+                transactionList.add(new TransactionDocument(
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         documentBeforeUpdate.getDocumentCode(),
@@ -260,7 +261,7 @@ public class TransactionAspect {
             }
             // Check changes of document creation date
             if (!documentAfterUpdate.getCreationDate().equals(documentBeforeUpdate.getCreationDate())) {
-                transactionList.add(new TransactionUser(
+                transactionList.add(new TransactionDocument(
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         documentBeforeUpdate.getDocumentCode(),
@@ -270,7 +271,7 @@ public class TransactionAspect {
             }
             // Check changes of document modification date
             if (!documentAfterUpdate.getModificationDate().equals(documentBeforeUpdate.getModificationDate())) {
-                transactionList.add(new TransactionUser(
+                transactionList.add(new TransactionDocument(
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         documentBeforeUpdate.getDocumentCode(),
@@ -280,7 +281,7 @@ public class TransactionAspect {
             }
             // Check changes of document author id
             if (!documentAfterUpdate.getAuthor().equals(documentBeforeUpdate.getAuthor())) {
-                transactionList.add(new TransactionUser(
+                transactionList.add(new TransactionDocument(
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         documentBeforeUpdate.getDocumentCode(),

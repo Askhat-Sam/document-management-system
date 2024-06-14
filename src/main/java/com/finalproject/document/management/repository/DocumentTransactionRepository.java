@@ -8,7 +8,5 @@ import java.util.List;
 
 public interface DocumentTransactionRepository extends JpaRepository<TransactionDocument, Long> {
     void save(TransactionEntity transaction);
-
-    List<TransactionEntity> findAllById(Long id);
-    List<TransactionEntity> findAllByDocumentId(Long documentId);
+    List<TransactionEntity> findAllByDocumentCode(String documentCode);
 }

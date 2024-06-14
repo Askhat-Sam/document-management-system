@@ -5,6 +5,6 @@ import com.finalproject.document.management.entity.TransactionEntity;
 import java.util.List;
 
 public interface DocumentTransactionService extends TransactionService {
-    List<TransactionEntity> findAllByDocument(Long documentId);
+    List<TransactionEntity> findAllByDocumentCode(String documentCode);
     void save(TransactionEntity transactionEntity);
 }

@@ -16,14 +16,9 @@ public class DocumentTransactionServiceImpl implements DocumentTransactionServic
         this.documentTransactionRepository = documentTransactionRepository;
     }
 
+
     @Override
     public List<TransactionEntity> findAll(String keyword) {
-        return null;
-    }
-
-
-    @Override
-    public List<TransactionEntity> findAllByDocument(Long documentId) {
         return null;
     }
 
@@ -37,8 +32,7 @@ public class DocumentTransactionServiceImpl implements DocumentTransactionServic
         return null;
     }
 
-
-    public List<TransactionEntity> findAllByDocumentId(Long documentId) {
-        return documentTransactionRepository.findAllByDocumentId(documentId);
+    public List<TransactionEntity> findAllByDocumentCode(String documentCode) {
+        return documentTransactionRepository.findAllByDocumentCode(documentCode);
     }
 }

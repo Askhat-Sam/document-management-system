@@ -19,25 +19,33 @@ public class TransactionDocument implements TransactionEntity {
     private String date;
     @Column(name = "user")
     private String user;
-    @Column(name = "document_id")
-    private Long documentId;
+    @Column(name = "document_code")
+    private String documentCode;
     @Column(name = "transaction_type")
     private String transactionType;
 
-    public TransactionDocument(String date, String user, Long documentId, String transactionType) {
+    public TransactionDocument(String date, String user, String documentCode, String transactionType) {
         this.date = date;
         this.user = user;
-        this.documentId = documentId;
+        this.documentCode = documentCode;
+        this.transactionType = transactionType;
+    }
+
+    public TransactionDocument(Long id, String date, String user, String documentCode, String transactionType) {
+        this.id = id;
+        this.date = date;
+        this.user = user;
+        this.documentCode = documentCode;
         this.transactionType = transactionType;
     }
 
     @Override
     public String toString() {
-        return "Transaction{" +
+        return "TransactionDocument{" +
                 "id=" + id +
                 ", date='" + date + '\'' +
                 ", user='" + user + '\'' +
-                ", toolId='" + documentId + '\'' +
+                ", documentCode='" + documentCode + '\'' +
                 ", transactionType='" + transactionType + '\'' +
                 '}';
     }
