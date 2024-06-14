@@ -17,12 +17,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -134,6 +136,56 @@ public class UserServiceImpl implements UserService {
         UserDTO userDTO = new UserDTO(user.getId(), user.getUserId(), user.getFirstName(), user.getLastName(),
                 user.getEmail(), user.getDepartment(), user.getRole(), user.getStatus());
         return userDTO;
+    }
+
+    @Override
+    public User updateUser(Long id, String userId, String firstName, String lastName,String email,
+                           String department, String password, String role, String status) {
+        User user = findUserById(id);
+        // Get the userId og logged user
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        String loggedUserAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
+
+
+        // Allow save own password for user with role ROLE_EMPLOYEE
+        if ((loggedUserAuthority.equals("[ROLE_EMPLOYEE]") || loggedUserAuthority.equals("[ROLE_MANAGER]"))&&loggedUser.equals(userId)) {
+            if (!Objects.equals(password, "")) {
+                //generate bcrypt hash
+                String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
+
+                user.setPassword(pw_hash);
+            }
+        }
+
+        if (loggedUserAuthority.equals("[ROLE_ADMIN]")){
+            if (userId != null) {
+                user.setUserId(userId);
+            }
+            if (firstName != null) {
+                user.setFirstName(firstName);
+            }
+            if (lastName != null) {
+                user.setLastName(lastName);
+            }
+            if (email != null) {
+                user.setEmail(email);
+            }
+            if (department != null) {
+                user.setDepartment(department);
+            }
+            if (password != "") {
+                //generate bcrypt hash
+                String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
+                user.setPassword(pw_hash);
+            }
+            if (role != null) {
+                user.setRole(role);
+            }
+            if (status != null) {
+                user.setStatus(status);
+            }
+        }
+        return user;
     }
 
     @Override

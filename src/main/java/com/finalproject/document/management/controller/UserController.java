@@ -25,6 +25,9 @@ public class UserController {
     private final DocumentTransactionService documentTransactionService;
     private final UserTransactionService userTransactionService;
     private  final DocumentValidationService documentValidationService;
+    private static final String USERS = "users/users";
+    private static final String VIEW_USER = "users/view-user";
+    private static final String REDIRECT_USERS = "redirect:/document-management/users/getUsers";
     @Value("${headersUser}")
     private List<String> headers;
     @Value("${departments}")
@@ -57,7 +60,7 @@ public class UserController {
         model.addAttribute("statuses", statuses);
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
         model.addAttribute("loggedUser", loggedUser);
-        return "users/users";
+        return USERS;
     }
 
 
@@ -66,13 +69,6 @@ public class UserController {
         return userService.findById(id);
     }
 
-//    @RequestMapping("/getOne")
-//    @ResponseBody
-//    public UserDTO findById(Long id, Model model) {
-//        UserDTO user = userService.findById(id);
-//        model.addAttribute(user);
-//        return user;
-//    }
 
     @GetMapping("/view/{id}")
     public String viewUser(@PathVariable Long id, Model model) {
@@ -89,7 +85,7 @@ public class UserController {
         model.addAttribute("roles", roles);
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
 
-        return "users/view-user";
+        return VIEW_USER;
     }
 
     @GetMapping("/downloadListAsExcel")
@@ -116,10 +112,10 @@ public class UserController {
 
         userService.save(newUser);
 
-        return "redirect:/document-management/users/getUsers";
+        return REDIRECT_USERS;
     }
 
-    @PostMapping("/updateUser") ////////TO MOVE TO SERVICE
+    @PostMapping("/updateUser")
     public String updateUser(@RequestParam(name = "id", required = false) Long id,
                              @RequestParam(name = "userId", required = false) String userId,
                              @RequestParam(name = "firstName", required = false) String firstName,
@@ -131,55 +127,12 @@ public class UserController {
                              @RequestParam(name = "role", required = false) String role,
                              @RequestParam(name = "status", required = false) String status) {
 
-        User user = userService.findUserById(id);
-        // Get the userId og logged user
-        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
-        String loggedUserAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
 
-        // Allow save own password for user with role ROLE_EMPLOYEE
-        if ((loggedUserAuthority.equals("[ROLE_EMPLOYEE]") || loggedUserAuthority.equals("[ROLE_MANAGER]"))&&loggedUser.equals(userId)) {
-            if (password != "") {
-                //generate bcrypt hash
-                String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
-
-                user.setPassword(pw_hash);
-            }
-        }
-
-        if (loggedUserAuthority.equals("[ROLE_ADMIN]")){
-            if (userId != null) {
-                user.setUserId(userId);
-            }
-            if (firstName != null) {
-                user.setFirstName(firstName);
-            }
-            if (lastName != null) {
-                user.setLastName(lastName);
-            }
-            if (email != null) {
-                user.setEmail(email);
-            }
-            if (department != null) {
-                user.setDepartment(department);
-            }
-            if (password != "") {
-                //generate bcrypt hash
-                String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
-
-                user.setPassword(pw_hash);
-            }
-            if (role != null) {
-                user.setRole(role);
-            }
-            if (status != null) {
-                user.setStatus(status);
-            }
-        }
-
+        User user = userService.updateUser(id, userId, firstName, lastName, email, department,password,role, status);
 
         userService.update(user);
 
-        return "redirect:/document-management/users/getUsers";
+        return REDIRECT_USERS;
     }
 
 }
