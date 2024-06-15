@@ -37,12 +37,17 @@ public class DocumentRevisionServiceImpl implements DocumentRevisionService {
                 documentRevision.getValidatingUser());
     }
 
-    public DocumentRevision findByRevisionNumber(Long revisionNumber){
-        return documentRevisionRepository.findByRevisionNumber(revisionNumber);
+    public DocumentRevision findByRevisionNumberAndDocumentId(Long revisionNumber, Long documentId){
+        return documentRevisionRepository.findByRevisionNumberAndDocumentId(revisionNumber, documentId);
     }
 
     @Override
     public void save(DocumentRevision documentRevision) {
         documentRevisionRepository.save(documentRevision);
+    }
+
+    @Override
+    public DocumentRevision findById(Long id) {
+        return documentRevisionRepository.findById(id).get();
     }
 }

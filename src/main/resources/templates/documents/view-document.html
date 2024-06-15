@@ -116,8 +116,10 @@
                                     <div class="flex-option-div">
                                         <label class="edit-label">Author</label>
                                         <select th:field="*{author}" name="author" class="search-list" aria-label="">
-                                            <option th:each="userId : ${userIds}" th:value="${userId}"
-                                                    th:text="${userId}"></option>
+                                            <option th:each="userIdsOptions : ${userIds}"
+                                                    th:value="${userIdsOptions}"
+                                                    th:text="${userIdsOptions}"
+                                                    ></option>
                                         </select>
                                     </div>
                                 </div>

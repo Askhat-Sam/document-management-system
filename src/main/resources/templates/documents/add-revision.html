@@ -65,7 +65,8 @@
                         <input type="text" name="documentId" th:value="${documentId}">
                         <input type="text" class="add-input" name="userId" th:value="${userId}" readonly>
                         <input type="date" class="add-input" placeholder="Date" th:field="*{date}">
-                        <input type="number" class="add-input" placeholder="Revision number" th:field="*{revisionNumber}">
+<!--                        <input type="number" class="add-input" placeholder="Revision number" th:field="*{revisionNumber}">-->
+                        <input type="text" name="revisionNumber" th:value="${revisionNumber}" readonly>
                         <select th:field="*{status}" name="status" class="search-list" aria-label="">
                             <option th:each="statusOption : ${documentRevisionStatuses}" th:value="${statusOption}" th:text="${statusOption}"></option>
                         </select>
@@ -74,7 +75,7 @@
                             <option th:each="userId : ${userIds}" th:value="${userId}" th:text="${userId}"></option>
                         </select>
                         <input type="text" placeholder="Link" name="link" th:value="${message}">
-                        <button type="submit" class="action-button">Save</button>
+                        <button type="submit" class="action-button">Save and send to validation</button>
                     </form>
                     <form method="POST" enctype="multipart/form-data"
                           action="/document-management/documents/uploadFile">
@@ -89,18 +90,7 @@
             <div th:if="${message}">
                 <p th:text="${message}"></p>
             </div>
-            <div class="main-content">
-                <div class="centered-div">
-                    <div>
-                        <button class="action-button" type="submit">
-                            <a class="link" th:href="@{/document-management/documents/getDocuments}">
-                                Cancel
-                            </a>
-                        </button>
-                        <button class="action-button" type="submit">Save and send to validation</button>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 </div>

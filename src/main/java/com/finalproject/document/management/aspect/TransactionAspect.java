@@ -255,7 +255,7 @@ public class TransactionAspect {
                         new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
                         SecurityContextHolder.getContext().getAuthentication().getName(),
                         documentBeforeUpdate.getDocumentCode(),
-                        "Document status id number has been changed from '" + documentBeforeUpdate.getStatus() +
+                        "Document status has been changed from '" + documentBeforeUpdate.getStatus() +
                                 "' to '" + documentAfterUpdate.getStatus() + "'"
                 ));
             }

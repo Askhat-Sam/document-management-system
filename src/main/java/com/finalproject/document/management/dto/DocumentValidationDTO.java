@@ -15,4 +15,5 @@ public class DocumentValidationDTO {
     private Long revisionNumber;
     private String userId;
     private String status;
+    private String link;
 }

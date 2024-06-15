@@ -32,14 +32,10 @@ public class DocumentValidation {
 
     @Column(name = "status")
     private String status;
+    @Column(name = "link")
+    private String link;
 
-    public DocumentValidation(String documentCode, String name, Long revisionNumber, String userId, String status) {
-        this.documentCode = documentCode;
-        this.name = name;
-        this.revisionNumber = revisionNumber;
-        this.userId = userId;
-        this.status = status;
-    }
+
 
     public DocumentValidation(Long id, String documentCode, String name, Long revisionNumber, String userId, String status) {
         this.id = id;
@@ -50,12 +46,13 @@ public class DocumentValidation {
         this.status = status;
     }
 
-    public DocumentValidation(String documentCode, Long documentId, String name, Long revisionNumber, String userId, String status) {
+    public DocumentValidation(String documentCode, Long documentId, String name, Long revisionNumber, String userId, String status, String link) {
         this.documentCode = documentCode;
         this.documentId = documentId;
         this.name = name;
         this.revisionNumber = revisionNumber;
         this.userId = userId;
         this.status = status;
+        this.link = link;
     }
 }

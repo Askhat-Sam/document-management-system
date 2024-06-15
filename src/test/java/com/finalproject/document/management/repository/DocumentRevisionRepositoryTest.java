@@ -41,7 +41,7 @@ public class DocumentRevisionRepositoryTest {
         documentRevisionRepository.save(documentRevisionExpected);
 
         // When
-        DocumentRevision documentRevisionActual = documentRevisionRepository.findByRevisionNumber(revisionNumber);
+        DocumentRevision documentRevisionActual = documentRevisionRepository.findByRevisionNumberAndDocumentId(revisionNumber, 1L);
 
         // Then
         assertEquals(revisionNumber, documentRevisionActual.getRevisionNumber());

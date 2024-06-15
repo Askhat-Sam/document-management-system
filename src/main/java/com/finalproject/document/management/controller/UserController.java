@@ -74,7 +74,7 @@ public class UserController {
     public String viewUser(@PathVariable Long id, Model model) {
         UserDTO user = userService.findById(id);
         List<TransactionEntity> transactionsUsers = userTransactionService.findAllByUser(user.getUserId());
-        List<TransactionEntity> transactionsDocuments= userTransactionService.findAllByUser(user.getUserId());
+        List<TransactionEntity> transactionsDocuments= documentTransactionService.findAllByUser(user.getUserId());
         String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
         Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
         model.addAttribute("user", user);
@@ -126,7 +126,6 @@ public class UserController {
                              @RequestParam(name = "active", required = false) Integer active,
                              @RequestParam(name = "role", required = false) String role,
                              @RequestParam(name = "status", required = false) String status) {
-
 
         User user = userService.updateUser(id, userId, firstName, lastName, email, department,password,role, status);
 

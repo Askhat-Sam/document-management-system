@@ -183,6 +183,9 @@ public class UserServiceImpl implements UserService {
             }
             if (status != null) {
                 user.setStatus(status);
+                if (status.equals("Not active")){
+                    user.setActive(0);
+                }
             }
         }
         return user;

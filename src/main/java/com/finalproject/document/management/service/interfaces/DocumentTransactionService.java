@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface DocumentTransactionService extends TransactionService {
     List<TransactionEntity> findAllByDocumentCode(String documentCode);
+    List<TransactionEntity> findAllByUser(String userId);
     void save(TransactionEntity transactionEntity);
 }

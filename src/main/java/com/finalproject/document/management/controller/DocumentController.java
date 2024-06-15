@@ -48,8 +48,10 @@ public class DocumentController {
     @Value("${documentTypes}")
     private List<String> documentTypes;
     @Value("${documentRevisionStatuses}")
-    private List<String> documentRevisionStatuses;;
+    private List<String> documentRevisionStatuses;
+    ;
     private static final Logger logger = Logger.getLogger(DocumentController.class.getName());
+
     @GetMapping("/getDocuments")
     public String getDocuments(@RequestParam(name = "page", required = false) Integer page,
                                @RequestParam(name = "size", required = false) Integer size,
@@ -125,13 +127,12 @@ public class DocumentController {
     @GetMapping("/addNewDocumentPage")
     public String addNewDocumentPage(Model model) {
         Document document = new Document();
-        List<String> userIds = userService.findAllUserIds();
-        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
+        String author = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", author);
         model.addAttribute("document", document);
         model.addAttribute("documentTypes", documentTypes);
         model.addAttribute("documentStatuses", documentStatuses);
-        model.addAttribute("userIds", userIds);
+        model.addAttribute("author", author);
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
         return ADD_DOCUMENT;
     }
@@ -141,7 +142,7 @@ public class DocumentController {
             @RequestParam("documentCode") String documentCode,
             @RequestParam("documentType") String documentType,
             @RequestParam("name") String name,
-            @RequestParam("revisionNumber") Long revisionNumber,
+//            @RequestParam("revisionNumber") Long revisionNumber,
             @RequestParam("status") String status,
             @RequestParam("creationDate") String creationDate,
             @RequestParam("modificationDate") String modificationDate,
@@ -150,7 +151,7 @@ public class DocumentController {
         String link = "TBD";
 
         // Create a new document
-        Document document = new Document(documentCode, documentType, name, revisionNumber, status, creationDate, modificationDate, author, link);
+        Document document = new Document(documentCode, documentType, name, 0L, status, creationDate, modificationDate, author, link);
 
         // Add document into database
         documentService.save(document);
@@ -186,7 +187,6 @@ public class DocumentController {
 
     @PostMapping("/updateDocument")
     public String updateDocument(@ModelAttribute Document document) {
-        // Retrieve the existing document from the database
 
         documentService.updateDocument(document);
 
@@ -226,6 +226,7 @@ public class DocumentController {
     public String addNewRevisionPage(@RequestParam Long documentId,
                                      Model model) {
         List<String> userIds = userService.findAllUserIds();
+        DocumentDTO document = documentService.findById(documentId);
         DocumentRevision documentRevision = new DocumentRevision();
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", userId);
@@ -233,6 +234,7 @@ public class DocumentController {
         model.addAttribute("userId", userId);
         model.addAttribute("documentId", documentId);
         model.addAttribute("documentRevision", documentRevision);
+        model.addAttribute("revisionNumber", document.getRevisionNumber() + 1);
         model.addAttribute("documentRevisionStatuses", documentRevisionStatuses);
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
 
@@ -250,25 +252,27 @@ public class DocumentController {
                                  @RequestParam String validatingUser) {
         DocumentDTO document = documentService.findById(documentId);
 
-        // Add revision to the document
-        DocumentRevision documentRevision =new DocumentRevision(userId, documentId, date, revisionNumber,
-                status, description, validatingUser);
+        Long currentRevision = document.getRevisionNumber();
+
+        DocumentRevision documentRevision = new DocumentRevision(userId, documentId, date, currentRevision + 1,
+                status, description, link, validatingUser);
+        DocumentValidation documentValidation = new DocumentValidation(document.getDocumentCode(), documentId, document.getName(),
+                revisionNumber, validatingUser, "Awaiting validation", link);
 
         documentRevisionService.save(documentRevision);
-
-        DocumentValidation documentValidation = new DocumentValidation(document.getDocumentCode(), documentId, document.getName(),
-                revisionNumber, validatingUser, "Awaiting validation");
-
         documentValidationService.save(documentValidation);
+
+
         return REDIRECT_DOCUMENTS_VIEW + documentId;
     }
+
     @RequestMapping("/getDocumentValidations")
     public String documentValidationPage(Model model) {
         String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
         List<DocumentValidationDTO> documentValidations = documentValidationService.findAllByUserId(loggedUser);
         Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
-        model.addAttribute("documentValidations",documentValidations);
+        model.addAttribute("documentValidations", documentValidations);
 
         return DOCUMENTS_VALIDATIONS;
     }
@@ -296,7 +300,7 @@ public class DocumentController {
         DocumentValidation documentValidation = DocumentValidationServiceImpl.fromDTOToEntity(documentValidationDTO);
         documentValidation.setStatus(status);
         // Update status in document revision
-        DocumentRevision documentRevision = documentRevisionService.findByRevisionNumber(documentValidation.getRevisionNumber());
+        DocumentRevision documentRevision = documentRevisionService.findById( id);
         documentRevision.setStatus(status);
         documentRevisionService.save(documentRevision);
         documentValidationService.save(documentValidation);
@@ -306,7 +310,7 @@ public class DocumentController {
         Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
 
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
-        model.addAttribute("documentValidations",documentValidations);
+        model.addAttribute("documentValidations", documentValidations);
 
         return DOCUMENTS_VALIDATIONS;
     }

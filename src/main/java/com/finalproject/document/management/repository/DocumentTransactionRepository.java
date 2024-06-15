@@ -9,4 +9,5 @@ import java.util.List;
 public interface DocumentTransactionRepository extends JpaRepository<TransactionDocument, Long> {
     void save(TransactionEntity transaction);
     List<TransactionEntity> findAllByDocumentCode(String documentCode);
+    List<TransactionEntity> findAllByUser(String userId);
 }

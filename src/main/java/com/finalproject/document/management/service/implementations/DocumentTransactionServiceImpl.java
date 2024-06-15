@@ -29,10 +29,11 @@ public class DocumentTransactionServiceImpl implements DocumentTransactionServic
 
     @Override
     public List<TransactionEntity> findAllByUser(String userId) {
-        return null;
+        return documentTransactionRepository.findAllByUser(userId);
     }
 
     public List<TransactionEntity> findAllByDocumentCode(String documentCode) {
         return documentTransactionRepository.findAllByDocumentCode(documentCode);
     }
+
 }

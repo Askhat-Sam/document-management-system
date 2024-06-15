@@ -65,4 +65,15 @@ public class DocumentRevision {
         this.description = description;
         this.validatingUser = validatingUser;
     }
+
+    public DocumentRevision(String userId, Long documentId, String date, Long revisionNumber, String status, String description, String link, String validatingUser) {
+        this.userId = userId;
+        this.documentId = documentId;
+        this.date = date;
+        this.revisionNumber = revisionNumber;
+        this.status = status;
+        this.description = description;
+        this.link = link;
+        this.validatingUser = validatingUser;
+    }
 }

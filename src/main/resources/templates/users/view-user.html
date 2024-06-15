@@ -52,11 +52,6 @@
                     Users
                 </a>
             </div>
-            <div>
-                <a class="" th:href="@{/document-management/documents/downloadList}" sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
-                    Export as list
-                </a>
-            </div>
         </div>
         <div class="body-container">
             <div class="navbar flex-container-column">
@@ -133,17 +128,43 @@
                                 <th>Id</th>
                                 <th>Date</th>
                                 <th>Modified by</th>
-                                <th>Modified user/document</th>
+                                <th>Modified user</th>
                                 <th>Transaction type</th>
                             </tr>
                             </thead>
                             <tbody class="table-body">
-                            <tr th:each="transaction : ${transactions}" class="" style="height: 20px">
+                            <tr th:each="transaction : ${transactionsUsers}" class="" style="height: 20px">
                                 <td th:text="${transaction.id}"/>
                                 <td th:text="${transaction.date}"/>
                                 <td th:text="${transaction.user}"/>
                                 <td th:text="${transaction.userId}"/>
                                 <td th:text="${transaction.transactionType}"/>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="section-header centered-div">3. Document transactions</div>
+                <div class="section-body">
+                    <div class="table-container">
+                        <table class="">
+                            <thead>
+                            <tr class="table-header">
+                                <th>Id</th>
+                                <th>Date</th>
+                                <th>Modified by</th>
+                                <th>Modified document</th>
+                                <th>Transaction type</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-body">
+                            <tr th:each="transactionDoc : ${transactionsDocuments}" class="" style="height: 20px">
+                                <td th:text="${transactionDoc.id}"/>
+                                <td th:text="${transactionDoc.date}"/>
+                                <td th:text="${transactionDoc.user}"/>
+                                <td th:text="${transactionDoc.documentCode}"/>
+                                <td th:text="${transactionDoc.transactionType}"/>
                             </tr>
                             </tbody>
                         </table>

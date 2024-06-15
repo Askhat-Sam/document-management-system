@@ -83,12 +83,12 @@ class DocumentRevisionServiceTest {
         documentRevisionsList.add(new DocumentRevision(3L, "andrey.s", 1L, "2024-09-09",
                 3L,"Awaiting validation", "New revision", "John.s"));
 
-        when(documentRevisionRepository.findByRevisionNumber(1L)).thenReturn(documentRevisionsList.get(0));
-        when(documentRevisionRepository.findByRevisionNumber(3L)).thenReturn(documentRevisionsList.get(1));
+        when(documentRevisionRepository.findByRevisionNumberAndDocumentId(1L,1L)).thenReturn(documentRevisionsList.get(0));
+        when(documentRevisionRepository.findByRevisionNumberAndDocumentId(3L, 1L)).thenReturn(documentRevisionsList.get(1));
 
         // When
-        DocumentRevision documentRevisionActual1 = documentRevisionServiceImpl.findByRevisionNumber(1L);
-        DocumentRevision documentRevisionActual2 = documentRevisionServiceImpl.findByRevisionNumber(3L);
+        DocumentRevision documentRevisionActual1 = documentRevisionServiceImpl.findByRevisionNumberAndDocumentId(1L, 1L);
+        DocumentRevision documentRevisionActual2 = documentRevisionServiceImpl.findByRevisionNumberAndDocumentId(3L, 1L);
 
         // Then
         Assertions.assertEquals("john.s", documentRevisionActual1.getUserId());
