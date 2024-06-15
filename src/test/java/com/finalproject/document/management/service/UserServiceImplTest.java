@@ -166,6 +166,6 @@ public class UserServiceImplTest {
         userService.update(userToUpdate);
 
         // Then
-        verify(userRepository).save(userToUpdate); // Verify that userRepository.save() is called with the user object
+        verify(userRepository).save(userToUpdate);
     }
 }
