@@ -262,7 +262,6 @@ public class DocumentController {
         documentRevisionService.save(documentRevision);
         documentValidationService.save(documentValidation);
 
-
         return REDIRECT_DOCUMENTS_VIEW + documentId;
     }
 
@@ -300,7 +299,7 @@ public class DocumentController {
         DocumentValidation documentValidation = DocumentValidationServiceImpl.fromDTOToEntity(documentValidationDTO);
         documentValidation.setStatus(status);
         // Update status in document revision
-        DocumentRevision documentRevision = documentRevisionService.findById( id);
+        DocumentRevision documentRevision = documentRevisionService.findById(id);
         documentRevision.setStatus(status);
         documentRevisionService.save(documentRevision);
         documentValidationService.save(documentValidation);
