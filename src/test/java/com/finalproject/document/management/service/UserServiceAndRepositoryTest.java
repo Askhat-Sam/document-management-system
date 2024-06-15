@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class UserServiceIntegrationTest {
+public class UserServiceAndRepositoryTest {
     @Autowired
     private UserService userService;
     @Test

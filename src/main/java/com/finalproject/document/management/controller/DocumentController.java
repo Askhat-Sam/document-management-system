@@ -259,6 +259,10 @@ public class DocumentController {
         DocumentValidation documentValidation = new DocumentValidation(document.getDocumentCode(), documentId, document.getName(),
                 revisionNumber, validatingUser, "Awaiting validation", link);
 
+        document.setRevisionNumber(documentRevision.getRevisionNumber());
+
+        documentService.updateDocument(documentService.convertToEntity(document));
+
         documentRevisionService.save(documentRevision);
         documentValidationService.save(documentValidation);
 
@@ -307,6 +311,12 @@ public class DocumentController {
         List<DocumentValidationDTO> documentValidations = documentValidationService.findAll();
         String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
         Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
+
+        // Update the status of document to "Validated" after validation of revision
+        DocumentDTO documentDTO = documentService.findById(documentRevision.getDocumentId());
+        documentDTO.setStatus("Validated");
+
+        documentService.updateDocument(documentService.convertToEntity(documentDTO));
 
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
         model.addAttribute("documentValidations", documentValidations);

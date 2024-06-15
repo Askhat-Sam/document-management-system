@@ -61,14 +61,11 @@
         </div>
         <div class="body-container">
             <div class="navbar flex-container">
-                <form th:action="@{/document-management/documents/getDocuments}" th:object="${search}"
-                      class="navbar-form" role="search">
-                    <input name="keyword" th:value="${keyword}" class="" type="search" placeholder="Search"
-                           aria-label="Search" id="searchText">
+                <form th:action="@{/document-management/documents/getDocuments}" th:object="${search}" class="navbar-form" role="search">
+                    <input name="keyword" th:value="${keyword}" class="" type="search" placeholder="Search" aria-label="Search" id="searchText">
 
                     <select th:field="*{column}" name="column" class="search-list" aria-label="">
-                        <option th:each="tempHeader : ${headers}" th:value="${tempHeader}"
-                                th:text="${tempHeader}"></option>
+                        <option th:each="tempHeader : ${headers}" th:value="${tempHeader}" th:text="${tempHeader}"></option>
                     </select>
 
                     <button class="" type="submit">Search</button>

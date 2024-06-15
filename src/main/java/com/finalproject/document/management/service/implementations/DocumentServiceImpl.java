@@ -66,11 +66,11 @@ public class DocumentServiceImpl implements DocumentService {
                     return documentsFiltered;
                 case "Document code": documentsFiltered = documentsDTO.stream().filter(d -> d.getDocumentCode().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Document type": documentsFiltered = documentsDTO.stream().filter(d ->  d.getDocumentType().toLowerCase().contains(keyword)).collect(Collectors.toList());
+                case "Document type": documentsFiltered = documentsDTO.stream().filter(d ->  d.getDocumentType().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
                 case "Title": documentsFiltered = documentsDTO.stream().filter(d -> d.getName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Status": documentsFiltered = documentsDTO.stream().filter(d -> d.getStatus().toLowerCase().contains(keyword)).collect(Collectors.toList());
+                case "Status": documentsFiltered = documentsDTO.stream().filter(d -> d.getStatus().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
                 case "Creation date": documentsFiltered = documentsDTO.stream().filter(d -> d.getCreationDate().contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
@@ -78,7 +78,7 @@ public class DocumentServiceImpl implements DocumentService {
                     return documentsFiltered;
                 case "Revision number": documentsFiltered = documentsDTO.stream().filter(d -> Long.toString(d.getRevisionNumber()).equals(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Author": documentsFiltered = documentsDTO.stream().filter(d -> d.getAuthor().toLowerCase().contains(keyword)).collect(Collectors.toList());
+                case "Author": documentsFiltered = documentsDTO.stream().filter(d -> d.getAuthor().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
             }
             return documentsFiltered;

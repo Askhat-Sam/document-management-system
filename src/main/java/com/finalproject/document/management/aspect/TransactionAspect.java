@@ -289,7 +289,6 @@ public class TransactionAspect {
                                 "' to '" + documentAfterUpdate.getAuthor() + "'"
                 ));
             }
-            // Check changes of other fields if necessary
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();

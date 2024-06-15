@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
                     usersFiltered = usersDTO.stream().filter(u -> u.getEmail().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
                 case "Department":
-                    usersFiltered = usersDTO.stream().filter(u -> u.getDepartment().contains(keyword)).collect(Collectors.toList());
+                    usersFiltered = usersDTO.stream().filter(u -> u.getDepartment().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
                 case "Role":
                     usersFiltered = usersDTO.stream().filter(u -> u.getRole().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
