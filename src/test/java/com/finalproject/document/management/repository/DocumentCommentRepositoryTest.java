@@ -1,9 +1,6 @@
 package com.finalproject.document.management.repository;
 
-import com.finalproject.document.management.dto.DocumentDTO;
-import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.DocumentComment;
-import com.finalproject.document.management.service.interfaces.DocumentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -12,7 +9,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -23,10 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class DocumentCommentRepositoryTest {
     @Autowired
     private DocumentCommentRepository documentCommentRepository;
+
     @Test
-    public void test_findById() {
+    public void shouldFindById() {
         // Given
-        DocumentComment documentCommentExpected = new DocumentComment(1L, "john.s", "2024-09-02","New comment to document");
+        DocumentComment documentCommentExpected = new DocumentComment(1L, "john.s", "2024-09-02", "New comment to document");
         documentCommentRepository.save(documentCommentExpected);
         // When
         DocumentComment documentCommentActual = documentCommentRepository.findById(1L).get();
@@ -37,11 +34,11 @@ public class DocumentCommentRepositoryTest {
     }
 
     @Test
-    public void test_findAllByDocumentId() {
+    public void shouldFindAllByDocumentId() {
         // Given
         Long documentId = 1L;
-        DocumentComment documentCommentExpected = new DocumentComment(1L,  documentId,"john.s", "2024-09-02", "New comment to document");
-        DocumentComment documentCommentExpected2 = new DocumentComment(2L,  documentId,"susan.s", "2024-01-02", "New comment to document 2");
+        DocumentComment documentCommentExpected = new DocumentComment(1L, documentId, "john.s", "2024-09-02", "New comment to document");
+        DocumentComment documentCommentExpected2 = new DocumentComment(2L, documentId, "susan.s", "2024-01-02", "New comment to document 2");
         documentCommentRepository.save(documentCommentExpected);
         documentCommentRepository.save(documentCommentExpected2);
         // When

@@ -17,8 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class DocumentServiceTest {
     @Autowired
     private DocumentService documentService;
+
     @Test
-    public void test_findById() {
+    public void shouldFindById() {
         // Given
         Document documentExpected = new Document("POL-001", "Policy", "Safety policy", 1L,
                 "Validated", "2024-09-01", "2024-09-05", "john.s");

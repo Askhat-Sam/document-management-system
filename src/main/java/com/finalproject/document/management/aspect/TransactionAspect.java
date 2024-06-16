@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 @Aspect
 @Component
 public class TransactionAspect {
@@ -59,7 +60,7 @@ public class TransactionAspect {
         // Check if the user was updated
         if (!userAfterUpdate.equals(userBeforeUpdate)) {
             // Check changes of userId
-            if (userBeforeUpdate!=null){
+            if (userBeforeUpdate != null) {
                 if (!userAfterUpdate.getUserId().equals(userBeforeUpdate.getUserId())) {
                     transactionList.add(new TransactionUser(
                             new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()),
@@ -122,7 +123,7 @@ public class TransactionAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         request.setAttribute("transactionList", transactionList);
         // Save each userTransaction in transactionList into DB
-        if (transactionList.size()>0){
+        if (transactionList.size() > 0) {
             transactionList.forEach(t -> userTransactionService.save(t));
         }
 
@@ -172,7 +173,7 @@ public class TransactionAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         request.setAttribute("transactionList", transactionList);
         // Save each userTransaction in transactionList into DB
-        transactionList.forEach(t -> userTransactionService.save(t));
+        transactionList.forEach(userTransactionService::save);
     }
 
     @AfterReturning("execution(* com.finalproject.document.management.service.interfaces.DocumentService.downloadListAsExcel(..)) ")
@@ -192,11 +193,11 @@ public class TransactionAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         request.setAttribute("transactionList", transactionList);
         // Save each userTransaction in transactionList into DB
-        transactionList.forEach(t -> userTransactionService.save(t));
+        transactionList.forEach(userTransactionService::save);
     }
 
     @Before("execution(* com.finalproject.document.management.service.implementations.DocumentServiceImpl.updateDocument(..)) ")
-    public void beforeDocumentUpdate(JoinPoint joinPoint){
+    public void beforeDocumentUpdate(JoinPoint joinPoint) {
 
         // Get the user object passed to the update method
         Object documentJointPoint = joinPoint.getArgs()[0];

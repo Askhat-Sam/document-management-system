@@ -22,17 +22,14 @@ public class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
-
-    @InjectMocks
-    private UserServiceImpl userService;
     @Mock
     private User user;
 
     @Mock
     private UserDTO userDTO;
-
     @InjectMocks
-    private UserServiceImpl userServiceImpl;
+    private UserServiceImpl userService;
+
 
     @BeforeEach
     public void setUp() {
@@ -40,7 +37,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void test_findAll() {
+    public void shouldFindAll() {
         // given
         List<User> userList = new ArrayList<>();
         userList.add(new User(1L, "ivan.i", "ivan", "ivanov",
@@ -63,9 +60,9 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void test_findAllUserIds() {
+    public void shouldFindAllUserIds() {
         // Given
-        List<User> expectedUserIds =new ArrayList<>();
+        List<User> expectedUserIds = new ArrayList<>();
         User user1 = new User(1L, "ivan.i", "ivan", "ivanov",
                 "ivanov.i@example.com", "IT", "ROLE_EMPLOYEE", "Active");
         User user2 = new User(1L, "sergey.s", "sergey", "sergeyev",
@@ -89,9 +86,9 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void test_findById() {
+    public void shouldFindById() {
         // Given
-        User userExpected= new User(1L, "ivan.i", "ivan", "ivanov",
+        User userExpected = new User(1L, "ivan.i", "ivan", "ivanov",
                 "ivanov.i@example.com", "IT", "ROLE_EMPLOYEE", "Active");
         when(userRepository.findById(1L)).thenReturn(Optional.of(userExpected));
 
@@ -105,7 +102,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void test_fromEntityToDTO() {
+    public void shouldConvertFromEntityToDTO() {
         // Given
         when(user.getId()).thenReturn(1L);
         when(user.getUserId()).thenReturn("user123");
@@ -117,7 +114,7 @@ public class UserServiceImplTest {
         when(user.getStatus()).thenReturn("Active");
 
         // When
-        UserDTO userDTO = userServiceImpl.fromEntityToDTO(user);
+        UserDTO userDTO = userService.fromEntityToDTO(user);
 
         // Then
         Assertions.assertEquals((Long) 1L, userDTO.getId());
@@ -131,7 +128,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void test_fromDTOToEntity() {
+    public void shouldConvertFromDTOToEntity() {
         // Given
         when(userDTO.getId()).thenReturn(1L);
         when(userDTO.getUserId()).thenReturn("user123");
@@ -143,7 +140,7 @@ public class UserServiceImplTest {
         when(userDTO.getStatus()).thenReturn("Active");
 
         // When
-        User user = userServiceImpl.fromDTOToEntity(userDTO);
+        User user = userService.fromDTOToEntity(userDTO);
 
         // Then
         Assertions.assertEquals((Long) 1L, user.getId());
@@ -157,7 +154,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testUpdate() {
+    public void shouldUpdate() {
         // Given
         User userToUpdate = new User();
         when(userRepository.save(userToUpdate)).thenReturn(userToUpdate);

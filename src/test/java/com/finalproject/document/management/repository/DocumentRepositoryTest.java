@@ -1,8 +1,6 @@
 package com.finalproject.document.management.repository;
 
-import com.finalproject.document.management.dto.DocumentDTO;
 import com.finalproject.document.management.entity.Document;
-import com.finalproject.document.management.service.interfaces.DocumentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -21,8 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class DocumentRepositoryTest {
     @Autowired
     private DocumentRepository documentRepository;
+
     @Test
-    public void test_findById() {
+    public void shouldFindById() {
         // Given
         Document documentExpected = new Document("POL-001", "Policy", "Safety policy", 1L,
                 "Validated", "2024-09-01", "2024-09-05", "john.s");

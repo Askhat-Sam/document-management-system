@@ -27,12 +27,14 @@ class DocumentServiceImplTest {
     DocumentServiceImpl documentServiceImpl;
     @Mock
     DocumentRepository documentRepository;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
+
     @Test
-    public void test_findAll() {
+    public void shouldFindAll() {
         // Given
         List<Document> documentListList = new ArrayList<>();
         documentListList.add(new Document("POL-001", "Policy", "Safety policy", 1L,
@@ -57,7 +59,7 @@ class DocumentServiceImplTest {
     }
 
     @Test
-    public void test_fromEntityToDTO() {
+    public void shouldFromEntityToDTO() {
         // Given
         when(document.getId()).thenReturn(1L);
         when(document.getDocumentCode()).thenReturn("POL-001");
@@ -85,7 +87,7 @@ class DocumentServiceImplTest {
     }
 
     @Test
-    public void test_fromDTOToEntity() {
+    public void shouldFromDTOToEntity() {
         // Given
         when(documentDTO.getId()).thenReturn(1L);
         when(documentDTO.getDocumentCode()).thenReturn("POL-001");
@@ -113,9 +115,9 @@ class DocumentServiceImplTest {
     }
 
     @Test
-    public void test_findById() {
+    public void shouldFindById() {
         // Given
-        Document documentExpected= new Document(1L, "POL-001", "Policy", "Safety policy", 1L,
+        Document documentExpected = new Document(1L, "POL-001", "Policy", "Safety policy", 1L,
                 "Validated", "2024-09-01", "2024-09-05", "john.s");
         when(documentRepository.findById(1L)).thenReturn(Optional.of(documentExpected));
 
@@ -130,7 +132,7 @@ class DocumentServiceImplTest {
     }
 
     @Test
-    public void testUpdate() {
+    public void shouldUpdate() {
         // Given
         Document documentToUpdate = new Document();
         when(documentRepository.save(documentToUpdate)).thenReturn(documentToUpdate);
@@ -143,21 +145,21 @@ class DocumentServiceImplTest {
     }
 
     @Test
-    public void test_findAllDocumentsByUserIds() {
+    public void shouldFindAllDocumentsByUserIds() {
         // Given
-        List<Document> expectedDocuments =new ArrayList<>();
-        expectedDocuments.add(new Document(1L,"POL-001", "Policy", "Safety policy", 1L,
+        List<Document> expectedDocuments = new ArrayList<>();
+        expectedDocuments.add(new Document(1L, "POL-001", "Policy", "Safety policy", 1L,
                 "Validated", "2024-09-01", "2024-09-05", "john.s"));
-        expectedDocuments.add(new Document(2L,"MAN-001", "Manual", "IT manual", 2L,
+        expectedDocuments.add(new Document(2L, "MAN-001", "Manual", "IT manual", 2L,
                 "In progress", "2023-01-01", "2023-02-05", "john.s"));
-        expectedDocuments.add(new Document(3L,"INS-003", "Instruction", "Working instruction", 3L,
+        expectedDocuments.add(new Document(3L, "INS-003", "Instruction", "Working instruction", 3L,
                 "Validated", "2024-01-01", "2024-02-05", "john.s"));
         when(documentRepository.findByUserId("john.s")).thenReturn(expectedDocuments);
 
         // When
         List<DocumentDTO> actualDocuments = documentServiceImpl.findByUserId("john.s");
         List<Document> actualDocumentsMapped = actualDocuments.stream()
-                .map(d->documentServiceImpl.convertToEntity(d))
+                .map(d -> documentServiceImpl.convertToEntity(d))
                 .toList();
 
         // Then
@@ -167,7 +169,6 @@ class DocumentServiceImplTest {
             Assertions.assertEquals(expectedDocuments.get(i).getAuthor(), actualDocumentsMapped.get(i).getAuthor());
         }
     }
-
 
 
 }

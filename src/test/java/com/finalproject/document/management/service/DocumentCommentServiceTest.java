@@ -17,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 class DocumentCommentServiceTest {
@@ -46,7 +47,7 @@ class DocumentCommentServiceTest {
         List<DocumentCommentDTO> documentCommentsListActual = documentCommentServiceImpl.findAll();
 
         // Then
-        Assertions.assertEquals(2, documentCommentsListActual.size());
+        assertEquals(2, documentCommentsListActual.size());
         Assertions.assertEquals(documentCommentsList.get(0).getDocumentId(), documentCommentsListActual.get(0).getDocumentId());
         Assertions.assertEquals(documentCommentsList.get(1).getUserId(), documentCommentsListActual.get(1).getUserId());
     }

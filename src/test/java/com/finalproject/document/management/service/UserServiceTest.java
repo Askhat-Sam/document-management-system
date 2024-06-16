@@ -16,8 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UserServiceTest {
     @Autowired
     private UserService userService;
+
     @Test
-    public void testFindUserById() {
+    public void shouldFindUserById() {
         // Given
         User userExpected = new User(1L, "ivan.i", "ivan", "ivanov",
                 "ivanov.i@example.com", "IT", "ROLE_EMPLOYEE", "Active");

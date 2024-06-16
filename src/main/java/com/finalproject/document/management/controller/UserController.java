@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @Controller
@@ -24,7 +25,7 @@ public class UserController {
     private final DocumentService documentService;
     private final DocumentTransactionService documentTransactionService;
     private final UserTransactionService userTransactionService;
-    private  final DocumentValidationService documentValidationService;
+    private final DocumentValidationService documentValidationService;
     private static final String USERS = "users/users";
     private static final String VIEW_USER = "users/view-user";
     private static final String REDIRECT_USERS = "redirect:/document-management/users/getUsers";
@@ -39,12 +40,12 @@ public class UserController {
 
     @RequestMapping("/getUsers")
     public String getUsers(@RequestParam(name = "page", required = false) Integer page,
-                            @RequestParam(name = "size", required = false) Integer size,
-                            @RequestParam(name = "sortBy", required = false) String sortBy,
-                            @RequestParam(name = "sortDirection", required = false) String sortDirection,
-                            @RequestParam(name = "keyword", required = false) String keyword,
-                            @RequestParam(name = "column", required = false) String column,
-                            Model model) {
+                           @RequestParam(name = "size", required = false) Integer size,
+                           @RequestParam(name = "sortBy", required = false) String sortBy,
+                           @RequestParam(name = "sortDirection", required = false) String sortDirection,
+                           @RequestParam(name = "keyword", required = false) String keyword,
+                           @RequestParam(name = "column", required = false) String column,
+                           Model model) {
         Search search = new Search();
         List<UserDTO> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
         User user = new User();
@@ -60,21 +61,20 @@ public class UserController {
         model.addAttribute("statuses", statuses);
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
         model.addAttribute("loggedUser", loggedUser);
+
         return USERS;
     }
-
 
     @RequestMapping("/getUser/{id}")
     public UserDTO getUserById(@PathVariable("id") Long id) {
         return userService.findById(id);
     }
-
-
+    
     @GetMapping("/view/{id}")
     public String viewUser(@PathVariable Long id, Model model) {
         UserDTO user = userService.findById(id);
         List<TransactionEntity> transactionsUsers = userTransactionService.findAllByUser(user.getUserId());
-        List<TransactionEntity> transactionsDocuments= documentTransactionService.findAllByUser(user.getUserId());
+        List<TransactionEntity> transactionsDocuments = documentTransactionService.findAllByUser(user.getUserId());
         String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
         Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
         model.addAttribute("user", user);
@@ -127,7 +127,7 @@ public class UserController {
                              @RequestParam(name = "role", required = false) String role,
                              @RequestParam(name = "status", required = false) String status) {
 
-        User user = userService.updateUser(id, userId, firstName, lastName, email, department,password,role, status);
+        User user = userService.updateUser(id, userId, firstName, lastName, email, department, password, role, status);
 
         userService.update(user);
 

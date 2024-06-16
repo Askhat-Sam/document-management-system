@@ -230,7 +230,8 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public List<DocumentDTO> findByUserId(String userId) {
-        return documentRepository.findByUserId(userId).stream().map(this::fromEntityToDTO).collect(Collectors.toList());
+        return documentRepository.findByUserId(userId).stream()
+                .map(this::fromEntityToDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -345,6 +346,7 @@ public class DocumentServiceImpl implements DocumentService {
         document.setCreationDate(documentDTO.getCreationDate());
         document.setModificationDate(documentDTO.getModificationDate());
         document.setAuthor(documentDTO.getAuthor());
+
         return document;
     }
 

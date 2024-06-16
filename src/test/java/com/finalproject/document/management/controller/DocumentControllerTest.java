@@ -34,7 +34,7 @@ public class DocumentControllerTest {
     private DocumentController documentController;
 
     @Test
-    public void test_GetDocuments() {
+    public void shouldGetDocuments() {
         // Given
         List<DocumentDTO> mockedDocuments = Arrays.asList(new DocumentDTO(), new DocumentDTO());
         String loggedUser = "testUser";
@@ -54,7 +54,6 @@ public class DocumentControllerTest {
         verify(documentValidationService).countByStatusAndUserId("Awaiting validation", loggedUser);
         verify(model).addAttribute("documents", mockedDocuments);
         verify(model).addAttribute("countAwaitingValidation", mockedCountAwaitingValidation);
-
         assertEquals("documents/documents", result);
     }
 }

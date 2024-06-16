@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -59,8 +58,8 @@ public class UserServiceImpl implements UserService {
         String loggedUserAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
 
         // For the users with role EMPLOYEE and MANAGER filter the  list of user to one (own account)
-        if (loggedUserAuthority.equals("[ROLE_EMPLOYEE]")){
-            usersDTO = usersDTO.stream().filter(u->u.getUserId().equals(loggedUser)).collect(Collectors.toList());
+        if (loggedUserAuthority.equals("[ROLE_EMPLOYEE]")) {
+            usersDTO = usersDTO.stream().filter(u -> u.getUserId().equals(loggedUser)).collect(Collectors.toList());
         }
 
         List<UserDTO> usersFiltered = new ArrayList<>();
@@ -101,6 +100,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO fromEntityToDTO(User user) {
         return new UserDTO(user.getId(), user.getUserId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getDepartment(), user.getRole(), user.getStatus());
     }
+
     public User fromDTOToEntity(UserDTO userDTO) {
         return new User(userDTO.getId(), userDTO.getUserId(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
                 userDTO.getDepartment(), userDTO.getRole(), userDTO.getStatus());
@@ -111,7 +111,6 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findAll();
         return users.stream().map(this::fromEntityToDTO).collect(Collectors.toList());
     }
-
 
     @Override
     @Transactional
@@ -135,20 +134,20 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(theId).get();
         UserDTO userDTO = new UserDTO(user.getId(), user.getUserId(), user.getFirstName(), user.getLastName(),
                 user.getEmail(), user.getDepartment(), user.getRole(), user.getStatus());
+
         return userDTO;
     }
 
     @Override
-    public User updateUser(Long id, String userId, String firstName, String lastName,String email,
+    public User updateUser(Long id, String userId, String firstName, String lastName, String email,
                            String department, String password, String role, String status) {
         User user = findUserById(id);
         // Get the userId og logged user
         String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
         String loggedUserAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
 
-
         // Allow save own password for user with role ROLE_EMPLOYEE
-        if ((loggedUserAuthority.equals("[ROLE_EMPLOYEE]") || loggedUserAuthority.equals("[ROLE_MANAGER]"))&&loggedUser.equals(userId)) {
+        if ((loggedUserAuthority.equals("[ROLE_EMPLOYEE]") || loggedUserAuthority.equals("[ROLE_MANAGER]")) && loggedUser.equals(userId)) {
             if (!Objects.equals(password, "")) {
                 //generate bcrypt hash
                 String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
@@ -157,7 +156,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        if (loggedUserAuthority.equals("[ROLE_ADMIN]")){
+        if (loggedUserAuthority.equals("[ROLE_ADMIN]")) {
             if (userId != null) {
                 user.setUserId(userId);
             }
@@ -183,17 +182,19 @@ public class UserServiceImpl implements UserService {
             }
             if (status != null) {
                 user.setStatus(status);
-                if (status.equals("Not active")){
+                if (status.equals("Not active")) {
                     user.setActive(0);
                 }
             }
         }
+
         return user;
     }
 
     @Override
     public User findUserById(Long theId) {
         entityManager.clear();
+
         return userRepository.findUserById(theId);
     }
 
@@ -287,7 +288,6 @@ public class UserServiceImpl implements UserService {
                     sort = Sort.by(DESC, sortBy);
                 }
             }
-
             Pageable pageable;
             if (page != null) {
                 pageable = PageRequest.of(page, size, sort);
@@ -302,6 +302,7 @@ public class UserServiceImpl implements UserService {
             } else {
                 pageable = PageRequest.of(0, Integer.MAX_VALUE);
             }
+
             return pageable;
         }
     }

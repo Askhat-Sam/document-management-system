@@ -7,8 +7,11 @@ import java.util.List;
 
 public interface DocumentRevisionService {
     List<DocumentRevisionDTO> findAll();
+
     List<DocumentRevisionDTO> findAllByDocumentId(Long id);
+
     DocumentRevision findByRevisionNumberAndDocumentId(Long revisionNumber, Long documentId);
+
     void save(DocumentRevision documentRevision);
 
     DocumentRevision findById(Long id);

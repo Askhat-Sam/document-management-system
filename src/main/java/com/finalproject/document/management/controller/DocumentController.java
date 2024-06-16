@@ -73,12 +73,10 @@ public class DocumentController {
         return DOCUMENTS;
     }
 
-
     @GetMapping("/getDocument/{id}")
     public DocumentDTO getDocument(@PathVariable("id") Long id) {
         return documentService.findById(id);
     }
-
 
     @GetMapping("/view/{id}")
     public String viewDocument(@PathVariable Long id, Model model) {
@@ -96,8 +94,8 @@ public class DocumentController {
         model.addAttribute("documentStatuses", documentStatuses);
         model.addAttribute("documentTypes", documentTypes);
         model.addAttribute("userIds", userIds);
-
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
+
         return VIEW_DOCUMENTS;
     }
 
@@ -116,6 +114,7 @@ public class DocumentController {
                              @RequestParam("documentId") Long documentId,
                              Model model) {
         documentService.uploadFile(file, redirectAttributes, documentId, model);
+
         return "redirect:/document-management/documents/addNewRevisionPage?documentId=" + documentId;
     }
 
@@ -134,6 +133,7 @@ public class DocumentController {
         model.addAttribute("documentStatuses", documentStatuses);
         model.addAttribute("author", author);
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
+
         return ADD_DOCUMENT;
     }
 
@@ -142,7 +142,6 @@ public class DocumentController {
             @RequestParam("documentCode") String documentCode,
             @RequestParam("documentType") String documentType,
             @RequestParam("name") String name,
-//            @RequestParam("revisionNumber") Long revisionNumber,
             @RequestParam("status") String status,
             @RequestParam("creationDate") String creationDate,
             @RequestParam("modificationDate") String modificationDate,
@@ -155,6 +154,7 @@ public class DocumentController {
 
         // Add document into database
         documentService.save(document);
+
         return REDIRECT_DOCUMENTS;
     }
 
