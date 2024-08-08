@@ -18,6 +18,13 @@ table {
     flex-direction: column;
     box-sizing: border-box;
 }
+.div-centered {
+     max-width: fit-content;
+       margin-left: auto;
+       margin-right: auto;
+       padding: 10px;
+}
+
 .container {
     display: flex;
     flex-direction: row;

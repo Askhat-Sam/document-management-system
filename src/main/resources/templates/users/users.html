@@ -72,6 +72,7 @@
                 </div>
                 <div class="main-content">
                     <div class="table-container">
+
                         <table class="">
                             <thead>
                             <tr class="table-header">
@@ -87,6 +88,8 @@
                             </tr>
                             </thead>
                             <tbody class="table-body">
+
+
                             <tr th:each="user : ${users}" class="" style="height: 20px">
                                 <td th:text="${user.id}" />
                                 <td th:text="${user.userId}" />
@@ -101,9 +104,12 @@
                                     <a th:href="@{/document-management/users/view/{id}(id=${user.id})}" class="action-tool-edit" sec:authorize="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER','ROLE_ADMIN')">Edit</a>
 
                                 </td>
+
+
                             </tr>
                             </tbody>
                         </table>
+                        <div th:if="${users.size} == 0" class="div-centered">User not found</div>
                     </div>
                     <div class="centered-div">
                         <button type="button" class="add-user action-button" data-bs-toggle="modal" data-bs-target="#addModalUser" sec:authorize="hasRole('ROLE_ADMIN')">
