@@ -63,13 +63,10 @@
                     <form action="#" th:action="@{/document-management/documents/addNewRevision}"
                           th:object="${documentRevision}" method="POST">
                         <input type="text" name="documentId" th:value="${documentId}">
-                        <input type="text" class="add-input" name="userId" th:value="${userId}" readonly>
+<!--                        <input type="text" class="add-input" name="userId" th:value="${userId}" readonly>-->
                         <input type="date" class="add-input" placeholder="Date" th:field="*{date}">
-<!--                        <input type="number" class="add-input" placeholder="Revision number" th:field="*{revisionNumber}">-->
                         <input type="text" name="revisionNumber" th:value="${revisionNumber}" readonly>
-                        <select th:field="*{status}" name="status" class="search-list" aria-label="">
-                            <option th:each="statusOption : ${documentRevisionStatuses}" th:value="${statusOption}" th:text="${statusOption}"></option>
-                        </select>
+                        <input type="text" class="add-input" name="userId" th:value="${userId}" readonly>
                         <input type="text" class="add-input" placeholder="Description" th:field="*{description}">
                         <select th:field="*{validatingUser}" name="validatingUser" class="search-list" aria-label="">
                             <option th:each="userId : ${userIds}" th:value="${userId}" th:text="${userId}"></option>

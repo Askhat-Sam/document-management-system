@@ -5,6 +5,8 @@ import com.finalproject.document.management.entity.Search;
 import com.finalproject.document.management.entity.TransactionEntity;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.interfaces.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,6 +43,7 @@ public class UserController {
 
     @RequestMapping("/getUsers")
     public String getUsers(@RequestParam(name = "page", required = false) Integer page,
+                           HttpServletRequest request, // another option
                            @RequestParam(name = "size", required = false) Integer size,
                            @RequestParam(name = "sortBy", required = false) String sortBy,
                            @RequestParam(name = "sortDirection", required = false) String sortDirection,
@@ -49,7 +53,6 @@ public class UserController {
         Search search = new Search();
         List<UserDTO> users = userService.findAll(page, size, sortBy, sortDirection, keyword, column);
         User user = new User();
-
         String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
         Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
         model.addAttribute(user);
@@ -69,7 +72,7 @@ public class UserController {
     public UserDTO getUserById(@PathVariable("id") Long id) {
         return userService.findById(id);
     }
-    
+
     @GetMapping("/view/{id}")
     public String viewUser(@PathVariable Long id, Model model) {
         UserDTO user = userService.findById(id);

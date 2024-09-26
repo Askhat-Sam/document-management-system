@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,15 +30,20 @@ public class User implements Comparable<User>{
     private Long id;
 
     @Column(name="user_id")
+    @NotEmpty(message = "The field user ID cannot be empty")
+    @Size(min=2, max = 50, message = "Length should be between 2 to 50 characters")
     private String userId;
 
     @Column(name="first_name")
+    @NotEmpty(message = "The field first name cannot be empty")
     private String firstName;
 
     @Column(name="last_name")
+    @NotEmpty(message = "The field last name cannot be empty")
     private String lastName;
 
     @Column(name="email")
+    @NotEmpty(message = "The field email cannot be empty")
     private String email;
 
     @Column(name="department")
@@ -46,6 +55,7 @@ public class User implements Comparable<User>{
     private String status;
 
     @Column(name="password")
+    @NotEmpty(message = "The field password cannot be empty")
     private String password;
 
     @Column(name="active")

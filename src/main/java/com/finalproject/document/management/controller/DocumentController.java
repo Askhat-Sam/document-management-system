@@ -243,27 +243,21 @@ public class DocumentController{
     }
 
     @PostMapping("/addNewRevision")
-    public String addNewRevision(@RequestParam String userId,
-                                 @RequestParam Long documentId,
+    public String addNewRevision(@RequestParam Long documentId,
                                  @RequestParam String date,
                                  @RequestParam Long revisionNumber,
-                                 @RequestParam String status,
                                  @RequestParam String description,
                                  @RequestParam String link,
                                  @RequestParam String validatingUser) {
         DocumentDTO document = documentService.findById(documentId);
-
         Long currentRevision = document.getRevisionNumber();
-
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         DocumentRevision documentRevision = new DocumentRevision(userId, documentId, date, currentRevision + 1,
-                status, description, link, validatingUser);
+                "Awaiting validation", description, link, validatingUser);
         DocumentValidation documentValidation = new DocumentValidation(document.getDocumentCode(), documentId, document.getName(),
                 revisionNumber, validatingUser, "Awaiting validation", link);
-
         document.setRevisionNumber(documentRevision.getRevisionNumber());
-
         documentService.updateDocument(documentService.convertToEntity(document));
-
         documentRevisionService.save(documentRevision);
         documentValidationService.save(documentValidation);
 
