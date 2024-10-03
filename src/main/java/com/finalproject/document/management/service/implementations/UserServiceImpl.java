@@ -192,6 +192,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String generateUserId(String firstName, String lastName) {
+        int charCount = 0;
+        //Generate userId based on first and last name
+        StringBuilder userId = new StringBuilder().append(firstName).append(".").append(lastName.charAt(charCount++));
+
+        // Check if the userId is already exist in DB
+        while (userRepository.findAllUserIds().contains(userId.toString())){
+            userId.append(lastName.charAt(charCount++));
+        };
+
+        return userId.toString();
+    }
+
+    @Override
     public User findUserById(Long theId) {
         entityManager.clear();
 

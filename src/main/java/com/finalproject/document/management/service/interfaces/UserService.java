@@ -31,4 +31,5 @@ public interface UserService {
 
     User updateUser(Long id, String userId, String firstName, String lastName, String email,
                     String department, String password, String role, String status);
+    String generateUserId(String firstName, String lastName);
 }

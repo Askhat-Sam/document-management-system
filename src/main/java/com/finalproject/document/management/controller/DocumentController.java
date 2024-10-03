@@ -8,6 +8,7 @@ import com.finalproject.document.management.entity.*;
 import com.finalproject.document.management.service.implementations.DocumentValidationServiceImpl;
 import com.finalproject.document.management.service.interfaces.*;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,11 +21,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.RecursiveTask;
 import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/document-management/documents")
+@Slf4j
 @AllArgsConstructor
 public class DocumentController{
     private final DocumentService documentService;
@@ -61,6 +62,7 @@ public class DocumentController{
                                @RequestParam(name = "keyword", required = false) String keyword,
                                @RequestParam(name = "column", required = false) String column,
                                Model model) {
+        log.debug("Method getDocuments has been called");
         Search search = new Search();
 
         List<DocumentDTO> documents = documentService.findAll(page, size, sortBy, sortDirection, keyword, column);

@@ -99,7 +99,7 @@ public class UserController {
 
     @PostMapping("/addNewUser")
     public String addNewUser(
-            @RequestParam("userId") String userId,
+//            @RequestParam("userId") String userId,
             @RequestParam("firstName") String firstName,
             @RequestParam("lastName") String lastName,
             @RequestParam("email") String email,
@@ -109,6 +109,9 @@ public class UserController {
             @RequestParam("password") String password) {
         //generate bcrypt hash
         String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
+
+        //Generate userId using firstName and lastName
+        String userId = userService.generateUserId(firstName, lastName);
 
         // Create a new user
         User newUser = new User(userId, firstName, lastName, email, department, role, status, pw_hash, 1);

@@ -132,7 +132,7 @@
             </div>
             <div class="modal-body">
                 <form action="#" th:action="@{/document-management/users/addNewUser}" th:object = "${user}" method="POST">
-                    <input type="text" class="form-control mb-4 w-75"  placeholder="User ID" th:field = "*{userId}">
+<!--                    <input type="text" class="form-control mb-4 w-75"  placeholder="User ID" th:field = "*{userId}">-->
                     <input type="text" class="form-control mb-4 w-75"  placeholder="First name" th:field = "*{firstName}">
                     <input type="text" class="form-control mb-4 w-75"  placeholder="Last name" th:field = "*{lastName}">
                     <input type="text" class="form-control mb-4 w-75" placeholder="Email" th:field = "*{email}">
