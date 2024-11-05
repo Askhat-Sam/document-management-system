@@ -3,9 +3,9 @@ package com.finalproject.document.management.service.interfaces;
 import com.finalproject.document.management.dto.UserDTO;
 import com.finalproject.document.management.entity.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
     List<UserDTO> findAll(Integer page, Integer size, String sortBy, String sortDirection, String keyword, String column);
@@ -30,6 +30,6 @@ public interface UserService {
     User fromDTOToEntity(UserDTO userDTO);
 
     User updateUser(Long id, String userId, String firstName, String lastName, String email,
-                    String department, String password, String role, String status);
+                    String department, String password, String role, String status, RedirectAttributes redirectAttributes);
     String generateUserId(String firstName, String lastName);
 }

@@ -50,8 +50,7 @@ public class DocumentServiceImpl implements DocumentService {
         List<Document> documents;
         List<DocumentDTO> documentsDTO = new ArrayList<>();
         if (pageable != null) {
-            documents = documentRepository.findAll(pageable).toList();
-            documentsDTO = documents.stream().map(this::fromEntityToDTO).collect(Collectors.toList());
+            documentsDTO = documentRepository.findAll(pageable).stream().map(this::fromEntityToDTO).collect(Collectors.toList());
         } else {
             documents = documentRepository.findAll();
             documentsDTO = documents.stream().map(this::fromEntityToDTO).collect(Collectors.toList());

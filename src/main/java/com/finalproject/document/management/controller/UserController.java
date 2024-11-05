@@ -6,7 +6,6 @@ import com.finalproject.document.management.entity.TransactionEntity;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.interfaces.*;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -73,23 +72,7 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @GetMapping("/view/{id}")
-    public String viewUser(@PathVariable Long id, Model model) {
-        UserDTO user = userService.findById(id);
-        List<TransactionEntity> transactionsUsers = userTransactionService.findAllByUser(user.getUserId());
-        List<TransactionEntity> transactionsDocuments = documentTransactionService.findAllByUser(user.getUserId());
-        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
-        model.addAttribute("user", user);
-        model.addAttribute("transactionsUsers", transactionsUsers);
-        model.addAttribute("transactionsDocuments", transactionsDocuments);
-        model.addAttribute("statuses", statuses);
-        model.addAttribute("departments", departments);
-        model.addAttribute("roles", roles);
-        model.addAttribute("countAwaitingValidation", countAwaitingValidation);
 
-        return VIEW_USER;
-    }
 
     @GetMapping("/downloadListAsExcel")
     public ResponseEntity<byte[]> downloadListAsExcel() {
@@ -121,6 +104,25 @@ public class UserController {
         return REDIRECT_USERS;
     }
 
+    @GetMapping("/view/{id}")
+    public String viewUser(@PathVariable Long id, Model model, @RequestParam(name = "errorMessage", required = false) String errorMessage) {
+        UserDTO user = userService.findById(id);
+        List<TransactionEntity> transactionsUsers = userTransactionService.findAllByUser(user.getUserId());
+        List<TransactionEntity> transactionsDocuments = documentTransactionService.findAllByUser(user.getUserId());
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", loggedUser);
+        model.addAttribute("user", user);
+        model.addAttribute("transactionsUsers", transactionsUsers);
+        model.addAttribute("transactionsDocuments", transactionsDocuments);
+        model.addAttribute("statuses", statuses);
+        model.addAttribute("departments", departments);
+        model.addAttribute("roles", roles);
+        model.addAttribute("countAwaitingValidation", countAwaitingValidation);
+        model.addAttribute("errorMessage", errorMessage);
+
+        return VIEW_USER;
+    }
+
     @PostMapping("/updateUser")
     public String updateUser(@RequestParam(name = "id", required = false) Long id,
                              @RequestParam(name = "userId", required = false) String userId,
@@ -131,11 +133,17 @@ public class UserController {
                              @RequestParam(name = "password", required = false) String password,
                              @RequestParam(name = "active", required = false) Integer active,
                              @RequestParam(name = "role", required = false) String role,
-                             @RequestParam(name = "status", required = false) String status) {
+                             @RequestParam(name = "status", required = false) String status,
+                             RedirectAttributes redirectAttributes) {
 
-        User user = userService.updateUser(id, userId, firstName, lastName, email, department, password, role, status);
+        User user = userService.updateUser(id, userId, firstName, lastName, email, department, password, role, status, redirectAttributes);
 
         userService.update(user);
+
+        // Return page with the error message
+        if (redirectAttributes.getAttribute("errorMessage") != null) {
+            return "redirect:/document-management/users/view/" + id;
+        }
 
         return REDIRECT_USERS;
     }

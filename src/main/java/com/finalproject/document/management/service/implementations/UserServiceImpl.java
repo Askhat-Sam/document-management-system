@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,7 +53,6 @@ public class UserServiceImpl implements UserService {
             users = userRepository.findAll();
             usersDTO = users.stream().map(this::fromEntityToDTO).collect(Collectors.toList());
         }
-
 
         String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
         String loggedUserAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
@@ -140,20 +140,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(Long id, String userId, String firstName, String lastName, String email,
-                           String department, String password, String role, String status) {
+                           String department, String password, String role, String status, RedirectAttributes redirectAttributes) {
         User user = findUserById(id);
         // Get the userId og logged user
         String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
         String loggedUserAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
 
-        // Allow save own password for user with role ROLE_EMPLOYEE
-        if ((loggedUserAuthority.equals("[ROLE_EMPLOYEE]") || loggedUserAuthority.equals("[ROLE_MANAGER]")) && loggedUser.equals(userId)) {
+        // Allow save own password for user with any role
+        if (password != null && loggedUser.equals(userId)) {
             if (!Objects.equals(password, "")) {
                 //generate bcrypt hash
                 String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
-
                 user.setPassword(pw_hash);
             }
+        } else {
+            redirectAttributes.addAttribute("errorMessage", "You can only change your own password!");
         }
 
         if (loggedUserAuthority.equals("[ROLE_ADMIN]")) {
@@ -172,11 +173,11 @@ public class UserServiceImpl implements UserService {
             if (department != null) {
                 user.setDepartment(department);
             }
-            if (password != "") {
-                //generate bcrypt hash
-                String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
-                user.setPassword(pw_hash);
-            }
+//            if (password != "") {
+//                //generate bcrypt hash
+//                String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
+//                user.setPassword(pw_hash);
+//            }
             if (role != null) {
                 user.setRole(role);
             }

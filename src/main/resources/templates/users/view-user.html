@@ -117,6 +117,7 @@
                             </div>
                         </div>
                         <button type="submit" class="action-button">Save</button>
+                        <span th:if ="${errorMessage}!=null" th:text="${errorMessage}" style="color: red"></span>
                     </form>
                 </div>
                 <div class="section-header centered-div">2. User transactions</div>
