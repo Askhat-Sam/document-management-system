@@ -6,6 +6,7 @@ import com.finalproject.document.management.entity.TransactionEntity;
 import com.finalproject.document.management.entity.User;
 import com.finalproject.document.management.service.interfaces.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -42,7 +44,6 @@ public class UserController {
 
     @RequestMapping("/getUsers")
     public String getUsers(@RequestParam(name = "page", required = false) Integer page,
-                           HttpServletRequest request, // another option
                            @RequestParam(name = "size", required = false) Integer size,
                            @RequestParam(name = "sortBy", required = false) String sortBy,
                            @RequestParam(name = "sortDirection", required = false) String sortDirection,
@@ -120,31 +121,27 @@ public class UserController {
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
         model.addAttribute("errorMessage", errorMessage);
 
+
         return VIEW_USER;
     }
 
     @PostMapping("/updateUser")
-    public String updateUser(@RequestParam(name = "id", required = false) Long id,
-                             @RequestParam(name = "userId", required = false) String userId,
-                             @RequestParam(name = "firstName", required = false) String firstName,
-                             @RequestParam(name = "lastName", required = false) String lastName,
-                             @RequestParam(name = "email", required = false) String email,
-                             @RequestParam(name = "department", required = false) String department,
-                             @RequestParam(name = "password", required = false) String password,
-                             @RequestParam(name = "active", required = false) Integer active,
-                             @RequestParam(name = "role", required = false) String role,
-                             @RequestParam(name = "status", required = false) String status,
-                             RedirectAttributes redirectAttributes) {
-
-        User user = userService.updateUser(id, userId, firstName, lastName, email, department, password, role, status, redirectAttributes);
-
-        userService.update(user);
-
-        // Return page with the error message
-        if (redirectAttributes.getAttribute("errorMessage") != null) {
-            return "redirect:/document-management/users/view/" + id;
+    public String updateUser(RedirectAttributes redirectAttributes,
+                             Model model,
+                             @Valid @ModelAttribute("user") User user,
+                             BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            model.addAttribute("departments", user.getDepartment());
+            model.addAttribute("statuses", user.getStatus());
+            model.addAttribute("roles", user.getRole());
+            return VIEW_USER;
+        } else {
+            User updatedUser = userService.updateUser(user,redirectAttributes);
+            userService.update(updatedUser);// Return page with the error message
+            if (redirectAttributes.getAttribute("errorMessage") != null) {
+                return "redirect:/document-management/users/view/" + user.getId();
+            }
         }
-
         return REDIRECT_USERS;
     }
 

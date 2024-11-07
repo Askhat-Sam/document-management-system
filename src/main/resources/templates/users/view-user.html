@@ -94,6 +94,7 @@
                                 <div class="">
                                     <label for="email" class="edit-label">Email</label>
                                     <input type="text" id="email" name="email" th:field="*{email}" class="edit-input"/>
+
                                 </div>
                                 <div class="flex-option-div">
                                     <label  class="edit-label">Role</label>
@@ -106,6 +107,7 @@
                                     <label for="password" class="edit-label">Password</label>
                                     <input type="text" id="password" name="password"
                                            class="edit-input"/>
+
                                 </div>
                                 <div class="flex-option-div">
                                     <label  class="edit-label">Status</label>
@@ -118,6 +120,7 @@
                         </div>
                         <button type="submit" class="action-button">Save</button>
                         <span th:if ="${errorMessage}!=null" th:text="${errorMessage}" style="color: red"></span>
+                        <span th:if = "${#fields.hasErrors('email')}" th:errors = "*{email}" style="color: red"></span>
                     </form>
                 </div>
                 <div class="section-header centered-div">2. User transactions</div>

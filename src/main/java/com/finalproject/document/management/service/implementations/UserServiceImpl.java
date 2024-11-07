@@ -139,57 +139,55 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long id, String userId, String firstName, String lastName, String email,
-                           String department, String password, String role, String status, RedirectAttributes redirectAttributes) {
-        User user = findUserById(id);
+    public User updateUser(User user, RedirectAttributes redirectAttributes) {
+        User updatedUser = userRepository.getById(user.getId());
         // Get the userId og logged user
         String loggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
         String loggedUserAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
 
         // Allow save own password for user with any role
-        if (password != null && loggedUser.equals(userId)) {
-            if (!Objects.equals(password, "")) {
+        if (!user.getPassword().isEmpty() && loggedUser.equals(user.getUserId())) {
                 //generate bcrypt hash
-                String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
-                user.setPassword(pw_hash);
-            }
-        } else {
+                String pw_hash = "{bcrypt}" + BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+                updatedUser.setPassword(pw_hash);
+
+        } else if (!user.getPassword().isEmpty()){
             redirectAttributes.addAttribute("errorMessage", "You can only change your own password!");
         }
 
         if (loggedUserAuthority.equals("[ROLE_ADMIN]")) {
-            if (userId != null) {
-                user.setUserId(userId);
+            if (user.getUserId() != null) {
+                updatedUser.setUserId(user.getUserId());
             }
-            if (firstName != null) {
-                user.setFirstName(firstName);
+            if (user.getFirstName() != null) {
+                updatedUser.setFirstName(user.getFirstName() );
             }
-            if (lastName != null) {
-                user.setLastName(lastName);
+            if (user.getLastName() != null) {
+                updatedUser.setLastName(user.getLastName());
             }
-            if (email != null) {
-                user.setEmail(email);
+            if (user.getEmail() != null) {
+                updatedUser.setEmail(user.getEmail() );
             }
-            if (department != null) {
-                user.setDepartment(department);
+            if (user.getDepartment() != null) {
+                updatedUser.setDepartment(user.getDepartment());
             }
 //            if (password != "") {
 //                //generate bcrypt hash
 //                String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
 //                user.setPassword(pw_hash);
 //            }
-            if (role != null) {
-                user.setRole(role);
+            if (user.getRole() != null) {
+                updatedUser.setRole(user.getRole());
             }
-            if (status != null) {
-                user.setStatus(status);
-                if (status.equals("Not active")) {
-                    user.setActive(0);
+            if (user.getStatus() != null) {
+                updatedUser.setStatus(user.getStatus());
+                if (user.getStatus().equals("Not active")) {
+                    updatedUser.setActive(0);
                 }
             }
         }
 
-        return user;
+        return updatedUser;
     }
 
     @Override
