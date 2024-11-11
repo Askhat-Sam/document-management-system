@@ -60,7 +60,7 @@
                 <div class="section-header centered-div">1. Document info</div>
                 <div class="section-body">
                     <form action="" th:action="@{/document-management/documents/addNewDocument}" th:object="${document}" method="POST" class="edit-form">
-                        <input type="text" class="add-input" placeholder="Document code" th:field="*{documentCode}">
+<!--                        <input type="text" class="add-input" placeholder="Document code" th:field="*{documentCode}" readonly>-->
                         <select th:field="*{documentType}" name="documentType" class="search-list" aria-label="">
                             <option th:each="documentTypeOption : ${documentTypes}" th:value="${documentTypeOption}" th:text="${documentTypeOption}"></option>
                         </select>

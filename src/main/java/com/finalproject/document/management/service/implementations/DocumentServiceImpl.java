@@ -29,6 +29,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +46,7 @@ public class DocumentServiceImpl implements DocumentService {
     private static final Logger logger = Logger.getLogger(DocumentServiceImpl.class.getName());
 
     @Override
-    public List<DocumentDTO> findAll(Integer pageNo, Integer pageSize, String sortBy, String sortDirection, String  keyword, String column) {
+    public List<DocumentDTO> findAll(Integer pageNo, Integer pageSize, String sortBy, String sortDirection, String keyword, String column) {
         Pageable pageable = doPagingAndSorting(pageNo, pageSize, sortBy, sortDirection);
         List<Document> documents;
         List<DocumentDTO> documentsDTO = new ArrayList<>();
@@ -59,25 +60,34 @@ public class DocumentServiceImpl implements DocumentService {
         List<DocumentDTO> documentsFiltered = new ArrayList<>();
 
         //if searching by keyword in certain column. Uses "contains" to search by the part of word.
-        if (keyword!=null&&column!=null){
-            switch(column) {
-                case "Id": documentsFiltered = documentsDTO.stream().filter(d -> Long.toString(d.getId()).contains(keyword)).collect(Collectors.toList());
+        if (keyword != null && column != null) {
+            switch (column) {
+                case "Id":
+                    documentsFiltered = documentsDTO.stream().filter(d -> Long.toString(d.getId()).contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Document code": documentsFiltered = documentsDTO.stream().filter(d -> d.getDocumentCode().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+                case "Document code":
+                    documentsFiltered = documentsDTO.stream().filter(d -> d.getDocumentCode().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Document type": documentsFiltered = documentsDTO.stream().filter(d ->  d.getDocumentType().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+                case "Document type":
+                    documentsFiltered = documentsDTO.stream().filter(d -> d.getDocumentType().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Title": documentsFiltered = documentsDTO.stream().filter(d -> d.getName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+                case "Title":
+                    documentsFiltered = documentsDTO.stream().filter(d -> d.getName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Status": documentsFiltered = documentsDTO.stream().filter(d -> d.getStatus().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+                case "Status":
+                    documentsFiltered = documentsDTO.stream().filter(d -> d.getStatus().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Creation date": documentsFiltered = documentsDTO.stream().filter(d -> d.getCreationDate().contains(keyword)).collect(Collectors.toList());
+                case "Creation date":
+                    documentsFiltered = documentsDTO.stream().filter(d -> d.getCreationDate().contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Modification date": documentsFiltered = documentsDTO.stream().filter(d -> d.getModificationDate().contains(keyword)).collect(Collectors.toList());
+                case "Modification date":
+                    documentsFiltered = documentsDTO.stream().filter(d -> d.getModificationDate().contains(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Revision number": documentsFiltered = documentsDTO.stream().filter(d -> Long.toString(d.getRevisionNumber()).equals(keyword)).collect(Collectors.toList());
+                case "Revision number":
+                    documentsFiltered = documentsDTO.stream().filter(d -> Long.toString(d.getRevisionNumber()).equals(keyword)).collect(Collectors.toList());
                     return documentsFiltered;
-                case "Author": documentsFiltered = documentsDTO.stream().filter(d -> d.getAuthor().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+                case "Author":
+                    documentsFiltered = documentsDTO.stream().filter(d -> d.getAuthor().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return documentsFiltered;
             }
             return documentsFiltered;
@@ -100,7 +110,7 @@ public class DocumentServiceImpl implements DocumentService {
     public DocumentDTO findById(Long id) {
 //        entityManager.clear();
 
-        Optional<Document> result =documentRepository.findById(id);
+        Optional<Document> result = documentRepository.findById(id);
 
         System.out.println("result: " + result);
 
@@ -202,7 +212,7 @@ public class DocumentServiceImpl implements DocumentService {
                     cell.setCellStyle(styleBody);
                 }
                 // Apply style to the headers
-                if (cell.getRowIndex()==0) {
+                if (cell.getRowIndex() == 0) {
                     cell.setCellStyle(headerCellStyle);
                 }
             }
@@ -326,7 +336,7 @@ public class DocumentServiceImpl implements DocumentService {
         if (document.getAuthor() != null) {
             existingDocument.setAuthor(document.getAuthor());
         }
-        
+
         // Convert DTO back to the enityty to update DB
         Document updatedDocument = convertToEntity(existingDocument);
 
@@ -345,6 +355,22 @@ public class DocumentServiceImpl implements DocumentService {
         document.setCreationDate(documentDTO.getCreationDate());
         document.setModificationDate(documentDTO.getModificationDate());
         document.setAuthor(documentDTO.getAuthor());
+
+        return document;
+    }
+
+    @Override
+    public Document createDocument(String documentType, String name, long revisionNumber, String status, String creationDate,
+                                   String modificationDate, String author, String link) {
+        // Generate document code
+        // Get the last index for the given documentType
+        int lastIndex = Integer.parseInt(documentRepository.findAll().stream()
+                .filter(x -> x.getDocumentCode().startsWith(documentType.toUpperCase().substring(0, 3)))
+                .reduce((first, second) -> second).get().getDocumentCode().substring(4));
+
+        // Create document
+        Document document = new Document(documentType.toUpperCase().substring(0, 3) + "-" + ++lastIndex, documentType, name, revisionNumber,
+                status, creationDate, modificationDate, author);
 
         return document;
     }
@@ -384,16 +410,16 @@ public class DocumentServiceImpl implements DocumentService {
         try {
             Path filePathTemp = findFile(Paths.get(filePath), fileName);
             if (filePathTemp != null) {
-                String oldPath = filePath  + fileName;
+                String oldPath = filePath + fileName;
                 Path oldFilePath = Paths.get(oldPath);
-                String newPath = actionType.equals("upload") ? "src/main/resources/documentsUploaded/" + fileName:
+                String newPath = actionType.equals("upload") ? "src/main/resources/documentsUploaded/" + fileName :
                         "src/main/resources/donwloads/" + fileName;
 
                 Path newFilePath = Paths.get(newPath);
 
                 File file = new File(oldPath);
 
-                if (!file.exists()){
+                if (!file.exists()) {
                     logger.log(Level.SEVERE, "File cannot be found");
                 } else {
                     if (actionType.equals("upload") || actionType.equals("download")) {

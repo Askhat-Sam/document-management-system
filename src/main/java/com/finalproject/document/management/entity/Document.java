@@ -71,6 +71,16 @@ public class Document {
     }
 
 
+    public Document(String documentType, String name, Long revisionNumber, String status, String creationDate, String modificationDate, String author, String link) {
+        this.documentType = documentType;
+        this.name = name;
+        this.revisionNumber = revisionNumber;
+        this.status = status;
+        this.creationDate = creationDate;
+        this.modificationDate = modificationDate;
+        this.author = author;
+    }
+
     public Document(Long id, String documentCode, String documentType, String name, Long revisionNumber, String status, String creationDate, String modificationDate, String author) {
         this.id = id;
         this.documentCode = documentCode;

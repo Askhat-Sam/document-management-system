@@ -142,7 +142,7 @@ public class DocumentController{
 
     @PostMapping("/addNewDocument")
     public String addDocument(
-            @RequestParam("documentCode") String documentCode,
+//            @RequestParam("documentCode") String documentCode,
             @RequestParam("documentType") String documentType,
             @RequestParam("name") String name,
             @RequestParam("status") String status,
@@ -153,7 +153,7 @@ public class DocumentController{
         String link = "TBD";
 
         // Create a new document
-        Document document = new Document(documentCode, documentType, name, 0L, status, creationDate, modificationDate, author, link);
+        Document document = documentService.createDocument(documentType, name, 0L, status, creationDate, modificationDate, author, link);
 
         // Add document into database
         documentService.save(document);

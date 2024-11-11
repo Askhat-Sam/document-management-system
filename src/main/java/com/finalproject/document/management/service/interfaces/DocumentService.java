@@ -43,4 +43,6 @@ public interface DocumentService {
     DocumentDTO fromEntityToDTO(Document document);
 
     Document convertToEntity(DocumentDTO documentDTO);
+
+    Document createDocument(String documentType, String name, long revisionNumber, String status, String creationDate, String modificationDate, String author, String link);
 }
