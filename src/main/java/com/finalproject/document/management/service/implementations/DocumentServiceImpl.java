@@ -27,10 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -364,9 +361,14 @@ public class DocumentServiceImpl implements DocumentService {
                                    String modificationDate, String author, String link) {
         // Generate document code
         // Get the last index for the given documentType
-        int lastIndex = Integer.parseInt(documentRepository.findAll().stream()
-                .filter(x -> x.getDocumentCode().startsWith(documentType.toUpperCase().substring(0, 3)))
-                .reduce((first, second) -> second).get().getDocumentCode().substring(4));
+        int lastIndex = 0;
+        try{
+            lastIndex = Integer.parseInt(documentRepository.findAll().stream()
+                    .filter(x -> x.getDocumentCode().startsWith(documentType.toUpperCase().substring(0, 3)))
+                    .reduce((first, second) -> second).get().getDocumentCode().substring(4));
+        } catch (NoSuchElementException e) {
+            logger.log(Level.SEVERE, "NoSuchElementException was thrown when computing lastIndex");
+        }
 
         // Create document
         Document document = new Document(documentType.toUpperCase().substring(0, 3) + "-" + ++lastIndex, documentType, name, revisionNumber,
