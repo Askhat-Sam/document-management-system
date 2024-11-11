@@ -106,7 +106,8 @@ public class UserController {
     }
 
     @GetMapping("/view/{id}")
-    public String viewUser(@PathVariable Long id, Model model, @RequestParam(name = "errorMessage", required = false) String errorMessage) {
+    public String viewUser(@PathVariable Long id, Model model, @RequestParam(name = "errorMessage", required = false) String errorMessage,
+                           @RequestParam(name = "userIdExist", required = false) String userIdExist) {
         UserDTO user = userService.findById(id);
         List<TransactionEntity> transactionsUsers = userTransactionService.findAllByUser(user.getUserId());
         List<TransactionEntity> transactionsDocuments = documentTransactionService.findAllByUser(user.getUserId());
@@ -120,6 +121,7 @@ public class UserController {
         model.addAttribute("roles", roles);
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
         model.addAttribute("errorMessage", errorMessage);
+        model.addAttribute("userIdExist", userIdExist);
 
 
         return VIEW_USER;
@@ -139,6 +141,10 @@ public class UserController {
             User updatedUser = userService.updateUser(user,redirectAttributes);
             userService.update(updatedUser);// Return page with the error message
             if (redirectAttributes.getAttribute("errorMessage") != null) {
+                return "redirect:/document-management/users/view/" + user.getId();
+            }
+
+            if (redirectAttributes.getAttribute("userIdExist") != null) {
                 return "redirect:/document-management/users/view/" + user.getId();
             }
         }

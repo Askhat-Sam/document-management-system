@@ -120,6 +120,7 @@
                         </div>
                         <button type="submit" class="action-button">Save</button>
                         <span th:if ="${errorMessage}!=null" th:text="${errorMessage}" style="color: red"></span>
+                        <span th:if ="${userIdExist}!=null" th:text="${userIdExist}" style="color: red"></span>
                         <span th:if = "${#fields.hasErrors('email')}" th:errors = "*{email}" style="color: red"></span>
                     </form>
                 </div>

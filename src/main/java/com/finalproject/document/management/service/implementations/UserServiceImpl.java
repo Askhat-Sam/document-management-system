@@ -157,7 +157,12 @@ public class UserServiceImpl implements UserService {
 
         if (loggedUserAuthority.equals("[ROLE_ADMIN]")) {
             if (user.getUserId() != null) {
-                updatedUser.setUserId(user.getUserId());
+                // Check if the userID is already exist in DB
+                if (userRepository.findAllUserIds().contains(user.getUserId())){
+                    redirectAttributes.addAttribute("userIdExist", "User with id " + user.getUserId() + " already exist in database.");
+                }else {
+                    updatedUser.setUserId(user.getUserId());
+                }
             }
             if (user.getFirstName() != null) {
                 updatedUser.setFirstName(user.getFirstName() );
