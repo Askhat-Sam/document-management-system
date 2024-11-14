@@ -3,8 +3,8 @@ table {
 }
 
 .action-button {
-    background: rgb(0,32,91);
-    color: white;
+    background: #8ab1dc;
+    color: #262e3f;
     padding: 5px 10px;
     border-radius: 5px;
     margin-top: 5px:
@@ -62,6 +62,7 @@ table {
 .edit-input{
     width: 500px;
     margin: 5px;
+    background: #fff5c6;
 }
 .login-form{
  display: flex;
@@ -84,8 +85,8 @@ table {
 .header-container{
     display: flex;
     column-gap: 40px;
-    background-color: rgb(0,32,91);
-    color: white;
+    background-color: #c2d4e2;
+    color: black;
     height: auto;
     padding: 10px;
 }
@@ -109,6 +110,7 @@ table {
 .flex-container-column {
    display: flex;
    flex-direction: column;
+   background: #e8eff5;
 }
 
 .flex-container-row {
@@ -118,11 +120,6 @@ table {
    align-items: center;
 }
 
-.navbar-div {
-       padding: 5px 20px;
-       color: white;
-       font-weight: 500;
-}
 .link {
     color: white;
 }
@@ -132,6 +129,11 @@ table, th, td {
   border-collapse: collapse;
   font-size: 15px;
   font-family: sans-serif;
+}
+.navbar-div {
+       padding: 5px 20px;
+       color: #262e3f;
+       font-weight: 500;
 }
 .navbar-header {
     margin-left: 5px;
@@ -161,13 +163,17 @@ tr{
 td, th{
     padding-left: 4px;
 }
+th{
+    color: #262e3f;
+}
 .table-header {
-    background: rgb(0,47,138);
-     line-height: 35px;
-     color: white;
+    background: #c1d8e8;
+    line-height: 35px;
+
 }
 .search-list {
     width: 500px;
+    background: #fff5c6;
 }
 .search-list-modal {
     width: 350px;
@@ -181,8 +187,8 @@ td, th{
 }
 
 .section-header {
-    background: rgb(0,32,91);
-    color: white;
+    background: #c1d8e8;
+    color: #262e3f;
     font-weight: bold;
     line-height: 35px;
     width: 99%;
@@ -204,7 +210,7 @@ td, th{
     position: fixed;
     top: 50px;
     left: 0;
-    background-color: #111;
+    background-color: #cfdde8;
     padding-top: 20px;
 }
 
