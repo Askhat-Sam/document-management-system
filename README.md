@@ -33,3 +33,6 @@ It includes following functions:<br>
 <br>
 3 As GUEST:<br>
 3.1 Open and download documents to which he received direct link<br>
+
+[Final project Presentation.drawio.pdf](https://github.com/user-attachments/files/17706020/Final.project.Presentation.drawio.pdf)
+
