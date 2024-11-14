@@ -147,33 +147,33 @@ public class UserServiceImpl implements UserService {
 
         // Allow save own password for user with any role
         if (!user.getPassword().isEmpty() && loggedUser.equals(user.getUserId())) {
-                //generate bcrypt hash
-                String pw_hash = "{bcrypt}" + BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
-                updatedUser.setPassword(pw_hash);
+            //generate bcrypt hash
+            String pw_hash = "{bcrypt}" + BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+            updatedUser.setPassword(pw_hash);
 
-        } else if (!user.getPassword().isEmpty()){
+        } else if (!user.getPassword().isEmpty()) {
             redirectAttributes.addAttribute("errorMessage", "You can only change your own password!");
         }
 
         if (loggedUserAuthority.equals("[ROLE_ADMIN]")) {
-            if (user.getUserId() != null) {
+            if (user.getUserId() != null && !user.getUserId().equals(updatedUser.getUserId())) {
                 // Check if the userID is already exist in DB
-                if (userRepository.findAllUserIds().contains(user.getUserId())){
+                if (userRepository.findAllUserIds().contains(user.getUserId())) {
                     redirectAttributes.addAttribute("userIdExist", "User with id " + user.getUserId() + " already exist in database.");
-                }else {
+                } else {
                     updatedUser.setUserId(user.getUserId());
                 }
             }
-            if (user.getFirstName() != null) {
-                updatedUser.setFirstName(user.getFirstName() );
+            if (user.getFirstName() != null && !user.getFirstName().equals(updatedUser.getFirstName())) {
+                updatedUser.setFirstName(user.getFirstName());
             }
-            if (user.getLastName() != null) {
+            if (user.getLastName() != null && !user.getLastName().equals(updatedUser.getLastName())) {
                 updatedUser.setLastName(user.getLastName());
             }
-            if (user.getEmail() != null) {
-                updatedUser.setEmail(user.getEmail() );
+            if (user.getEmail() != null && !user.getEmail().equals(updatedUser.getEmail())) {
+                updatedUser.setEmail(user.getEmail());
             }
-            if (user.getDepartment() != null) {
+            if (user.getDepartment() != null && !user.getDepartment().equals(updatedUser.getDepartment())) {
                 updatedUser.setDepartment(user.getDepartment());
             }
 //            if (password != "") {
@@ -181,10 +181,10 @@ public class UserServiceImpl implements UserService {
 //                String pw_hash = "{bcrypt}" + BCrypt.hashpw(password, BCrypt.gensalt());
 //                user.setPassword(pw_hash);
 //            }
-            if (user.getRole() != null) {
+            if (user.getRole() != null && !user.getRole().equals(updatedUser.getRole())) {
                 updatedUser.setRole(user.getRole());
             }
-            if (user.getStatus() != null) {
+            if (user.getStatus() != null && !user.getStatus().equals(updatedUser.getStatus())) {
                 updatedUser.setStatus(user.getStatus());
                 if (user.getStatus().equals("Not active")) {
                     updatedUser.setActive(0);
@@ -203,13 +203,14 @@ public class UserServiceImpl implements UserService {
         StringBuilder userId = new StringBuilder().append(firstName).append(".").append(lastName.charAt(charCount++));
 
         // Check if the userId is already exist in DB
-        while (userRepository.findAllUserIds().contains(userId.toString())){
-            if (charCount < lastName.length()){
+        while (userRepository.findAllUserIds().contains(userId.toString())) {
+            if (charCount < lastName.length()) {
                 userId.append(lastName.charAt(charCount++));
             } else {
                 userId.append(intCount++);
             }
-        };
+        }
+        ;
 
         return userId.toString();
     }
