@@ -80,6 +80,11 @@ public class UserController {
         return userService.downloadListAsExcel();
     }
 
+    @GetMapping("/downloadUserTransactionList")
+    public ResponseEntity<byte[]> downloadUserTransactionList() {
+        return userService.downloadUserTransactionList();
+    }
+
 
     @PostMapping("/addNewUser")
     public String addNewUser(

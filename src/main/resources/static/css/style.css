@@ -63,6 +63,7 @@ table {
     width: 500px;
     margin: 5px;
     background: #fff5c6;
+    border: 1px solid gray;
 }
 .login-form{
  display: flex;
@@ -173,6 +174,7 @@ th{
 }
 .search-list {
     width: 500px;
+    height: 26px;
     background: #fff5c6;
 }
 .search-list-modal {
@@ -193,6 +195,8 @@ th{
     line-height: 35px;
     width: 99%;
     margin: 25px 5px 0 5px;
+    border: 1px solid grey;
+    border-bottom: none;
 }
 
 .side-panel{

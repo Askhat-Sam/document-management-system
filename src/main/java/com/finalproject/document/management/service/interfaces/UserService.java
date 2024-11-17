@@ -24,6 +24,7 @@ public interface UserService {
     UserDTO findById(Long id);
 
     ResponseEntity<byte[]> downloadListAsExcel();
+    ResponseEntity<byte[]> downloadUserTransactionList();
 
     UserDTO fromEntityToDTO(User user);
 
