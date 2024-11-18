@@ -126,6 +126,11 @@ public class DocumentController{
         return documentService.downloadListAsExcel();
     }
 
+    @GetMapping("/downloadDocumentTransactions")
+    public ResponseEntity<byte[]> downloadDocumentTransactions() {
+        return documentService.downloadDocumentTransactions();
+    }
+
     @GetMapping("/addNewDocumentPage")
     public String addNewDocumentPage(Model model) {
         Document document = new Document();

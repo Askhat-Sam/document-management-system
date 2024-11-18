@@ -2,7 +2,9 @@ package com.finalproject.document.management.service.implementations;
 
 import com.finalproject.document.management.dto.DocumentDTO;
 import com.finalproject.document.management.entity.Document;
+import com.finalproject.document.management.entity.TransactionDocument;
 import com.finalproject.document.management.repository.DocumentRepository;
+import com.finalproject.document.management.repository.DocumentTransactionRepository;
 import com.finalproject.document.management.service.interfaces.DocumentService;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
@@ -39,6 +41,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @AllArgsConstructor
 public class DocumentServiceImpl implements DocumentService {
     private final DocumentRepository documentRepository;
+    private final DocumentTransactionRepository documentTransactionRepository;
     private final EntityManager entityManager;
     private static final Logger logger = Logger.getLogger(DocumentServiceImpl.class.getName());
 
@@ -375,6 +378,83 @@ public class DocumentServiceImpl implements DocumentService {
                 status, creationDate, modificationDate, author);
 
         return document;
+    }
+
+    @Override
+    public ResponseEntity<byte[]> downloadDocumentTransactions() {
+        List<TransactionDocument> transactions = documentTransactionRepository.findAll();
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Document transactions");
+
+        // Set style for table body
+        CellStyle styleBody = workbook.createCellStyle();
+        styleBody.setBorderTop(BorderStyle.THIN);
+        styleBody.setBorderBottom(BorderStyle.THIN);
+        styleBody.setBorderLeft(BorderStyle.THIN);
+        styleBody.setBorderRight(BorderStyle.THIN);
+        styleBody.setAlignment(HorizontalAlignment.LEFT);
+
+        // Create header CellStyle
+        Font headerFont = workbook.createFont();
+        headerFont.setColor(IndexedColors.WHITE.index);
+        CellStyle headerCellStyle = sheet.getWorkbook().createCellStyle();
+        // fill foreground color ...
+        headerCellStyle.setFillForegroundColor(new XSSFColor(new java.awt.Color(0, 32, 91), null));
+        // and solid fill pattern produces solid grey cell fill
+        headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        headerCellStyle.setFont(headerFont);
+
+
+        int rowIndex = 1;
+        // Add header values
+        Row rowHeader = sheet.createRow(rowIndex - 1);
+        rowHeader.createCell(0).setCellValue("Id");
+        rowHeader.createCell(1).setCellValue("Date");
+        rowHeader.createCell(2).setCellValue("Modified by");
+        rowHeader.createCell(3).setCellValue("Document code");
+        rowHeader.createCell(4).setCellValue("Transaction type");
+
+        // Add table body values
+        for (TransactionDocument d : transactions) {
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(d.getId());
+            row.createCell(1).setCellValue(d.getDate());
+            row.createCell(2).setCellValue(d.getUser());
+            row.createCell(3).setCellValue(d.getDocumentCode());
+            row.createCell(4).setCellValue(d.getTransactionType());
+        }
+
+        // Apply style to cells
+        for (Row row : sheet) {
+            for (Cell cell : row) {
+                // Apply border to all non empty cells
+                if (cell.getCellType() != CellType.BLANK) {
+                    cell.setCellStyle(styleBody);
+                }
+                // Apply style to the headers
+                if (cell.getRowIndex() == 0) {
+                    cell.setCellStyle(headerCellStyle);
+                }
+            }
+        }
+
+        for (int i = 0; i <= 9; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            workbook.write(outputStream);
+            workbook.close();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Document transactions.xlsx");
+            headers.add(HttpHeaders.CONTENT_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private static Pageable doPagingAndSorting(Integer page, Integer size, String sortBy, String sortDirection) {

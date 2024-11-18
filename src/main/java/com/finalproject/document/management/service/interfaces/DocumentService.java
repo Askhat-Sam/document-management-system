@@ -45,4 +45,6 @@ public interface DocumentService {
     Document convertToEntity(DocumentDTO documentDTO);
 
     Document createDocument(String documentType, String name, long revisionNumber, String status, String creationDate, String modificationDate, String author, String link);
+
+    ResponseEntity<byte[]> downloadDocumentTransactions();
 }
