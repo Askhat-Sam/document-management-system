@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -95,6 +96,16 @@ public class UserServiceImpl implements UserService {
                 case "Status":
                     usersFiltered = usersDTO.stream().filter(u -> u.getStatus().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
                     return usersFiltered;
+                default:
+                    Predicate<UserDTO> userMatcher = u -> Long.toString(u.getId()).contains(keyword) ||
+                            u.getUserId().toLowerCase().contains(keyword.toLowerCase()) ||
+                            u.getFirstName().toLowerCase().contains(keyword.toLowerCase()) ||
+                            u.getLastName().toLowerCase().contains(keyword.toLowerCase()) ||
+                            u.getEmail().toLowerCase().contains(keyword.toLowerCase()) ||
+                            u.getDepartment().toLowerCase().contains(keyword.toLowerCase()) ||
+                            u.getRole().toLowerCase().contains(keyword.toLowerCase()) ||
+                            u.getStatus().toLowerCase().contains(keyword.toLowerCase());
+                    usersFiltered = usersDTO.stream().filter(userMatcher).collect(Collectors.toList());
             }
             return usersFiltered;
         }
