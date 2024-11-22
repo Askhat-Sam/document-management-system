@@ -67,8 +67,6 @@
                         <input type="text" class="add-input" placeholder="Title" th:field="*{name}">
                         <input type="text" class="add-input" placeholder="Revision Number"   th:value="'0'" readonly>
                         <input type="text"  name="status" class="search-list" aria-label="" value="In Progress" readonly>
-                        <input type="date" class="add-input" placeholder="Creation date" th:field="*{creationDate}">
-                        <input type="date" class="add-input" placeholder="Modification date" th:field="*{modificationDate}">
                         <input type="text" name="author" th:value="${author}" readonly>
                         <button type="submit" class="action-button">Save</button>
                     </form>

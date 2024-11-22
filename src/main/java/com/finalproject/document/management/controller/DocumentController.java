@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -135,12 +137,14 @@ public class DocumentController{
     public String addNewDocumentPage(Model model) {
         Document document = new Document();
         String author = SecurityContextHolder.getContext().getAuthentication().getName();
+        LocalDateTime localDateTime = LocalDateTime.now();
         Long countAwaitingValidation = documentValidationService.countByStatusAndUserId("Awaiting validation", author);
         model.addAttribute("document", document);
         model.addAttribute("documentTypes", documentTypes);
         model.addAttribute("documentStatuses", documentStatuses);
         model.addAttribute("author", author);
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
+        model.addAttribute("modifiedDate", localDateTime);
 
         return ADD_DOCUMENT;
     }
@@ -151,14 +155,12 @@ public class DocumentController{
             @RequestParam("documentType") String documentType,
             @RequestParam("name") String name,
             @RequestParam("status") String status,
-            @RequestParam("creationDate") String creationDate,
-            @RequestParam("modificationDate") String modificationDate,
             @RequestParam("author") String author) {
-
+        String date = String.valueOf(LocalDate.now());
         String link = "TBD";
 
         // Create a new document
-        Document document = documentService.createDocument(documentType, name, 0L, status, creationDate, modificationDate, author, link);
+        Document document = documentService.createDocument(documentType, name, 0L, status, date, date, author, link);
 
         // Add document into database
         documentService.save(document);
