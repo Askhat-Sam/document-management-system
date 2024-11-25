@@ -34,5 +34,36 @@ It includes following functions:<br>
 3 As GUEST:<br>
 3.1 Open and download documents to which he received direct link<br>
 
-[Final project Presentation.drawio.pdf](https://github.com/user-attachments/files/17706020/Final.project.Presentation.drawio.pdf)
+<br>
+Functions/improvements to be introduced into next version of DMS:<br>
+- Improvement of user interface; <br>
+- Add feature to change user interface to other languages;<br>
+- Sharing link to the document with external users; <br>
+- Forgot password function for users using email;<br>
+- Email notifications to user about account creation;<br>
+- Email notification to user about request for validation of document;<br>
+- Email notification to user about new revision of document;<br>
+- Sorting/filtering button on "Documents browse" and "Users browse" page;<br>
+- Administration page for adding new categories (Role, Document types, Document statuses);<br>
+- Function for filtering list of documents/user before export;<br>
+- Function for adding digital signature to document;<br>
+- Function for exporting list of document/user transactions [UPDATE: Implemented];<br>
+- Function for reply to comments added to document;<br>
+- User account logout after certain period of inactivity;<br>
+- REST API endpoints page for third party integration;<br>
+- Add deadline for document validation by responsible person;<br>
+- Handling incorrect input from user / input validation;<br>
+- Add tutorial page on basic functions of DMS (maybe video);<br>
+- Implement page pagination;<br>
+- Add restriction to revision validation: revision author cannot validate its own revision request [UPDATE: Implemented];<br>
+- Add exception handling in service layer;<br>
+- Add restriction to users to change other users password [UPDATE: Implemented];<br>
+- Record the logger data into the file;<br>
+- Make document code to be created automatically depending of document type and the next available number (POL-002, POL-003 and etc) [UPDATE: Implemented];<br>
+- More test coverage (unit and integration);<br>
+- Correct tests name convention;<br>
+- Use DTO for all operations in controller (POST and GET);<br>
+<br>
+Full presentation of project:<br>
+[Final project Presentation.drawio.pdf](https://github.com/user-attachments/files/17706020/Final.project.Presentation.drawio.pdf)<br>
 
