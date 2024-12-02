@@ -467,7 +467,6 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public ResponseEntity<byte[]> checkWord(MultipartFile file, RedirectAttributes redirectAttributes, Model model) throws IOException {
-
         // Read the input Word file
         InputStream inputStream = file.getInputStream();
         XWPFDocument document = new XWPFDocument(inputStream);
