@@ -2,6 +2,7 @@ package com.finalproject.document.management.service.implementations;
 
 import com.finalproject.document.management.dto.DocumentDTO;
 import com.finalproject.document.management.entity.Document;
+import com.finalproject.document.management.entity.MatchWord;
 import com.finalproject.document.management.entity.TransactionDocument;
 import com.finalproject.document.management.repository.DocumentRepository;
 import com.finalproject.document.management.repository.DocumentTransactionRepository;
@@ -12,6 +13,9 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -26,12 +30,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
@@ -365,7 +373,7 @@ public class DocumentServiceImpl implements DocumentService {
         // Generate document code
         // Get the last index for the given documentType
         int lastIndex = 0;
-        try{
+        try {
             lastIndex = Integer.parseInt(documentRepository.findAll().stream()
                     .filter(x -> x.getDocumentCode().startsWith(documentType.toUpperCase().substring(0, 3)))
                     .reduce((first, second) -> second).get().getDocumentCode().substring(4));
@@ -456,6 +464,105 @@ public class DocumentServiceImpl implements DocumentService {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public ResponseEntity<byte[]> checkWord(MultipartFile file, RedirectAttributes redirectAttributes, Model model) throws IOException {
+
+        // Read the input Word file
+        InputStream inputStream = file.getInputStream();
+        XWPFDocument document = new XWPFDocument(inputStream);
+
+        // Iterate through all paragraphs
+        for (XWPFParagraph paragraph : document.getParagraphs()) {
+            List<MatchWord> listDate = checkDate(paragraph.getText());
+            if (!listDate.isEmpty()) {
+                updateParagraph(paragraph, listDate);
+            }
+        }
+
+
+        // Save the modified document to a new file
+        File outputFile = new File("src/main/resources/donwloads/updated_document.docx");
+        try (FileOutputStream fos = new FileOutputStream(outputFile)) {
+            document.write(fos);
+        }
+
+        // Save the modified document to a ByteArrayOutputStream instead of a file
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        document.write(byteArrayOutputStream);
+
+        // Prepare the byte array to send as a response
+        byte[] documentBytes = byteArrayOutputStream.toByteArray();
+
+        // Set the response headers for file download
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=updated_document.docx");
+        headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+
+        return new ResponseEntity<>(documentBytes, headers, HttpStatus.OK);
+    }
+
+    private void updateParagraph(XWPFParagraph paragraph, List<MatchWord> list) {
+        int runNumber = 0;
+
+        XWPFRun r = null;
+        String text = paragraph.getText();
+        int starPoint = 0;
+
+        for (MatchWord m : list) {
+            r = paragraph.insertNewRun(++runNumber);
+            r.setText(text.substring(starPoint, m.getStartIndex()), 0);
+            r = paragraph.insertNewRun(++runNumber);
+            r.setText(m.getNewData(), 0);
+            r.setFontFamily("Tahoma");
+            r.setColor("DC143C");
+            starPoint = m.getEndIndex();
+        }
+    }
+
+
+    private List<MatchWord> checkDate(String runText) {
+        // Define the regex pattern to search for dates like "August 17, 2024"
+        String regex = "\\b([A-Za-z]+) (\\d{1,2}), (\\d{4})\\b" // Matches "Month Day, Year"
+                + "|\\b(\\d{1,2})-(\\d{1,2})-(\\d{4})\\b";  // Matches "Day-Month-Year"
+
+        // Create a Pattern object
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(runText);
+        List<MatchWord> listDate = new ArrayList<>();
+        String matcherPattern = null;
+
+        // Create a Matcher object
+        while (matcher.find()) {
+
+            System.out.println("Match found: " + matcher.group());
+
+            System.out.println("Start index: " + matcher.start());
+            System.out.println("End index: " + matcher.end());
+
+            // Determine which part of the regex matched
+            if (matcher.group(1) != null) {
+                matcherPattern = "1";
+                System.out.println("Matched format: 'Month Day, Year'");
+
+            } else if (matcher.group(4) != null) {
+                System.out.println("Matched format: 'Day-Month-Year'");
+                matcherPattern = "4";
+            }
+            listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end()));
+
+        }
+
+        listDate.forEach(s -> System.out.println(s.getNewData()));
+
+
+        return listDate;
+    }
+
+    private void addComment() {
+
+    }
+
 
     private static Pageable doPagingAndSorting(Integer page, Integer size, String sortBy, String sortDirection) {
         if (sortBy != null) {

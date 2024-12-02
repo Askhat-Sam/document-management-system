@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,7 +30,7 @@ import java.util.logging.Logger;
 @RequestMapping("/document-management/documents")
 @Slf4j
 @AllArgsConstructor
-public class DocumentController{
+public class DocumentController {
     private final DocumentService documentService;
     private final UserService userService;
     private final DocumentCommentService documentCommentService;
@@ -45,6 +46,8 @@ public class DocumentController{
     private static final String REDIRECT_DOCUMENTS_VIEW = "redirect:/document-management/documents/view/";
     private static final String DOCUMENTS_VALIDATIONS = "documents/document-validations";
     private static final String VIEW_DOCUMENTS_VALIDATIONS = "documents/view-document-validations";
+    private static final String CHECK_DOCUMENTS = "documents/document-check";
+    private static final String REDIRECT_CHECK_DOCUMENTS = "redirect:/document-management/documents/checkDocument";
     @Value("${headersDocument}")
     private List<String> headers;
     @Value("${documentStatuses}")
@@ -128,10 +131,6 @@ public class DocumentController{
         return documentService.downloadListAsExcel();
     }
 
-    @GetMapping("/downloadDocumentTransactions")
-    public ResponseEntity<byte[]> downloadDocumentTransactions() {
-        return documentService.downloadDocumentTransactions();
-    }
 
     @GetMapping("/addNewDocumentPage")
     public String addNewDocumentPage(Model model) {
@@ -327,4 +326,22 @@ public class DocumentController{
 
         return DOCUMENTS_VALIDATIONS;
     }
+
+    @GetMapping("/checkDocument")
+    public String checkDocument() {
+        return CHECK_DOCUMENTS;
+    }
+
+    @GetMapping("/downloadDocumentTransactions")
+    public ResponseEntity<byte[]> downloadDocumentTransactions() {
+        return documentService.downloadDocumentTransactions();
+    }
+
+    @PostMapping("/uploadWord")
+    public ResponseEntity<byte[]> checkWord(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes,
+                                             Model model) throws IOException {
+
+        return documentService.checkWord(file, redirectAttributes, model);
+    }
+
 }
