@@ -43,8 +43,9 @@ public class MatchWord {
             sb.append(day).append(" ");
 
             //Add month
-            String month = newDataArray[0].substring(0,1).toUpperCase().concat(newDataArray[0].substring(1).toLowerCase());
-            sb.append(month).append(" ");
+             String month = Months.valueOf(newDataArray[0].toUpperCase()).toString();
+            sb.append(month.substring(0,1).toUpperCase().concat(month.substring(1).toLowerCase())).append(" ");
+
 
             //Add year
             String year = String.valueOf(newDataArray[2]);

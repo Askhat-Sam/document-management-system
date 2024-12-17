@@ -65,6 +65,7 @@ public class UserController {
         model.addAttribute("countAwaitingValidation", countAwaitingValidation);
         model.addAttribute("loggedUser", loggedUser);
 
+
         return USERS;
     }
 

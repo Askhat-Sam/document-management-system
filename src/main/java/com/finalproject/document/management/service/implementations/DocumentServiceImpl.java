@@ -13,9 +13,8 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.*;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +32,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
@@ -475,7 +475,7 @@ public class DocumentServiceImpl implements DocumentService {
         for (XWPFParagraph paragraph : document.getParagraphs()) {
             List<MatchWord> listDate = checkDate(paragraph.getText());
             if (!listDate.isEmpty()) {
-                updateParagraph(paragraph, listDate);
+                updateParagraph(paragraph, listDate, document);
             }
         }
 
@@ -501,24 +501,79 @@ public class DocumentServiceImpl implements DocumentService {
         return new ResponseEntity<>(documentBytes, headers, HttpStatus.OK);
     }
 
-    private void updateParagraph(XWPFParagraph paragraph, List<MatchWord> list) {
-        int runNumber = 0;
+    private void updateParagraph(XWPFParagraph paragraph, List<MatchWord> list, XWPFDocument document) {
+        int runNumber = -1;
 
         XWPFRun r = null;
         String text = paragraph.getText();
-        int starPoint = 0;
+        int startPoint = 0;
 
+        // Clear existing runs in the paragraph
+        while (paragraph.getRuns().size() > 0) {
+            paragraph.removeRun(0);
+        }
+
+        // Process matches
         for (MatchWord m : list) {
+            // Add text before the match
+            if (startPoint < m.getStartIndex()) {
+                r = paragraph.insertNewRun(++runNumber);
+                r.setText(text.substring(startPoint, m.getStartIndex()));
+                r.setFontFamily("Tahoma");
+            }
+
+            // Add the new matched data with formatting
             r = paragraph.insertNewRun(++runNumber);
-            r.setText(text.substring(starPoint, m.getStartIndex()), 0);
-            r = paragraph.insertNewRun(++runNumber);
-            r.setText(m.getNewData(), 0);
+            r.setText(m.getNewData());
             r.setFontFamily("Tahoma");
             r.setColor("DC143C");
-            starPoint = m.getEndIndex();
+
+            // Update the starting point
+            startPoint = m.getEndIndex();
+
+//            XWPFRun run = paragraph.createRun();
+//            run.setText("This is a sample text where a comment will be added.");
+
+            // Add a comment to the document
+            XWPFComments commentsPart = document.createComments();
+            CTComment ctComment = commentsPart.getCtComments().addNewComment();
+
+            // Set comment properties
+            BigInteger commentId = BigInteger.valueOf(1); // Unique comment ID
+            ctComment.setId(commentId);
+            ctComment.setAuthor("Askhat");
+            ctComment.addNewP().addNewR().addNewT().setStringValue("Corrected by script");
+            ctComment.setDate(Calendar.getInstance()); // Current date and time
+
+            // Map the comment to a text range in the paragraph
+            CTP ctp = paragraph.getCTP();
+
+            // Start comment range
+            CTMarkupRange commentStart = ctp.addNewCommentRangeStart();
+            commentStart.setId(commentId);
+
+            // Add the text run after the comment range
+//            CTR textRun = ctp.addNewR();
+//            textRun.addNewT().setStringValue(r.getText(0));
+
+            // End comment range
+            CTMarkupRange commentEnd = ctp.addNewCommentRangeEnd();
+            commentEnd.setId(commentId);
+
+            // Add comment reference (visible indicator)
+            CTR commentRef = ctp.addNewR();
+            CTMarkup commentReference = commentRef.addNewCommentReference();
+            commentReference.setId(commentId);
+
+        }
+
+        // Add remaining text after the last match
+        if (startPoint < text.length()) {
+            r = paragraph.insertNewRun(++runNumber);
+            r.setText(text.substring(startPoint));
+            r.setFontFamily("Tahoma");
         }
     }
-
 
     private List<MatchWord> checkDate(String runText) {
         // Define the regex pattern to search for dates like "August 17, 2024"
@@ -558,9 +613,6 @@ public class DocumentServiceImpl implements DocumentService {
         return listDate;
     }
 
-    private void addComment() {
-
-    }
 
 
     private static Pageable doPagingAndSorting(Integer page, Integer size, String sortBy, String sortDirection) {
