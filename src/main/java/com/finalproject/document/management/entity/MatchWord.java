@@ -36,6 +36,7 @@ public class MatchWord {
         StringBuilder sb = new StringBuilder();
 
         if (matchPattern.equals("1")) {// 17 august 2024
+
             newDataArray =  oldData.replaceAll(",", "").split(" ");
 
             //Add day
@@ -46,11 +47,12 @@ public class MatchWord {
              String month = Months.valueOf(newDataArray[0].toUpperCase()).toString();
             sb.append(month.substring(0,1).toUpperCase().concat(month.substring(1).toLowerCase())).append(" ");
 
-
             //Add year
             String year = String.valueOf(newDataArray[2]);
             sb.append(year);
+
         } else if (matchPattern.equals("4")) { // "Day-Month-Year"
+
             newDataArray =  oldData.split("-");
             //Add day
             String day = String.valueOf(newDataArray[0]);
@@ -64,6 +66,22 @@ public class MatchWord {
             //Add year
             String year = String.valueOf(newDataArray[2]);
             sb.append(year);
+
+        } else if (matchPattern.equals("7")) { // "Month Day"
+
+            newDataArray =  oldData.split(" ");
+
+            // Add day
+            String day = String.valueOf(newDataArray[1]);
+            sb.append(day).append(" ");
+
+            // Add month
+            String month = String.valueOf(newDataArray[0]);
+            sb.append(month).append(" ");
+
+            // Add year
+            sb.append("XXXX");
+
         }
 
         return sb.toString();

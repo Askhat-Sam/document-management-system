@@ -15,6 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -52,6 +53,8 @@ public class DocumentServiceImpl implements DocumentService {
     private final DocumentTransactionRepository documentTransactionRepository;
     private final EntityManager entityManager;
     private static final Logger logger = Logger.getLogger(DocumentServiceImpl.class.getName());
+//    @Value("${documentCheckPatterns.regexp}")
+//    private List<String> patterns; TO be corrected issue with reading "," in properties fole
 
     @Override
     public List<DocumentDTO> findAll(Integer pageNo, Integer pageSize, String sortBy, String sortDirection, String keyword, String column) {
@@ -577,8 +580,14 @@ public class DocumentServiceImpl implements DocumentService {
 
     private List<MatchWord> checkDate(String runText) {
         // Define the regex pattern to search for dates like "August 17, 2024"
-        String regex = "\\b([A-Za-z]+) (\\d{1,2}), (\\d{4})\\b" // Matches "Month Day, Year"
-                + "|\\b(\\d{1,2})-(\\d{1,2})-(\\d{4})\\b";  // Matches "Day-Month-Year"
+//         String regex = "\\b([A-Za-z]+) (\\d{1,2}), (\\d{4})\\b" // Matches "Month Day, Year"
+//                + "|\\b(\\d{1,2})-(\\d{1,2})-(\\d{4})\\b"  // Matches "Day-Month-Year"
+//        + "\\b(January|February|March|April|May|June|July|August|September|October|November|December) ([1-9]|[12][0-9]|3[01])\\b"; // Matches "Month Day"
+
+        String regex = "\\b([A-Za-z]+) (\\d{1,2}), (\\d{4})\\b" + // Matches "Month Day, Year"
+                "|\\b(\\d{1,2})-(\\d{1,2})-(\\d{4})\\b"+ // Matches "Day-Month-Year"
+        "|\\b(January|February|March|April|May|June|July|August|September|October|November|December) ([1-9]|[12][0-9]|3[01])\\b"; // Matches "Month Day"
+
 
         // Create a Pattern object
         Pattern pattern = Pattern.compile(regex);
@@ -590,6 +599,12 @@ public class DocumentServiceImpl implements DocumentService {
         while (matcher.find()) {
 
             System.out.println("Match found: " + matcher.group());
+            System.out.println("Match found: " + matcher.group(1));
+            System.out.println("Match found: " + matcher.group(2));
+            System.out.println("Match found: " + matcher.group(3));
+            System.out.println("Match found: " + matcher.group(4));
+            System.out.println("Match found: " + matcher.group(5));
+            System.out.println("Match found: " + matcher.group(6));
 
             System.out.println("Start index: " + matcher.start());
             System.out.println("End index: " + matcher.end());
@@ -598,12 +613,17 @@ public class DocumentServiceImpl implements DocumentService {
             if (matcher.group(1) != null) {
                 matcherPattern = "1";
                 System.out.println("Matched format: 'Month Day, Year'");
-
+                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end()));
             } else if (matcher.group(4) != null) {
                 System.out.println("Matched format: 'Day-Month-Year'");
                 matcherPattern = "4";
+                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end()));
+            } else if (matcher.group(7) != null) {
+                System.out.println("Matched format: 'Month Day'");
+                matcherPattern = "7";
+                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end()));
             }
-            listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end()));
+
 
         }
 
