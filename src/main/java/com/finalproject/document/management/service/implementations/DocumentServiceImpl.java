@@ -527,7 +527,7 @@ public class DocumentServiceImpl implements DocumentService {
 
             // Add the new matched data with formatting
             r = paragraph.insertNewRun(++runNumber);
-            r.setText(m.getNewData());
+            r.setText(m.getNewData().getRevisedWord());
             r.setFontFamily("Tahoma");
             r.setColor("DC143C");
 
@@ -545,7 +545,7 @@ public class DocumentServiceImpl implements DocumentService {
             BigInteger commentId = BigInteger.valueOf(1); // Unique comment ID
             ctComment.setId(commentId);
             ctComment.setAuthor("Askhat");
-            ctComment.addNewP().addNewR().addNewT().setStringValue("Corrected by script");
+            ctComment.addNewP().addNewR().addNewT().setStringValue(m.getNewData().getComment());
             ctComment.setDate(Calendar.getInstance()); // Current date and time
 
             // Map the comment to a text range in the paragraph
@@ -593,7 +593,8 @@ public class DocumentServiceImpl implements DocumentService {
                 "|\\b(\\d{1,2})-(\\d{1,2})-(\\d{4})\\b" +  // Groups 4, 5, 6
                 "|\\b(January|February|March|April|May|June|July|August|September|October|November|December) ([1-9]|[12][0-9]|3[01])\\b" +
                 // Groups 7, 8
-                "|(\\([A-Z]+\\))";  // Group 9
+                "|(\\([A-Z]+\\))" +  // Group 9
+                "|(\\b[A-Z]+\\b)";  // Group 10
 
 
         // Create a Pattern object
@@ -624,8 +625,12 @@ public class DocumentServiceImpl implements DocumentService {
                 matcherPattern = "7";
                 listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText));
             } else if (matcher.group(9) != null) {
-                System.out.println("Matched format: 'AOG'");
+                System.out.println("Matched format: '(AOG)'");
                 matcherPattern = "9";
+                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText));
+            }else if (matcher.group(10) != null) {
+                System.out.println("Matched format: 'NLG'");
+                matcherPattern = "10";
                 listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText));
             }
 
