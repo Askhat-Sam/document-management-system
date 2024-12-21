@@ -35,7 +35,7 @@ public class Main {
                 System.out.println("Matched format: 'Day-Month-Year'");
                 matcherPattern="4";
             }
-            listDate.add(new MatchWord(matcher.group(), matcherPattern,  matcher.start(), matcher.end()));
+            listDate.add(new MatchWord(matcher.group(), matcherPattern,  matcher.start(), matcher.end(), runText));
 
         }
 

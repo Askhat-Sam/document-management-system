@@ -1,17 +1,23 @@
 package com.finalproject.document.management.entity;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class MatchWord {
     private String oldData;
     private String matchPattern;
     private int startIndex;
     private int endIndex;
     private String newData;
+    private String text;
 
-    public MatchWord(String oldData, String matchPattern, int startIndex, int endIndex) {
+    public MatchWord(String oldData, String matchPattern, int startIndex, int endIndex,String text) {
         this.oldData = oldData;
         this.matchPattern = matchPattern;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
+        this.text = text;
     }
 
     public String getOldData() {
@@ -28,6 +34,10 @@ public class MatchWord {
 
     public int getEndIndex() {
         return endIndex;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public String getNewData() {
@@ -82,6 +92,57 @@ public class MatchWord {
             // Add year
             sb.append("XXXX");
 
+        } else if (matchPattern.equals("9")) { // "abbreviation"
+            //To change to download from file !!!!!!!!!!!!!!!!!!!!!!!!!!!11
+            Map<String, String> abbMap = new HashMap<>();
+
+            abbMap.put("AOG", "Aircraft on Ground");
+            abbMap.put("NLG", "Nose Landing Gear");
+            abbMap.put("OCC", "Operations Control Center");
+
+            int abbreviationLength = oldData.length();
+            String trimmedOldData = oldData.replace("(", "").replace(")", "");
+            String[] letters = trimmedOldData.split("");
+
+            List<String> words =List.of(text.split(" "));
+
+            int n = words.indexOf(oldData);
+
+            StringBuilder wordsBeforeSb = new StringBuilder();
+            StringBuilder wordsAfterSb = new StringBuilder();
+
+            //Check if the n words before the abbreviation
+            for (String s : letters){
+                wordsBeforeSb.insert(0,words.get(n-1)).insert(0," ");
+                n--;
+            }
+
+            n = words.indexOf(oldData);
+
+            //Check if the n words before the abbreviation
+            for (String s : letters){
+                wordsAfterSb.append(words.get(n+1)).append(" ");
+                n++;
+            }
+
+            String abbDefinition = null;
+
+
+            if ((abbDefinition=abbMap.get(trimmedOldData))!=null){
+                if (abbDefinition.equalsIgnoreCase(wordsBeforeSb.toString().trim()) || abbDefinition.equalsIgnoreCase(wordsAfterSb.toString().trim())){
+                    if (abbDefinition.equals(wordsBeforeSb.toString().trim()) || abbDefinition.equals(wordsAfterSb.toString().trim())) {
+                        System.out.println("abbreviation is present");
+                        sb.append(oldData).append(" [Abbreviation definition is correct]");;
+                    } else {
+                        System.out.println("abbreviation definition is not Uppercase");
+                        sb.append(oldData).append(" [Abbreviation definition should be uppercase: " + abbDefinition + "]");
+                    }
+                } else {
+                    System.out.println("abbreviation is not present");
+                    sb.append(oldData).append(" [Incorrect definition for abbreviation]");
+                }
+
+            }
         }
 
         return sb.toString();

@@ -584,9 +584,16 @@ public class DocumentServiceImpl implements DocumentService {
 //                + "|\\b(\\d{1,2})-(\\d{1,2})-(\\d{4})\\b"  // Matches "Day-Month-Year"
 //        + "\\b(January|February|March|April|May|June|July|August|September|October|November|December) ([1-9]|[12][0-9]|3[01])\\b"; // Matches "Month Day"
 
-        String regex = "\\b([A-Za-z]+) (\\d{1,2}), (\\d{4})\\b" + // Matches "Month Day, Year"
-                "|\\b(\\d{1,2})-(\\d{1,2})-(\\d{4})\\b"+ // Matches "Day-Month-Year"
-        "|\\b(January|February|March|April|May|June|July|August|September|October|November|December) ([1-9]|[12][0-9]|3[01])\\b"; // Matches "Month Day"
+//        String regex = "\\b([A-Za-z]+) (\\d{1,2}), (\\d{4})\\b" + // Matches "Month Day, Year"
+//                "|\\b(\\d{1,2})-(\\d{1,2})-(\\d{4})\\b"+ // Matches "Day-Month-Year"
+//        "|\\b(January|February|March|April|May|June|July|August|September|October|November|December) ([1-9]|[12][0-9]|3[01])\\b" +
+//                "|\\([A-Z]+\\)"; // Matches "Month Day"
+
+        String regex = "\\b([A-Za-z]+) (\\d{1,2}), (\\d{4})\\b" +  // Groups 1, 2, 3
+                "|\\b(\\d{1,2})-(\\d{1,2})-(\\d{4})\\b" +  // Groups 4, 5, 6
+                "|\\b(January|February|March|April|May|June|July|August|September|October|November|December) ([1-9]|[12][0-9]|3[01])\\b" +
+                // Groups 7, 8
+                "|(\\([A-Z]+\\))";  // Group 9
 
 
         // Create a Pattern object
@@ -598,14 +605,8 @@ public class DocumentServiceImpl implements DocumentService {
         // Create a Matcher object
         while (matcher.find()) {
 
-            System.out.println("Match found: " + matcher.group());
-            System.out.println("Match found: " + matcher.group(1));
-            System.out.println("Match found: " + matcher.group(2));
-            System.out.println("Match found: " + matcher.group(3));
-            System.out.println("Match found: " + matcher.group(4));
-            System.out.println("Match found: " + matcher.group(5));
-            System.out.println("Match found: " + matcher.group(6));
 
+            System.out.println("Match found: " + matcher.group(9));
             System.out.println("Start index: " + matcher.start());
             System.out.println("End index: " + matcher.end());
 
@@ -613,15 +614,19 @@ public class DocumentServiceImpl implements DocumentService {
             if (matcher.group(1) != null) {
                 matcherPattern = "1";
                 System.out.println("Matched format: 'Month Day, Year'");
-                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end()));
+                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText));
             } else if (matcher.group(4) != null) {
                 System.out.println("Matched format: 'Day-Month-Year'");
                 matcherPattern = "4";
-                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end()));
+                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText));
             } else if (matcher.group(7) != null) {
                 System.out.println("Matched format: 'Month Day'");
                 matcherPattern = "7";
-                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end()));
+                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText));
+            } else if (matcher.group(9) != null) {
+                System.out.println("Matched format: 'AOG'");
+                matcherPattern = "9";
+                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText));
             }
 
 
@@ -632,7 +637,6 @@ public class DocumentServiceImpl implements DocumentService {
 
         return listDate;
     }
-
 
 
     private static Pageable doPagingAndSorting(Integer page, Integer size, String sortBy, String sortDirection) {
