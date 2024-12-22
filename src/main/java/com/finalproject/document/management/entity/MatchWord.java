@@ -1,9 +1,16 @@
 package com.finalproject.document.management.entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.springframework.validation.MapBindingResult;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MatchWord {
     private String oldData;
@@ -14,12 +21,14 @@ public class MatchWord {
     private String text;
     private static List<String> definedAbb = new ArrayList<>();
     //To change to download from file !!!!!!!!!!!!!!!!!!!!!!!!!!!11
-    Map<String, String> abbMap = new HashMap<>(Map.of(
-            "AOG", "Aircraft on Ground",
-            "NLG", "Nose Landing Gear",
-            "OCC", "Operations Control Center",
-            "MCC", "Maintenance Control Center"
-    ));
+//    Map<String, String> abbMap = new HashMap<>(Map.of(
+//            "AOG", "Aircraft on Ground",
+//            "NLG", "Nose Landing Gear",
+//            "OCC", "Operations Control Center",
+//            "MCC", "Maintenance Control Center"
+//    ));
+
+    private final Map<String, String> abbMap = mapCSVToMap("src/main/resources/abbreviation.csv");
 
     public MatchWord(String oldData, String matchPattern, int startIndex, int endIndex, String text) {
         this.oldData = oldData;
@@ -47,6 +56,19 @@ public class MatchWord {
 
     public String getText() {
         return text;
+    }
+
+    public static Map<String, String> mapCSVToMap(String filePath ) {
+        Map<String, String> resultMap = new HashMap<>();
+       try {
+           Stream<String> lines = Files.lines(Paths.get(filePath));
+           resultMap = lines.map(line->line.split(",")).collect(Collectors.toMap(line->line[0], line->line[1]));
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
+        System.out.println(resultMap);
+
+       return resultMap;
     }
 
     public RevisedWord getNewData() {
@@ -148,7 +170,7 @@ public class MatchWord {
         n = words.indexOf(oldData);
 
         //Check if the n words before the abbreviation
-        if (words.size()-n >=3) {
+        if (words.size()-n >3) {
             for (String s : letters) {
                 wordsAfterSb.append(words.get(n + 1)).append(" ");
                 n++;
