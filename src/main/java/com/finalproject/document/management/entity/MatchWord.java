@@ -13,6 +13,13 @@ public class MatchWord {
     private String newData;
     private String text;
     private static List<String> definedAbb = new ArrayList<>();
+    //To change to download from file !!!!!!!!!!!!!!!!!!!!!!!!!!!11
+    Map<String, String> abbMap = new HashMap<>(Map.of(
+            "AOG", "Aircraft on Ground",
+            "NLG", "Nose Landing Gear",
+            "OCC", "Operations Control Center",
+            "MCC", "Maintenance Control Center"
+    ));
 
     public MatchWord(String oldData, String matchPattern, int startIndex, int endIndex, String text) {
         this.oldData = oldData;
@@ -97,67 +104,76 @@ public class MatchWord {
             sb.append("XXXX");
             return new RevisedWord(sb.toString(), "Changed from [" + oldData + "] to [" + sb.toString() + "].");
         } else if (matchPattern.equals("9")) { // "abbreviation"
-            //To change to download from file !!!!!!!!!!!!!!!!!!!!!!!!!!!11
-            Map<String, String> abbMap = new HashMap<>();
 
-            abbMap.put("AOG", "Aircraft on Ground");
-            abbMap.put("NLG", "Nose Landing Gear");
-            abbMap.put("OCC", "Operations Control Center");
-            abbMap.put("MCC", "Maintenance Control Center");
+            return getRevisedWord(sb);
 
-            int abbreviationLength = oldData.length();
-            String trimmedOldData = oldData.replace("(", "").replace(")", "");
-            String[] letters = trimmedOldData.split("");
+        } else if (matchPattern.equals("10")) {
+            // Check if the word is in abbreviation list
+            if (getRevisedWord(sb).getComment().equals("Incorrect definition for abbreviation")) {
+                // "abbreviation OCC, NLG"
+                if (definedAbb.contains(oldData)) {
+                    return new RevisedWord(oldData, "No changes");
+                } else {
+                    sb.append(oldData);
+                    return new RevisedWord(sb.toString(), " [Abbreviation {" + oldData + "} is not defined previously]");
+                }
+            }else {
+                return getRevisedWord(sb);
+            }
+        }
 
-            List<String> words = List.of(text.split(" "));
+        return null;
+    }
 
-            int n = words.indexOf(oldData);
+    private RevisedWord getRevisedWord(StringBuilder sb) {
+        int abbreviationLength = oldData.length();
+        String trimmedOldData = oldData.replace("(", "").replace(")", "");
+        String[] letters = trimmedOldData.split("");
 
-            StringBuilder wordsBeforeSb = new StringBuilder();
-            StringBuilder wordsAfterSb = new StringBuilder();
+        List<String> words = List.of(text.split(" "));
 
-            //Check if the n words before the abbreviation
+        int n = words.indexOf(oldData);
+
+        StringBuilder wordsBeforeSb = new StringBuilder();
+        StringBuilder wordsAfterSb = new StringBuilder();
+
+        //Check if the n words before the abbreviation
+        if (n>=3) {
             for (String s : letters) {
-                wordsBeforeSb.insert(0, words.get(n - 1)).insert(0, " ");
+                    wordsBeforeSb.insert(0, words.get(n - 1)).insert(0, " ");
                 n--;
             }
+        }
 
-            n = words.indexOf(oldData);
+        n = words.indexOf(oldData);
 
-            //Check if the n words before the abbreviation
+        //Check if the n words before the abbreviation
+        if (words.size()-n >=3) {
             for (String s : letters) {
                 wordsAfterSb.append(words.get(n + 1)).append(" ");
                 n++;
             }
-
-            String abbDefinition = null;
-
-
-            if ((abbDefinition = abbMap.get(trimmedOldData)) != null) {
-                if (abbDefinition.equalsIgnoreCase(wordsBeforeSb.toString().trim())) {
-                    sb.append(oldData).append(" ").append(abbMap.get(trimmedOldData));
-                    definedAbb.add(trimmedOldData);
-                } else if (abbDefinition.equalsIgnoreCase(wordsAfterSb.toString().trim())) {
-                    sb.append(oldData).append(" ").append(abbMap.get(trimmedOldData));
-                    definedAbb.add(trimmedOldData);
-                } else {
-                    sb.append(oldData);
-                    definedAbb.add(trimmedOldData);
-                }
-            } else {
-                System.out.println("abbreviation is not present");
-                sb.append(oldData).append(" [Incorrect definition for abbreviation.");
-            }
-
-        } else if (matchPattern.equals("10")) { // "abbreviation OCC, NLG"
-            if (definedAbb.contains(oldData)) {
-                sb.append(oldData);
-            } else {
-                sb.append(oldData).append(" [Abbreviation {" + oldData + "} is not defined previously]");
-            }
         }
 
-        return new RevisedWord(sb.toString(), "Changed from [" + oldData + "] to [" + sb.toString() + "].");
+        String abbDefinition = null;
+
+
+        if ((abbDefinition = abbMap.get(trimmedOldData)) != null) {
+            if (abbDefinition.equalsIgnoreCase(wordsBeforeSb.toString().trim())) {
+                sb.append(oldData).append(" ").append(abbMap.get(trimmedOldData));
+                definedAbb.add(trimmedOldData);
+                return new RevisedWord(sb.toString(), "Changed from [" + oldData + " " + wordsBeforeSb.toString().trim() + "] to [" + sb.toString() + "].");
+            } else if (abbDefinition.equalsIgnoreCase(wordsAfterSb.toString().trim())) {
+                sb.append(oldData).append(" ").append(abbMap.get(trimmedOldData));
+                definedAbb.add(trimmedOldData);
+                return new RevisedWord(sb.toString(), "Changed from [" + oldData + " " + wordsAfterSb.toString().trim() + "] to [" + sb.toString() + "].");
+            } else {
+                definedAbb.add(trimmedOldData);
+                return new RevisedWord(oldData, "No changes");
+            }
+        } else {
+            return new RevisedWord(oldData, "Incorrect definition for abbreviation");
+        }
     }
 
     public enum Months {
