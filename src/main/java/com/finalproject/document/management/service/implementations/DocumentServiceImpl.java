@@ -3,6 +3,7 @@ package com.finalproject.document.management.service.implementations;
 import com.finalproject.document.management.dto.DocumentDTO;
 import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.entity.MatchWord;
+import com.finalproject.document.management.entity.RevisedWord;
 import com.finalproject.document.management.entity.TransactionDocument;
 import com.finalproject.document.management.repository.DocumentRepository;
 import com.finalproject.document.management.repository.DocumentTransactionRepository;
@@ -15,7 +16,6 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -509,6 +509,7 @@ public class DocumentServiceImpl implements DocumentService {
 
         XWPFRun r = null;
         String text = paragraph.getText();
+        RevisedWord revisedWord = null;
         int startPoint = 0;
 
         // Clear existing runs in the paragraph
@@ -518,24 +519,25 @@ public class DocumentServiceImpl implements DocumentService {
 
         // Process matches
         for (MatchWord m : list) {
+            // GEt revised word
+            revisedWord = m.getNewData();
             // Add text before the match
             if (startPoint < m.getStartIndex()) {
                 r = paragraph.insertNewRun(++runNumber);
-                r.setText(text.substring(startPoint, m.getStartIndex()));
+                r.setText(text.substring(startPoint, m.getStartIndex() - revisedWord.getOffSet()));
                 r.setFontFamily("Tahoma");
             }
 
             // Add the new matched data with formatting
+
             r = paragraph.insertNewRun(++runNumber);
-            r.setText(m.getNewData().getRevisedWord());
+            r.setText(revisedWord.getRevisedWord());
             r.setFontFamily("Tahoma");
             r.setColor("DC143C");
 
             // Update the starting point
+            // Consider the length of abbreviation definition.
             startPoint = m.getEndIndex();
-
-//            XWPFRun run = paragraph.createRun();
-//            run.setText("This is a sample text where a comment will be added.");
 
             // Add a comment to the document
             XWPFComments commentsPart = document.createComments();
@@ -545,7 +547,7 @@ public class DocumentServiceImpl implements DocumentService {
             BigInteger commentId = BigInteger.valueOf(1); // Unique comment ID
             ctComment.setId(commentId);
             ctComment.setAuthor("Askhat");
-            ctComment.addNewP().addNewR().addNewT().setStringValue(m.getNewData().getComment());
+            ctComment.addNewP().addNewR().addNewT().setStringValue(revisedWord.getComment());
             ctComment.setDate(Calendar.getInstance()); // Current date and time
 
             // Map the comment to a text range in the paragraph
@@ -554,10 +556,6 @@ public class DocumentServiceImpl implements DocumentService {
             // Start comment range
             CTMarkupRange commentStart = ctp.addNewCommentRangeStart();
             commentStart.setId(commentId);
-
-            // Add the text run after the comment range
-//            CTR textRun = ctp.addNewR();
-//            textRun.addNewT().setStringValue(r.getText(0));
 
             // End comment range
             CTMarkupRange commentEnd = ctp.addNewCommentRangeEnd();
@@ -579,15 +577,6 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     private List<MatchWord> checkDate(String runText) {
-        // Define the regex pattern to search for dates like "August 17, 2024"
-//         String regex = "\\b([A-Za-z]+) (\\d{1,2}), (\\d{4})\\b" // Matches "Month Day, Year"
-//                + "|\\b(\\d{1,2})-(\\d{1,2})-(\\d{4})\\b"  // Matches "Day-Month-Year"
-//        + "\\b(January|February|March|April|May|June|July|August|September|October|November|December) ([1-9]|[12][0-9]|3[01])\\b"; // Matches "Month Day"
-
-//        String regex = "\\b([A-Za-z]+) (\\d{1,2}), (\\d{4})\\b" + // Matches "Month Day, Year"
-//                "|\\b(\\d{1,2})-(\\d{1,2})-(\\d{4})\\b"+ // Matches "Day-Month-Year"
-//        "|\\b(January|February|March|April|May|June|July|August|September|October|November|December) ([1-9]|[12][0-9]|3[01])\\b" +
-//                "|\\([A-Z]+\\)"; // Matches "Month Day"
 
         String regex = "\\b([A-Za-z]+) (\\d{1,2}), (\\d{4})\\b" +  // Groups 1, 2, 3
                 "|\\b(\\d{1,2})-(\\d{1,2})-(\\d{4})\\b" +  // Groups 4, 5, 6
@@ -615,30 +604,25 @@ public class DocumentServiceImpl implements DocumentService {
             if (matcher.group(1) != null) {
                 matcherPattern = "1";
                 System.out.println("Matched format: 'Month Day, Year'");
-                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText));
+                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText, matcher.group().length()));
             } else if (matcher.group(4) != null) {
                 System.out.println("Matched format: 'Day-Month-Year'");
                 matcherPattern = "4";
-                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText));
+                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText, matcher.group().length()));
             } else if (matcher.group(7) != null) {
                 System.out.println("Matched format: 'Month Day'");
                 matcherPattern = "7";
-                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText));
+                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText, matcher.group().length()));
             } else if (matcher.group(9) != null) {
-                System.out.println("Matched format: '(AOG)'");
+                System.out.println("Matched format: '(XXX)'");
                 matcherPattern = "9";
-                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText));
-            }else if (matcher.group(10) != null) {
-                System.out.println("Matched format: 'NLG'");
+                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText, matcher.group().length()));
+            } else if (matcher.group(10) != null) {
+                System.out.println("Matched format: 'XXX'");
                 matcherPattern = "10";
-                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText));
+                listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText, matcher.group().length()));
             }
-
-
         }
-
-        listDate.forEach(s -> System.out.println(s.getNewData()));
-
 
         return listDate;
     }

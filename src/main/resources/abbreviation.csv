@@ -2,7 +2,7 @@ Abreviation,Defination
 ADD,Aircraft Deferred Defect
 CDL,Configuration Deveation List
 DY,Days
-NLG,Noise Landing Gear
+NLG,Nose Landing Gear
 MLG,Main Landing Gear
 MCC,Maintenance Control Center
 UTC,Universal Coordinated Time
@@ -36,3 +36,4 @@ EA,Engineering Authorization
 CTS,Customer Technical Service
 TRAX,maintenance management system 
 AMM,Aircraft Maintenance Manual
+OCC,Operations Control Center

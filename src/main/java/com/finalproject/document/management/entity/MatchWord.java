@@ -1,74 +1,68 @@
 package com.finalproject.document.management.entity;
 
-import org.springframework.validation.MapBindingResult;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MatchWord {
-    private String oldData;
-    private String matchPattern;
-    private int startIndex;
-    private int endIndex;
+    private final String oldData;
+    private final String matchPattern;
+    private final int startIndex;
+    private final int endIndex;
     private String newData;
-    private String text;
-    private static List<String> definedAbb = new ArrayList<>();
-    //To change to download from file !!!!!!!!!!!!!!!!!!!!!!!!!!!11
-//    Map<String, String> abbMap = new HashMap<>(Map.of(
-//            "AOG", "Aircraft on Ground",
-//            "NLG", "Nose Landing Gear",
-//            "OCC", "Operations Control Center",
-//            "MCC", "Maintenance Control Center"
-//    ));
+    private final String text;
+    private static final List<String> definedAbb = new ArrayList<>();
+    private final int matchedWordLength;
 
     private final Map<String, String> abbMap = mapCSVToMap("src/main/resources/abbreviation.csv");
 
-    public MatchWord(String oldData, String matchPattern, int startIndex, int endIndex, String text) {
+    public MatchWord(String oldData, String matchPattern, int startIndex, int endIndex, String text, int matchedWordLength) {
         this.oldData = oldData;
         this.matchPattern = matchPattern;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
         this.text = text;
+        this.matchedWordLength = matchedWordLength;
     }
-
     public String getOldData() {
         return oldData;
     }
-
     public String getMatchPattern() {
         return matchPattern;
     }
-
     public int getStartIndex() {
         return startIndex;
     }
-
     public int getEndIndex() {
         return endIndex;
     }
-
     public String getText() {
         return text;
     }
 
-    public static Map<String, String> mapCSVToMap(String filePath ) {
-        Map<String, String> resultMap = new HashMap<>();
-       try {
-           Stream<String> lines = Files.lines(Paths.get(filePath));
-           resultMap = lines.map(line->line.split(",")).collect(Collectors.toMap(line->line[0], line->line[1]));
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
-        System.out.println(resultMap);
+    public int getMatchedWordLength() {
+        return abbMap.get(oldData.replace("(","").replace(")", "")).length();
+    }
 
-       return resultMap;
+    public Map<String, String> getAbbMap() {
+        return abbMap;
+    }
+
+    public static Map<String, String> mapCSVToMap(String filePath) {
+        Map<String, String> resultMap = new HashMap<>();
+        try {
+            Stream<String> lines = Files.lines(Paths.get(filePath));
+            resultMap = lines.map(line -> line.split(",")).collect(Collectors.toMap(line -> line[0], line -> line[1]));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return resultMap;
     }
 
     public RevisedWord getNewData() {
@@ -92,7 +86,7 @@ public class MatchWord {
             String year = String.valueOf(newDataArray[2]);
             sb.append(year);
 
-            return new RevisedWord(sb.toString(), "Changed from [" + oldData + "] to [" + sb.toString() + "].");
+            return new RevisedWord(sb.toString(), "Changed from [" + oldData + "] to [" + sb.toString() + "].", 0);
 
         } else if (matchPattern.equals("4")) { // "Day-Month-Year"
 
@@ -109,7 +103,7 @@ public class MatchWord {
             //Add year
             String year = String.valueOf(newDataArray[2]);
             sb.append(year);
-            return new RevisedWord(sb.toString(), "Changed from [" + oldData + "] to [" + sb.toString() + "].");
+            return new RevisedWord(sb.toString(), "Changed from [" + oldData + "] to [" + sb.toString() + "].", 0);
         } else if (matchPattern.equals("7")) { // "Month Day"
 
             newDataArray = oldData.split(" ");
@@ -124,23 +118,27 @@ public class MatchWord {
 
             // Add year
             sb.append("XXXX");
-            return new RevisedWord(sb.toString(), "Changed from [" + oldData + "] to [" + sb.toString() + "].");
+            return new RevisedWord(sb.toString(), "Changed from [" + oldData + "] to [" + sb.toString() + "].", 0);
         } else if (matchPattern.equals("9")) { // "abbreviation"
 
             return getRevisedWord(sb);
 
         } else if (matchPattern.equals("10")) {
+            // Get revised word
+            RevisedWord revisedWord = getRevisedWord(sb);
+
             // Check if the word is in abbreviation list
-            if (getRevisedWord(sb).getComment().equals("Incorrect definition for abbreviation")) {
-                // "abbreviation OCC, NLG"
+            if (revisedWord.getComment().equals("No definition found")) {
+//                 "abbreviation OCC, NLG"
                 if (definedAbb.contains(oldData)) {
-                    return new RevisedWord(oldData, "No changes");
+                    return new RevisedWord(oldData, "No changes was applied", 0);
                 } else {
-                    sb.append(oldData);
-                    return new RevisedWord(sb.toString(), " [Abbreviation {" + oldData + "} is not defined previously]");
+                  definedAbb.add(oldData);
+                  return new RevisedWord(revisedWord.getRevisedWord(), " [Abbreviation {" + oldData + "} is not defined previously]", 0);
                 }
-            }else {
-                return getRevisedWord(sb);
+            } else {
+                System.out.println("Wrong branch");
+                return revisedWord;
             }
         }
 
@@ -160,41 +158,41 @@ public class MatchWord {
         StringBuilder wordsAfterSb = new StringBuilder();
 
         //Check if the n words before the abbreviation
-        if (n>=3) {
+        if (n >= 3) {
             for (String s : letters) {
-                    wordsBeforeSb.insert(0, words.get(n - 1)).insert(0, " ");
+                wordsBeforeSb.insert(0, words.get(n - 1)).insert(0, " ");
                 n--;
             }
         }
-
         n = words.indexOf(oldData);
 
         //Check if the n words before the abbreviation
-        if (words.size()-n >3) {
+        if (words.size() - n > 3) {
             for (String s : letters) {
                 wordsAfterSb.append(words.get(n + 1)).append(" ");
                 n++;
             }
         }
-
         String abbDefinition = null;
 
 
         if ((abbDefinition = abbMap.get(trimmedOldData)) != null) {
             if (abbDefinition.equalsIgnoreCase(wordsBeforeSb.toString().trim())) {
-                sb.append(oldData).append(" ").append(abbMap.get(trimmedOldData));
+                sb.append(abbMap.get(trimmedOldData)).append(" ").append(oldData);
                 definedAbb.add(trimmedOldData);
-                return new RevisedWord(sb.toString(), "Changed from [" + oldData + " " + wordsBeforeSb.toString().trim() + "] to [" + sb.toString() + "].");
+                return new RevisedWord(sb.toString(), "Changed from [" + oldData + " " + wordsBeforeSb.toString().trim() + "] to [" + sb.toString() + "].", wordsBeforeSb.toString().length());
             } else if (abbDefinition.equalsIgnoreCase(wordsAfterSb.toString().trim())) {
                 sb.append(oldData).append(" ").append(abbMap.get(trimmedOldData));
                 definedAbb.add(trimmedOldData);
-                return new RevisedWord(sb.toString(), "Changed from [" + oldData + " " + wordsAfterSb.toString().trim() + "] to [" + sb.toString() + "].");
+                return new RevisedWord(sb.toString(), "Changed from [" + oldData + " " + wordsAfterSb.toString().trim() + "] to [" + sb.toString() + "].", wordsAfterSb.toString().length());
             } else {
-                definedAbb.add(trimmedOldData);
-                return new RevisedWord(oldData, "No changes");
+                sb.append(oldData).append(" (").append(abbMap.get(trimmedOldData)).append(")");
+                System.out.println("SB contex: " + sb.toString());
+//                definedAbb.add(trimmedOldData);
+                return new RevisedWord(sb.toString(), "No definition found", 0);
             }
         } else {
-            return new RevisedWord(oldData, "Incorrect definition for abbreviation");
+            return new RevisedWord(oldData, "No definition found in the map",0);
         }
     }
 

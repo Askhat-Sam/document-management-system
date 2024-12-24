@@ -3,10 +3,12 @@ package com.finalproject.document.management.entity;
 public class RevisedWord {
     private String revisedWord;
     private String comment;
+    private int offSet;
 
-    public RevisedWord(String revisedWord, String comment) {
+    public RevisedWord(String revisedWord, String comment, int offSet) {
         this.revisedWord = revisedWord;
         this.comment = comment;
+        this.offSet = offSet;
     }
 
     public String getRevisedWord() {
@@ -19,6 +21,10 @@ public class RevisedWord {
 
     public String getComment() {
         return comment;
+    }
+
+    public int getOffSet() {
+        return offSet;
     }
 
     public void setComment(String comment) {
