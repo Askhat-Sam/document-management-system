@@ -1,39 +1,368 @@
 Abreviation,Defination
+A.ICE,Anti-icing
+A/BRK,Autobrake
+A/C,Aircraft
+A/COLL,Anti-Collision
+A/G,Air to Ground
+A/S,Airspeed
+A/SKID,Anti-Skid
+A/STAB,Auto Stabilizer
+A/THR,Autothrust
+AAK,Aviation Administration of Kazakhstan
+ABCM,Alternate Brake Control Manifold
+ABCU,Alternate Braking Control Unit
+ABDC,Avionics Broadcast Data Collector
+ABS,Autobrake System
+ABSELV,Alternate Brake Selector Valve
+AC,Alternating Current
+ACARS,Aircraft Communication Addressing and Reporting System
+ACB,Attendant Call Button
+ACC,Active Clearance Control
+ACFT,Aircraft
+ACM,Air Cycle Machine
+ACOC,Air Cooled Oil Cooler
+ACP,Audio Control Panel
+ACS,Air Conditioning System
+ACSC,Air Conditioning System Controller
+ACU,Air Cooling Unit
+AD,Airworthiness Directive
+ADC,Air Data Computer
 ADD,Aircraft Deferred Defect
-CDL,Configuration Deveation List
-DY,Days
-NLG,Nose Landing Gear
-MLG,Main Landing Gear
-MCC,Maintenance Control Center
-UTC,Universal Coordinated Time
-AOG,Aircraft on Ground
-TSD ,Technical Service Department
-MEL,Minimum Equipment List
-FCOM,Flight Crew Operational Manual
-ETD,Estimated Time of Departure
-CPT,Captain
-RDAS,Repair Design Approval Sheet
-RDAF,Repair Design Approval Form
-EO,Engineering Order
-OEM,Original Equipment Manufacture
-PW,Pratt&Witney
-AMP,Aircraft Maintenance Program
-BSI,Borescope Inspection
-EPM,Engineering Procedure Manual
-NIA,National Investigation Agency 
-CAC,Civil Aviation Committee
-PF,Pilot Flying
-FO,First Officer
-PM,Pilot Monitoring
-ATL,Aircraft Technical Logbook
-OFP,Operational Flight Plan
-ECAM,Electronic Centralized Aircraft Monitor
-ATC ,Air Traffic Control
-FDM,Flight Data Monitoring
-HPT,High Pressure Trubine
-FH,Flight Hours
-EA,Engineering Authorization
-CTS,Customer Technical Service
-TRAX,maintenance management system 
+ADEM,Advanced Diagnostics and Engine Monitoring
+ADF,Automatic Direction Finder
+ADI,Attitude Director Indicator
+ADIRS,Air Data/Inertial Reference System
+ADIRU,Air Data/Inertial Reference Unit
+ADM,Air Data Module
+ADR,Air Data Reference
+ADS,Air Data System
+ADSM,Avionics Data Storage Module
+ADU,Area Distribution Unit
+AEVC,Avionics Equipment Ventilation Computer
+AF,Audio Frequency
+AFCD,Aft Cargo Door
+AFI,Aircraft Fault Isolation
+AFM,Airplane Flight Manual
+AFS,Automatic Flight System
+AFT,After
+AGB,Angle Gearbox
+AGC,APU Generator Contactor
+AGE,Aircraft Ground Equipment
+AGU,Air Generation Unit
+A-ICE,Anti-Ice
+AICF,Anti Ice Control Function
+AICS,Anti Ice Control System
+AICU,Anti Ice Control Unit
+AIDS,Aircraft Integrated Data System
+AIP,Attendant Indication Panel
+AIPC,Aircraft Illustrated Parts Catalog
+AIR,Aircraft Inspection Report
+AIS,Audio Integrated System
+AIU,Aircraft Interface Unit
+ALA,Almaty
+ALS,Airworthiness Limitation Section
+ALT,Altitude
+AMC,Acceptable Means of Compliance
 AMM,Aircraft Maintenance Manual
-OCC,Operations Control Center
+AMP,Aircraft Maintenance Program
+AMU,Audio Management Unit
+AOA,Angle Of Attack
+AOG,Aircraft On Ground
+AP,Autopilot
+AP/FD,Autopilot/Flight Director
+APU,Auxiliary Power Unit
+ARM,Aircraft Recovery Manual
+ASAP,As Soon As Possible
+ASCU,Air Systems Control Unit
+ASM,Aircraft Schematics Manual
+ATC,Air Traffic Control
+ATC ,Air Traffic Control
+ATIS,Automatic Terminal Information Service
+ATL,Aircraft Technical Logbook
+ATM,Air Traffic Management
+ATSU,Air Traffic Service Unit
+AWD,Aircraft Wiring Diagram
+AWM,Aircraft Wiring Manual
+BCF,Brake Cooling Fan
+BCL,Battery Charge Limiter
+BCS,Brake Control System
+BDD,Base Deferred Defect
+BITE,Built-In Test Equipment
+BS,Birdstrike
+BSCS,Braking and Steering Control System
+BSCU,Braking and Steering Control Unit
+BSI,Borescope Inspection
+BTMS,Brake Temperature Monitoring System
+BTMU,Brake Temperature Monitoring Unit
+BUS,Busbar
+C/B,Circuit Breaker
+C/L,Checklist
+CAC,Civil Aviation Committee
+CAME,Continuing Airworthiness Mangement Exposition
+CAMO,Continuing Airworthiness Management Organisation
+CB,XXXX Braker
+CBMS,Circuit Breaker Monitoring System
+CBMU,Circuit Breaker Monitoring Unit
+CBP,Circuit Breaker Panel
+CDAU,Centralized Data Acquisition Unit
+CDCCL,Critical Design Configuration Control Limitation
+CDL,Configuration Deveation List
+CDLB,Cabin Defect Log Book
+CDS,Control and Display System
+CEO,Current Engine Option
+CFR,Current Flight Report
+CG,Center of Gravity
+CIDS,Cabin Intercommunication Data System
+CIT,Shymkent
+CMM,Component Maintenance Manual
+CMR,Certification Maintenance Requirements
+CMS,Component Maintenance Sheet
+CPT,Captain
+CRS,Certificate Release to Service
+CTS,Customer Technical Service
+CVDR,Cockpit Voice and Data Recorder
+CVR,Cockpit Voice Recorder
+DAU,Data Acquisition Unit
+DC,Direct Current
+DEOA,Door Emergency Opening Actuator
+DFDAMU,Digital Flight Data Acquisition and Management Unit
+DFDAU,Digital Flight Data Acquisition Unit
+DFDR,Digital Flight Data Recorder
+DFDRS,Digital Flight Data Recording System
+DFPRM,Duct and Fuel Pipe Repair Manual
+DFSOV,Dual Flow Shut-Off Valve
+DMC,Display Management Computer
+DME,Distance Measuring Equipment
+DPI,Differential Pressure Indicator
+DPS,Differential Pressure Sensor
+DRM,Duct Repair Manual
+DSU,Data Storage Unit
+DY,Days
+EA,Engineering Authorization
+EASA,European Aviation Safety Agency
+ECAM,Electronic Centralized Aircraft Monitoring
+ECAS,Emergency Cabin Alerting System
+ECS,Environmental Control System
+ECU,Electronic Control Unit
+ED,Engine Display
+EDP,Engine Driven Pump
+EEC,Electronic Engine Control
+EFB,Electronic Flight Bag
+EFCC,Electronic Flight Control Computer
+EFCS,Electrical Flight Control System
+EFCU,Electrical Flight Control Unit
+EFIS,Electronic Flight Instrument System
+EGPWM,Enhanced Ground Proximity Warning Module
+EGPWS,Enhanced Ground Proximity Warning System
+EHM,Engine Health Monitoring
+EIS,Electronic Instrument System
+EIU,Engine Interface Unit
+ELT,Emergency Locator Transmitter
+EMU,Engine Monitoring Unit
+EO,Engineering Order
+EPM,Engineering Procedure Manual
+EPR,Engine Pressure Ratio
+ESS,Essential
+ET,Elapsed Time
+ETA,Estimated Time of Arrival
+ETD,Estimated Time of Departure
+ETOPS,Extended Range Operations for Two-Engine Aeroplanes
+EWD,Engine/Warning Display
+EWIS,Electrical Wiring Interconnection System
+FAC,Flight Augmentation Computer
+FADEC,Full Authority Digital Engine Control
+FAP,Flight Attendant Panel
+FAR,Federal Aviation Regulations
+FCC,Flight Control Computer
+FCDC,Flight Control Data Concentrator
+FCGS,Flight Control and Guidance System
+FCGU,Flight Control and Guidance Unit
+FCMC,Fuel Control and Monitoring Computer
+FCMS,Fuel Control Monitoring System
+FCOM,Flight Crew Operating Manual
+FCPC,Flight Control Primary Computer
+FCRC,Flight Crew Rest Compartment
+FCRM,Flight Control Remote Module
+FCS,Flight Control System
+FCSC,Flight Control Secondary Computer
+FCTM,Flight Crew Training Manual
+FCU,Flight Control Unit/Fuel Control Unit
+FD,Flight Director
+FDAU,Flight Data Acquisition Unit
+FDM,Flight Data Monitoring
+FEGV,Fan Exit Guide Vane
+FH,Flight Hours
+FIC,Fan Intermediate Case
+FIM,Fault Isolation Manual
+FIN,Functional Item Number
+FL,Flight Level
+FMC,Flight Management Computer
+FMCS,Flight Management Computer System
+FMGC,Flight Management and Guidance Computer
+FMGS,Flight Management and Guidance System
+FMGS ,XXX
+FMS,Flight Management System
+FO,First Officer
+FOB,Fuel On Board
+FOC,Fuel/Oil Cooler
+FOd,Foreign Object Debris
+FPI,Fluorescence Penetrant Inspection 
+FPL,XXX
+FQI,Fuel Quantity Indicating/Indication/Indicator
+FQIC,Fuel Quantity Indication Computer
+FQIS,Fuel Quantity Indicating System
+FQMS,Fuel Quantity and Management System
+FRU,Bishkek
+FWC,Flight Warning Computer
+FWD,Forward
+FWS,Flight Warning System
+GCU,Generator Control Unit
+GEM,Ground Equipment Manual
+GPCU,Ground Power Control Unit
+GPS,Global Positioning System
+GPWC,Ground Proximity Warning Computer
+GPWS,Ground Proximity Warning System
+GW,Gross Weight
+HC,Heater Circuit
+HCF,High Cycle Fatigue
+HF,High Frequency
+HPC,High Pressure Compressor
+HPT,High Pressure Turbine
+HPTACC,High Pressure Turbine Active Clearance Control
+HPTC,High Pressure Turbine Clearance
+IAE,Internatinal Aero Engines
+IAS,Indicated Airspeed
+IBR,Integrally Bladed Rotor 
+ICA,Instructions for Continued Airworthiness
+ICAO,International Civil Aviation Organization
+IDG,Integraded Drive Generator
+IFE,In-Flight Entertainment
+IFS,In-Flight Supervisor
+IFSD,In-flight Shutdown 
+IFTB,Inflight Turn Back
+IGB,Inlet Gear Box
+IGV,Inlet Guide Vane
+IPC,Illustrated Parts Catalog
+KC,Air Astana
+LH,Left Hand
+LP,Low Pressure
+LRU,Line Replaceable Unit
+LVDT,Linear Variable Differential Transducer
+MCC,Maintenance Control Center
+MCDL,Master Configuration Deviation List
+MCDU ,XXX
+MCT,Maximum Continuous Thrust 
+MEL,Minimum Equipment List
+MFG,Manufacturing
+MGB,Main Gear Box
+MLG,Main Landing Gear
+MLW,Maximum Landing Weight
+MMEL,Master Minimum Equipment List
+MPD,Maintenance Planning Document
+MRB,Maintenance Review Board
+MRBR,Maintenance Review Board Report
+MRO,Maintenance Repair Organization
+MSDS,Material Safety Data Sheet
+MSN,Manufacturer Serial Number
+MTBD,Mean Time Between Defects
+MTBF,Mean Time Between Failures
+MTBR,Mean Time Between Removals
+MTBUR,Mean Time Between Unscheduled Removals
+MTO,Maximum Take-Off
+MTOGW,Maximum Takeoff Gross Weight
+MTOW,Maximum Takeoff Weight
+MTTF,Mean Time to Failure
+MTTR,Mean Time to Repair
+MTTUR,Mean Time to Unscheduled Removal
+MTW,Maximum Taxi Weight
+MU,Management Unit
+MZFW,Maximum Zero Fuel Weight
+N/A,Not Applicable
+N/W,Nose Wheel
+N/WS,Nose Wheel Steering
+N1,Engine Fan Speed
+N2,High Pressure Rotor Speed
+ND,Navigation Display
+NDT,Non-Destructive Test
+NEO,New Engine Option
+NIA,National Investigation Agency
+NLG,Noise Landing Gear
+No.,Number
+NOTAM ,Noitice To Air Members
+NQZ,Astana
+NTM,Nondestructive Testing Manual
+NTSB,National Transport Safety Board
+NWS,Nose Wheel Steering
+OAT,Outside Air Temperature
+OEM,Original Equipment Manufacture
+OFP,Operational Flight Plan
+OPSOV,Over-Pressure Shut Off Valve
+OVHD,Overhead
+P/B,Pushbutton
+P/N,Part Number
+PA,Passenger Address
+PBE,Protective Breathing Equipment
+PC,Personal Computer
+PCU,Passenger Control Unit / Power Control Unit
+PF,Pilot Flying
+PFR,Post Flight Report
+PIPC,Power Plant Illustrated Parts Catalog
+PIREP,Pilot Report
+PM,Pilot Monitoring
+PN,Part Number
+PRAPI,Rules for Investigation of Incidents and Accidents of Republic of Kazakhstan
+PRSOV,Pressure Regulating and Shut-off Valve 
+PSCU,Proximity Switch Control Unit
+PW,Pratt&Witney
+QAD,Quick-Attach-Detach
+QAR,Quick Access Recorder
+QRH,Quick Reference Handbook
+QTY,Quantity
+RA,Radio Altimeter
+RAI,Ram Air Inlet
+RAT,Ram Air Turbine
+RDAF,Repair Design Approval Form
+RDAS,Repair Design Approval Sheet
+RH,Right Hand
+RTO,Rejected TakeOff
+RTOLW,Regulatory TakeOff and Landing Weight
+RTOW,Regulatory TakeOff Weight
+RVSM,Reduced Vertical Separation Minimum
+SATCOM,Satellite Communication
+SB,Service Bulletin
+SDAC,System Data Acquisition Concentrator
+SEC,Spoiler Elevator Computer
+SN,Serila Number
+SOP,Standard Operational Procedures
+SPDA,Secondary Power Distribution Assembly
+SRM,Structural Repair Manual
+T.O,TakeOff
+T/R,Thrust Reverser
+T2CAS,Traffic and Terrain Collision Avoidance System
+TA,Traffic Advisory
+TAS,Tashkent / True Airspeed
+TAT,Total Air Temperature
+TE,Trailing Edge
+TEC,Turbine Exhaust Case
+TFU,Technical Follow-up
+THS,Trimmable Horizontal Stabilizer
+THSA,Trimmable Horizontal Stabilizer Actuator
+TIC,Turbine Intermediate Case
+TLA,Throttle Lever Angle
+TOGA,Takeoff/Go Around
+TOGW,Takeoff Gross Weight
+TOW,Takeoff Weight
+TR,Thrust Reverser
+TRAX,maintenance management system 
+TSD ,Technical Service Department
+TSM,Trouble Shooting Manual
+U/S,Unserviceable
+UTC,Universal Coordinated Time
+VHF,Very High Frequency
+VIGV,Variable Inlet Guide Vane 
+WD,Warning Display
+WDM,Wiring Diagram Manual
+X BLEED,Crossbleed
+X FEED,Crossfeed
+ZFCG,Zero Fuel Center of Gravity
+ZFW,Zero Fuel Weight

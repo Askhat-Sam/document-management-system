@@ -1,0 +1,65 @@
+This is a draft final investigation report by/for Air Astana Risk Management purpose.
+For further information contact Air Astana Corporate Safety Compliance Department.
+
+Date of Event:February 2022Date of Issue:17 November 2023Issued By:Corporate Safety Compliance DepartmentIssued To:Engineering and Maintenance DepartmentIncident:SR 59555-23, EI-KBO, Repetitive inspection NLG sliding tube missed.	
+SYNOPSIS 
+In June 2023, Air Astana (AA) Warranty Team requested information on the results of the periodic inspection of the Nose Landing Gear (NLG) Shock absorber from AA Line Maintenance, to check if there were any possible costs depending on the results. During the request processing, it was found that a repetitive inspection on Airbus A320 reg. EI-KBO was overdue for about 5 months.
+The event falls under AMC 20-8 “The incorrect control or application of aircraft maintenance limitations or scheduled maintenance”. EASA was notified and an investigation was opened.
+1. FACTUAL INFORMATION
+1.1 History of the flight
+1.1.1. In February 2022, the A320 EI-KBO was undergoing maintenance at Magnetic MRO (Tallinn, Estonia) to deliver the aircraft to AA for operation. When the aircraft was on jacks, during inspection of the NLG shock absorber AA engineer found scratches on oleo that exceeded the allowable limit (see Figure 1) and reported this to Magnetic MRO representative. To get recommendations from the manufacturer, Magnetic, on behalf of AA representatives, sent a request to the manufacturer of the part “SAFRAN”.
+Figure 1. Nose Landing Gear Shock Absorber scratch
+
+1.1.2. On 24 Feb 2022, as a response, the manufacturer issued RDAS (Repair Design Approval Sheet) - Title: NLG Sliding Tube longitudinal scratch, in which it recommended repair and periodic inspection of this area with an interval of 12 months. 
+1.1.3. This RDAS and “LESSEE ACCEPTANCE CERTIFICATE” were sent on 04 March 2022 via e-mail to the Technical Services Department (TSD) Manager, copying TSD personnel (including supervisor) and delivery team (including engineer category B1). Also the documents were sent to Warranty Team. 
+1.1.4. According to the “LESSEE ACCEPTANCE CERTIFICATE”, during the repetitive inspections (every 12 months) of NLG if any problem that requires repair is detected, then the lessor will need to reimburse all expenses.
+1.1.5. On 04 March 2022, the aircraft was ready for the ferry flight and the CRS (Form M120-L) was signed by Magnetic MRO staff. The CRS form includes the item “Remarks” which includes “Deferred Items”.
+1.1.6. The requirement of the repetitive inspection was not included in the “Deferred Items” of CRS.
+1.1.7. According CAME 1.1A.2.1 and Part M M.A.306.(a) “the CRS should contain … provision should be made for a CRS following rectification of a defect or any deferred defect...”  that is not in compliance with requirements, therefore the request to MRO Magnetic was made.
+1.1.8. In response to MRO Magnetic concerning the reason, the Manager of Quality department confirmed that this is now in compliance with the company’s procedures but did not provide information about the reason why the responsible person is no longer working for the company.
+1.1.9. The information regarding the repetitive inspection was included into the aircraft Lessee Acceptance Certificate (refer to Figure 2) that was sent to the appropriate personnel of AA Departments on 04 March 2022 via e-mail.
+Figure 2. Lessee Acceptance Certificate
+
+1.1.10. On 16 May 2022, the redelivery documentation was saved in the AA Dashboard Applications (STREAM) that allows to get a few documents to all AA staff. The aircraft “LESSEE ACCEPTANCE CERTIFICATE” check was conducted to redelivery the documents.
+1.1.11. On 21 May 2022, the aircraft arrived at Almaty airport.
+1.1.12. Based on EPM procedure TSV-03 one of the responsibility of Technical Services Department (TSD) is to ensure that technical records supporting compliance all aircraft repairs carried out are retained. All repairs are established in STRUCTURE REPAIR LOG (Form No KC/ENG/088). 
+1.1.13. Since the mentioned above NLG Sliding Tube longitudinal scratch repair and periodic inspection are related to a component defect, this item was not reviewed by TSD engineer responsible for recording the damage in “STRUCTURE REPAIR LOG”.
+1.1.14. TSD manager confirmed that the information about repetitive inspection requirement was noted before the aircraft was delivered, but based on his statement since no ADD was raised when delivering the aircraft regarding the damage the Engineering Procedure Manual (EPM) procedure TSV-17 (BASE DEFERRED DEFECTS) of control of the task was not done.  
+1.1.15. The TSV-17 procedure describes the process of transferring the information about deferred defect to the computerized maintenance management system - TRAX to track and control for following rectification. 
+1.1.16. TSD engineer responsible for entering this information into TRAX per procedure TSV-17 checked the deferred items that were reported in CRS remark, then inserted the data to TRAX.
+1.1.17. In June 2023, during the aircraft delivery, the Warranty Team was informed that the lessor would reimburse repair costs if repair were required after the next inspection, then they requested the results of the inspection and the repetitive inspection found overdue for about 5 months.
+1.1.18. Immediately after that, a Work Order (BDD) was issued to perform this repetitive inspection. As a result, no damage and no non-compliance with RDAS were found. The next inspection is scheduled in TRAX for 24 February 2024.
+2. ANALYSIS
+2.1 Analysis of the collected data
+2.1.1. The required periodic inspection was not entered into the Maintenance program TRAX and therefore was not monitored by it.
+2.1.2. Since the information about the periodic inspection requirement was not included in the CRS (as a deferred defect), but was included into Lessee Acceptance Certificate only then sent by e-mail, therefore the information was not forwarded to the TSD engineer responsible for entering this information into TRAX.
+2.1.3. The entering information into TRAX after maintenance by service providers is described in the AA EPM TSV-17 (BASE DEFERRED DEFECTS.)
+2.1.4. Since the damage was not included in the Deferred Items of CRS and as consequence it was missed by TSD engineer responsible for entering this information into TRAX per procedure TSV-17.
+2.1.5. Thus, despite the fact that information about the periodic inspection requirement was transmitted to Air Astana, the procedure for monitoring its implementation was not applied due to not including a remark in CRS data. 
+2.2 Risk Assessment
+Severity: Although during the inspection as per manufacturer's instructions in RDAS, which was overdue for 5 months, no discrepancy was found, nevertheless, considering the worst case scenario, this could lead to leakage of the fluid used in the shock absorber, delay and possible aircraft damage due to lack of depreciation during landing. Therefore, the severity of this event can be assessed as “Minor”.
+Safety Barriers: Since before each flight and after landing, NLG Shock absorber is inspected by engineer as well as by pilot, therefore, the barriers could be estimated as “Minimal”.
+Thus, the risk value is “20”.
+3. CONCLUSIONS
+3.1 Findings:
+3.1.1 In February 2022, Magnetic MRO carried out maintenance work to deliver A320 EI-KBO to Air Astana airline.
+3.1.2 While inspecting the NLG shock absorber, AA engineer found scratches on the oleo that exceeded the allowable limit.
+3.1.3 MRO Magnetic, on behalf of Air Astana representatives, sent the request to the manufacturer.
+3.1.4 On 24 Feb 2022, manufacturer (SAFRAN) issued RDAS (Repair Design Approval Sheet) that instructed to perform repair as per “Repair Design Description”, then to return the aircraft to service with a repetitive inspection of this area with an interval of 12 months.
+3.1.5 On 04 March 2022, the RDAS and Lessee Acceptance Certificate were sent to AA staff (including TSD Manager) via e-mail.
+3.1.6 TSD engineer who responsible for entering this information into TRAX per procedure TSV-17 checked the deferred items that were reported in CRS “Deferred Items” remark then imputed the data to TRAX.
+3.1.7 Air Astana EPM procedure TSV-17 (BASE DEFERRED DEFECTS) describes the entering information about Deferred defect into TRAX.
+3.1.8 The requirement of the repetitive inspection was not included in the “Deferred Items” of CRS but it was included in the aircraft Lessee Acceptance Certificate.
+3.1.9 Manager of Quality department confirmed that this is now in compliance with the company’s procedures but did not provide information about the reason of because the responsible person no longer working for the company.
+3.1.10 Warranty Team requested results of the repetitive inspection which revealed the overdue (about 5 months) of the inspection.
+3.1.11 After overdue of the task was identified, the Work Order was issued to perform this repetitive inspection. As a result, no damage and no non-compliance with RDAS were found.
+3.2 Cause(s):
+Repetitive inspection of NLG was overdue due to Magnetic MRO did not specify the deferred inspection in the CRS.
+4. SAFETY ACTION
+4.1	This repetitive inspection was done on 01 August 2023. As a result, no damage and no non-compliance with RDAS were found.
+5. RECOMMENDATIONS
+5.1	No recommendation.
+              
+
+Page 4 of 5
+

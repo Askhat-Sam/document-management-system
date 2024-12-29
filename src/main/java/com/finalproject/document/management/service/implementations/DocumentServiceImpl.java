@@ -29,10 +29,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigInteger;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -476,7 +473,9 @@ public class DocumentServiceImpl implements DocumentService {
 
         // Iterate through all paragraphs
         for (XWPFParagraph paragraph : document.getParagraphs()) {
+//            List<MatchWord> listDate = checkDate(paragraph.getText());
             List<MatchWord> listDate = checkDate(paragraph.getText());
+            System.out.println(listDate);
             if (!listDate.isEmpty()) {
                 updateParagraph(paragraph, listDate, document);
             }
@@ -504,6 +503,9 @@ public class DocumentServiceImpl implements DocumentService {
         return new ResponseEntity<>(documentBytes, headers, HttpStatus.OK);
     }
 
+    private void countWords(XWPFParagraph paragraph, List<MatchWord> listDate, XWPFDocument document) {
+    }
+
     private void updateParagraph(XWPFParagraph paragraph, List<MatchWord> list, XWPFDocument document) {
         int runNumber = -1;
 
@@ -524,47 +526,49 @@ public class DocumentServiceImpl implements DocumentService {
             // Add text before the match
             if (startPoint < m.getStartIndex()) {
                 r = paragraph.insertNewRun(++runNumber);
-                r.setText(text.substring(startPoint, m.getStartIndex() - revisedWord.getOffSet()));
+                r.setText(text.substring(startPoint, m.getStartIndex()));
                 r.setFontFamily("Tahoma");
             }
+            if (!revisedWord.getComment().equals("Not changed")) {
+                // Add the new matched data with formatting
+                r = paragraph.insertNewRun(++runNumber);
+                r.setText(text.substring(m.getStartIndex(), m.getEndIndex()));
+                r.setFontFamily("Tahoma");
+                r.setColor("DC143C");
 
-            // Add the new matched data with formatting
+                // Update the starting point
+                // Consider the length of abbreviation definition.
+                startPoint = m.getEndIndex();
 
-            r = paragraph.insertNewRun(++runNumber);
-            r.setText(revisedWord.getRevisedWord());
-            r.setFontFamily("Tahoma");
-            r.setColor("DC143C");
+                // Add a comment to the document
+                XWPFComments commentsPart = document.createComments();
+                CTComment ctComment = commentsPart.getCtComments().addNewComment();
 
-            // Update the starting point
-            // Consider the length of abbreviation definition.
-            startPoint = m.getEndIndex();
+                // Set comment properties
 
-            // Add a comment to the document
-            XWPFComments commentsPart = document.createComments();
-            CTComment ctComment = commentsPart.getCtComments().addNewComment();
+                BigInteger commentId = BigInteger.valueOf(1); // Unique comment ID
+                ctComment.setId(commentId);
+                ctComment.setAuthor("AutoCheck");
+                ctComment.addNewP().addNewR().addNewT().setStringValue(revisedWord.getComment());
+                ctComment.setDate(Calendar.getInstance()); // Current date and time
 
-            // Set comment properties
-            BigInteger commentId = BigInteger.valueOf(1); // Unique comment ID
-            ctComment.setId(commentId);
-            ctComment.setAuthor("Askhat");
-            ctComment.addNewP().addNewR().addNewT().setStringValue(revisedWord.getComment());
-            ctComment.setDate(Calendar.getInstance()); // Current date and time
+                // Map the comment to a text range in the paragraph
+                CTP ctp = paragraph.getCTP();
 
-            // Map the comment to a text range in the paragraph
-            CTP ctp = paragraph.getCTP();
+                // Start comment range
+                CTMarkupRange commentStart = ctp.addNewCommentRangeStart();
+                commentStart.setId(commentId);
 
-            // Start comment range
-            CTMarkupRange commentStart = ctp.addNewCommentRangeStart();
-            commentStart.setId(commentId);
+                // End comment range
+                CTMarkupRange commentEnd = ctp.addNewCommentRangeEnd();
+                commentEnd.setId(commentId);
 
-            // End comment range
-            CTMarkupRange commentEnd = ctp.addNewCommentRangeEnd();
-            commentEnd.setId(commentId);
+                // Add comment reference (visible indicator)
+                CTR commentRef = ctp.addNewR();
+                CTMarkup commentReference = commentRef.addNewCommentReference();
+                commentReference.setId(commentId);
+            }
 
-            // Add comment reference (visible indicator)
-            CTR commentRef = ctp.addNewR();
-            CTMarkup commentReference = commentRef.addNewCommentReference();
-            commentReference.setId(commentId);
 
         }
 
@@ -594,12 +598,6 @@ public class DocumentServiceImpl implements DocumentService {
 
         // Create a Matcher object
         while (matcher.find()) {
-
-
-            System.out.println("Match found: " + matcher.group(9));
-            System.out.println("Start index: " + matcher.start());
-            System.out.println("End index: " + matcher.end());
-
             // Determine which part of the regex matched
             if (matcher.group(1) != null) {
                 matcherPattern = "1";
