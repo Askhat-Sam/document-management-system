@@ -60,7 +60,6 @@ public class MatchWord {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(resultMap);
         return resultMap;
     }
 
@@ -123,8 +122,14 @@ public class MatchWord {
             return getRevisedWord(sb);
 
         } else if (matchPattern.equals("10")) {
+            RevisedWord revisedWord = null;
             // Get revised word
-            RevisedWord revisedWord = getRevisedWord(sb);
+            if (definedAbb.contains(oldData)){
+                return new RevisedWord(oldData, "Not changed", 0);
+            } else {
+                 revisedWord = getRevisedWord(sb);
+            }
+
 
             // Check if the word is in abbreviation list
             if (revisedWord.getComment().equals("No definition found")) {
@@ -151,9 +156,10 @@ public class MatchWord {
         String[] letters = trimmedOldData.split("");
 
         List<String> words = new ArrayList<>(List.of(text.split(" ")));
-        words.replaceAll(w->w.replace(";", "").replace(".", ""));
+        words.replaceAll(w->w.replace(";", "").replace(".", "")
+                .replace("(", "").replace(")", "").replace(",", ""));
 
-        int n = words.indexOf(oldData);
+        int n = words.indexOf(trimmedOldData);
 
         StringBuilder wordsBeforeSb = new StringBuilder();
         StringBuilder wordsAfterSb = new StringBuilder();
@@ -171,11 +177,11 @@ public class MatchWord {
 //        System.out.println(words.size());
 //        System.out.println(Arrays.toString(letters));
 
-        //Check if the n words before the abbreviation
+        //Check if the n words after the abbreviation
         if (words.size() - n > letters.length) {
             for (String s : letters) {
-                System.out.println("n iteration : " + n);
-                System.out.println("word: " + words.get(n + 1));
+//                System.out.println("n iteration : " + n);
+//                System.out.println("word: " + words.get(n + 1));
                 wordsAfterSb.append(words.get(n + 1)).append(" ");
                 n++;
             }
@@ -185,22 +191,33 @@ public class MatchWord {
 
         if ((abbDefinition = abbMap.get(trimmedOldData)) != null) {
             if (abbDefinition.equalsIgnoreCase(wordsBeforeSb.toString().trim())) {
-                sb.append(abbMap.get(trimmedOldData)).append(" ").append(oldData);
-                definedAbb.add(trimmedOldData);
-                return new RevisedWord(sb.toString(), "Need to be changed from ["  + wordsBeforeSb.toString().trim() + " " + oldData + "] to [" + sb.toString() + "].", wordsBeforeSb.toString().length());
+                if (abbDefinition.equals(wordsBeforeSb.toString().trim())) {
+                    definedAbb.add(trimmedOldData);
+                    return new RevisedWord(oldData, "Not changed", 0);
+                } else {
+                    sb.append(abbMap.get(trimmedOldData)).append(" ").append(oldData);
+                    definedAbb.add(trimmedOldData);
+                    return new RevisedWord(sb.toString(), "Need to be changed from [" + wordsBeforeSb.toString().trim() + " " + oldData + "] to [" + sb.toString() + "].", wordsBeforeSb.toString().length());
+                }
             } else if (abbDefinition.equalsIgnoreCase(wordsAfterSb.toString().trim())) {
-                sb.append(oldData).append(" ").append(abbMap.get(trimmedOldData));
-                definedAbb.add(trimmedOldData);
-                return new RevisedWord(sb.toString(), "Need to be changed from [" + oldData + " " + wordsAfterSb.toString().trim() + "] to [" + sb.toString() + "].", wordsAfterSb.toString().length());
+                if (abbDefinition.equals(wordsAfterSb.toString().trim())) {
+                    return new RevisedWord(oldData, "Not changed", 0);
+                } else {
+                    sb.append(oldData).append(" ").append(abbMap.get(trimmedOldData));
+                    definedAbb.add(trimmedOldData);
+                    return new RevisedWord(sb.toString(), "Need to be changed from [" + oldData + " " + wordsAfterSb.toString().trim() + "] to [" + sb.toString() + "].", wordsAfterSb.toString().length());
+                }
             } else {
                 sb.append(oldData).append(" (").append(abbMap.get(trimmedOldData)).append(")");
                 System.out.println("SB contex: " + sb.toString());
-//                definedAbb.add(trimmedOldData);
-                return new RevisedWord(sb.toString(), "No definition found", 0);
+                definedAbb.add(trimmedOldData);
+                return new RevisedWord(sb.toString(), "Need to be changed from [" + wordsBeforeSb.toString().trim() + " " + oldData + "] to [" + sb.toString() + "].", wordsBeforeSb.toString().length());
             }
-        } else {
-            return new RevisedWord(oldData, "No definition found in the map",0);
         }
+        return null;
+//        } else {
+//            return new RevisedWord(oldData, "No definition found in the map",0);
+//        }
     }
 
     public enum Months {

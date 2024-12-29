@@ -567,6 +567,16 @@ public class DocumentServiceImpl implements DocumentService {
                 CTR commentRef = ctp.addNewR();
                 CTMarkup commentReference = commentRef.addNewCommentReference();
                 commentReference.setId(commentId);
+            } else {
+                // Add the new matched data with formatting
+                r = paragraph.insertNewRun(++runNumber);
+                r.setText(text.substring(m.getStartIndex(), m.getEndIndex()));
+                r.setFontFamily("Tahoma");
+                r.setColor("259A0E");
+
+                // Update the starting point
+                // Consider the length of abbreviation definition.
+                startPoint = m.getEndIndex();
             }
 
 
