@@ -28,24 +28,29 @@ public class MatchWord {
         this.matchedWordLength = matchedWordLength;
 
     }
+
     public String getOldData() {
         return oldData;
     }
+
     public String getMatchPattern() {
         return matchPattern;
     }
+
     public int getStartIndex() {
         return startIndex;
     }
+
     public int getEndIndex() {
         return endIndex;
     }
+
     public String getText() {
         return text;
     }
 
     public int getMatchedWordLength() {
-        return abbMap.get(oldData.replace("(","").replace(")", "")).length();
+        return abbMap.get(oldData.replace("(", "").replace(")", "")).length();
     }
 
     public Map<String, String> getAbbMap() {
@@ -94,14 +99,14 @@ public class MatchWord {
             sb.append(day).append(" ");
 
             //Add month
-            String month = String.valueOf(Months.values()[newDataArray[1].charAt(0) == '0' ? Integer.parseInt(String.valueOf(newDataArray[1].charAt(1)))
+            String month = String.valueOf(Months.values()[newDataArray[1].charAt(0) == '0' ? Integer.parseInt(String.valueOf(newDataArray[1].charAt(1))) - 1
                     : Integer.parseInt(newDataArray[1]) - 1]);
             sb.append(month.substring(0, 1).toUpperCase().concat(month.substring(1).toLowerCase())).append(" ");
 
             //Add year
             String year = String.valueOf(newDataArray[2]);
             sb.append(year);
-            return new RevisedWord(sb.toString(), "Need to be changed from [" + oldData + "] to [" + sb.toString() + "].", 0);
+            return new RevisedWord(sb.toString(), " Day-Month-Year Need to be changed from [" + oldData + "] to [" + sb.toString() + "].", 0);
         } else if (matchPattern.equals("7")) { // "Month Day"
 
             newDataArray = oldData.split(" ");
@@ -124,22 +129,23 @@ public class MatchWord {
         } else if (matchPattern.equals("10")) {
             RevisedWord revisedWord = null;
             // Get revised word
-            if (definedAbb.contains(oldData)){
+            if (definedAbb.contains(oldData)) {
                 return new RevisedWord(oldData, "Not changed", 0);
             } else {
-                 revisedWord = getRevisedWord(sb);
+                revisedWord = getRevisedWord(sb);
             }
 
 
             // Check if the word is in abbreviation list
+            System.out.println("revised word " + revisedWord);
             if (revisedWord.getComment().equals("No definition found")) {
 //                 "abbreviation OCC, NLG"
                 if (definedAbb.contains(oldData)) {
                     return new RevisedWord(oldData, "Not changed", 0);
                 } else {
-                  definedAbb.add(oldData);
-                  return new RevisedWord(revisedWord.getRevisedWord(), "Abbreviation [" + oldData + "] is not defined previously. " +
-                          "Probably need to be corrected to [" + revisedWord.getRevisedWord() +"]", 0);
+                    definedAbb.add(oldData);
+                    return new RevisedWord(revisedWord.getRevisedWord(), "Abbreviation [" + oldData + "] is not defined previously. " +
+                            "Probably need to be corrected to [" + revisedWord.getRevisedWord() + "]", 0);
                 }
             } else {
                 System.out.println("Wrong branch");
@@ -156,7 +162,7 @@ public class MatchWord {
         String[] letters = trimmedOldData.split("");
 
         List<String> words = new ArrayList<>(List.of(text.split(" ")));
-        words.replaceAll(w->w.replace(";", "").replace(".", "")
+        words.replaceAll(w -> w.replace(";", "").replace(".", "")
                 .replace("(", "").replace(")", "").replace(",", ""));
 
         int n = words.indexOf(trimmedOldData);
@@ -172,7 +178,7 @@ public class MatchWord {
             }
         }
 //        System.out.println("Words: " + words);
-//        n = words.indexOf(oldData);
+        n = words.indexOf(trimmedOldData);
 //        System.out.println("n is : " + n);
 //        System.out.println(words.size());
 //        System.out.println(Arrays.toString(letters));
@@ -180,8 +186,6 @@ public class MatchWord {
         //Check if the n words after the abbreviation
         if (words.size() - n > letters.length) {
             for (String s : letters) {
-//                System.out.println("n iteration : " + n);
-//                System.out.println("word: " + words.get(n + 1));
                 wordsAfterSb.append(words.get(n + 1)).append(" ");
                 n++;
             }
@@ -214,7 +218,7 @@ public class MatchWord {
                 return new RevisedWord(sb.toString(), "Need to be changed from [" + wordsBeforeSb.toString().trim() + " " + oldData + "] to [" + sb.toString() + "].", wordsBeforeSb.toString().length());
             }
         }
-        return null;
+        return new RevisedWord(oldData, "No definition found", 0);
 //        } else {
 //            return new RevisedWord(oldData, "No definition found in the map",0);
 //        }
