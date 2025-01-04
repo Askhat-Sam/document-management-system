@@ -144,8 +144,14 @@ public class MatchWord {
                     return new RevisedWord(oldData, "Not changed", 0);
                 } else {
                     definedAbb.add(oldData);
-                    return new RevisedWord(revisedWord.getRevisedWord(), "Abbreviation [" + oldData + "] is not defined previously. " +
-                            "Probably need to be corrected to [" + revisedWord.getRevisedWord() + "]", 0);
+                    String updatedRevisedWord = revisedWord.getRevisedWord();
+                    if (!updatedRevisedWord.equals(oldData)){
+                        return new RevisedWord(updatedRevisedWord, "Abbreviation [" + oldData + "] is not defined previously. " +
+                                "Probably need to be corrected to [" + revisedWord.getRevisedWord() + "]", 0);
+                    } else {
+                        return new RevisedWord(updatedRevisedWord, "Abbreviation [" + oldData + "] is not defined previously and not found in abbreviation list",0);
+                    }
+
                 }
             } else {
                 System.out.println("Wrong branch");
@@ -159,7 +165,18 @@ public class MatchWord {
     private RevisedWord getRevisedWord(StringBuilder sb) {
         int abbreviationLength = oldData.length();
         String trimmedOldData = oldData.replace("(", "").replace(")", "");
-        String[] letters = trimmedOldData.split("");
+        // Get the number of words for abbreviation
+        // Get the abbreviation definition from list
+        String definition = abbMap.get(trimmedOldData);
+        int definitionWordsLength = 0;
+        String[] definitionWords = new String[0];
+
+        // Get the array words in the abbreviation definition
+        if (definition!=null){
+            definitionWords = definition.split(" ");
+            definitionWordsLength = definitionWords.length;
+        }
+        
 
         List<String> words = new ArrayList<>(List.of(text.split(" ")));
         words.replaceAll(w -> w.replace(";", "").replace(".", "")
@@ -171,8 +188,8 @@ public class MatchWord {
         StringBuilder wordsAfterSb = new StringBuilder();
 
         //Check if the n words before the abbreviation
-        if (n >= letters.length) {
-            for (String s : letters) {
+        if (n >= definitionWordsLength) {
+            for (String s : definitionWords) {
                 wordsBeforeSb.insert(0, words.get(n - 1)).insert(0, " ");
                 n--;
             }
@@ -184,8 +201,8 @@ public class MatchWord {
 //        System.out.println(Arrays.toString(letters));
 
         //Check if the n words after the abbreviation
-        if (words.size() - n > letters.length) {
-            for (String s : letters) {
+        if (words.size() - n > definitionWordsLength) {
+            for (String s : definitionWords) {
                 wordsAfterSb.append(words.get(n + 1)).append(" ");
                 n++;
             }
@@ -215,7 +232,7 @@ public class MatchWord {
                 sb.append(oldData).append(" (").append(abbMap.get(trimmedOldData)).append(")");
                 System.out.println("SB contex: " + sb.toString());
                 definedAbb.add(trimmedOldData);
-                return new RevisedWord(sb.toString(), "Need to be changed from [" + wordsBeforeSb.toString().trim() + " " + oldData + "] to [" + sb.toString() + "].", wordsBeforeSb.toString().length());
+                return new RevisedWord(sb.toString(), "Need to be changed from [" + oldData + "] to [" + sb.toString() + "].", wordsBeforeSb.toString().length());
             }
         }
         return new RevisedWord(oldData, "No definition found", 0);

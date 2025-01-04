@@ -288,7 +288,7 @@ NEO,New Engine Option
 NIA,National Investigation Agency
 NLG,Noise Landing Gear
 No.,Number
-NOTAM,Notice To Air Members
+NOTAM ,Noitice To Air Members
 NQZ,Astana
 NTM,Nondestructive Testing Manual
 NTSB,National Transport Safety Board
@@ -366,3 +366,6 @@ X BLEED,Crossbleed
 X FEED,Crossfeed
 ZFCG,Zero Fuel Center of Gravity
 ZFW,Zero Fuel Weight
+LR,Long Range
+EGT,Exaust Gas Temperature
+GUW,Atyrau
