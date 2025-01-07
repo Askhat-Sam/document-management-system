@@ -14,7 +14,14 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.xwpf.usermodel.*;
+import org.apache.poi.xwpf.usermodel.XWPFComments;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.languagetool.JLanguageTool;
+import org.languagetool.Language;
+import org.languagetool.Languages;
+import org.languagetool.rules.RuleMatch;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -29,7 +36,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -590,14 +600,14 @@ public class DocumentServiceImpl implements DocumentService {
         }
     }
 
-    private List<MatchWord> checkDate(String runText) {
+    private List<MatchWord> checkDate(String runText) throws IOException {
 
         String regex = "\\b([A-Za-z]+) (\\d{1,2}), (\\d{4})\\b" +  // Groups 1, 2, 3
                 "|\\b(\\d{1,2})-(\\d{1,2})-(\\d{4})\\b" +  // Groups 4, 5, 6
                 "|\\b(January|February|March|April|May|June|July|August|September|October|November|December) ([1-9]|[12][0-9]|3[01])\\b" +
                 // Groups 7, 8
                 "|(\\([A-Z]+\\))" +  // Group 9
-                "|(\\b[A-Z]+\\b)";  // Group 10
+                "|(\\b[A-Z]{2,}\\b)";  // Group 10
 
 
         // Create a Pattern object

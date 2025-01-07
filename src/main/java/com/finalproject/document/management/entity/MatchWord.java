@@ -18,6 +18,7 @@ public class MatchWord {
     private final int matchedWordLength;
 
     private final Map<String, String> abbMap = mapCSVToMap("src/main/resources/abbreviation.csv");
+    private final Map<String, String> wordsToSkipMap = mapCSVToMap("src/main/resources/skip.csv");
 
     public MatchWord(String oldData, String matchPattern, int startIndex, int endIndex, String text, int matchedWordLength) {
         this.oldData = oldData;
@@ -106,7 +107,7 @@ public class MatchWord {
             //Add year
             String year = String.valueOf(newDataArray[2]);
             sb.append(year);
-            return new RevisedWord(sb.toString(), " Day-Month-Year Need to be changed from [" + oldData + "] to [" + sb.toString() + "].", 0);
+            return new RevisedWord(sb.toString(), "Need to be changed from [" + oldData + "] to [" + sb.toString() + "].", 0);
         } else if (matchPattern.equals("7")) { // "Month Day"
 
             newDataArray = oldData.split(" ");
@@ -126,8 +127,13 @@ public class MatchWord {
 
             return getRevisedWord(sb);
 
-        } else if (matchPattern.equals("10")) {
+        } else if (matchPattern.equals("10")) { //UPPER CASE ABBREVIATIONS
             RevisedWord revisedWord = null;
+
+            // skip the word if it is contains in the wordsToSkipMap
+            if (wordsToSkipMap.containsKey(oldData)) {
+                return new RevisedWord(oldData, "Not changed", 0);
+            }
             // Get revised word
             if (definedAbb.contains(oldData)) {
                 return new RevisedWord(oldData, "Not changed", 0);
@@ -145,11 +151,11 @@ public class MatchWord {
                 } else {
                     definedAbb.add(oldData);
                     String updatedRevisedWord = revisedWord.getRevisedWord();
-                    if (!updatedRevisedWord.equals(oldData)){
+                    if (!updatedRevisedWord.equals(oldData)) {
                         return new RevisedWord(updatedRevisedWord, "Abbreviation [" + oldData + "] is not defined previously. " +
                                 "Probably need to be corrected to [" + revisedWord.getRevisedWord() + "]", 0);
                     } else {
-                        return new RevisedWord(updatedRevisedWord, "Abbreviation [" + oldData + "] is not defined previously and not found in abbreviation list",0);
+                        return new RevisedWord(updatedRevisedWord, "Abbreviation [" + oldData + "] is not defined previously and not found in abbreviation list", 0);
                     }
 
                 }
@@ -172,11 +178,11 @@ public class MatchWord {
         String[] definitionWords = new String[0];
 
         // Get the array words in the abbreviation definition
-        if (definition!=null){
+        if (definition != null) {
             definitionWords = definition.split(" ");
             definitionWordsLength = definitionWords.length;
         }
-        
+
 
         List<String> words = new ArrayList<>(List.of(text.split(" ")));
         words.replaceAll(w -> w.replace(";", "").replace(".", "")
