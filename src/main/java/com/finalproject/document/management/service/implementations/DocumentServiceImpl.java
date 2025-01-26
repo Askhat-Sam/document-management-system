@@ -543,8 +543,11 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     public Document convertDocumentCSVToEntity(DocumentCSVRecord documentCSVRecord) {
+        // Get current document id value from DB:
+        long currentId = findAll().size();
+
         Document document = new Document();
-        document.setId(documentCSVRecord.getId());
+//        document.setId(documentCSVRecord.getId());
         document.setDocumentCode(documentCSVRecord.getDocumentCode());
         document.setDocumentType(documentCSVRecord.getDocumentType());
         document.setName(documentCSVRecord.getName());

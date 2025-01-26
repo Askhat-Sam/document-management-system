@@ -141,9 +141,11 @@ public class DocumentController {
     @PostMapping("/importListAsCSV")
     public String importListAsCSV(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes,
                                             Model model) throws IOException {
+        // Get the list of documents form CSV file
         List<Document> documents = documentService.importListAsCSV(file, redirectAttributes, model);
 
-//        documentService.updateDocument(documents.get(1));
+        // Save each document from list documents into DB
+        documents.forEach(documentService::update);
 
         return REDIRECT_DOCUMENTS;
     }
