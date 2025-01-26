@@ -15,7 +15,7 @@ public class DocumentCSVRecord {
     @CsvBindByName(column = "Document Code")
     private String documentCode;
 
-    @CsvBindByName(column = "Document Code")
+    @CsvBindByName(column = "Type")
     private String documentType;
 
     @CsvBindByName(column = "Name")
