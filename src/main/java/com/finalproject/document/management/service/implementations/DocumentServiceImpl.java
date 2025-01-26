@@ -1,10 +1,8 @@
 package com.finalproject.document.management.service.implementations;
 
 import com.finalproject.document.management.dto.DocumentDTO;
+import com.finalproject.document.management.entity.*;
 import com.finalproject.document.management.entity.Document;
-import com.finalproject.document.management.entity.MatchWord;
-import com.finalproject.document.management.entity.RevisedWord;
-import com.finalproject.document.management.entity.TransactionDocument;
 import com.finalproject.document.management.repository.DocumentRepository;
 import com.finalproject.document.management.repository.DocumentTransactionRepository;
 import com.finalproject.document.management.service.interfaces.DocumentService;
@@ -14,10 +12,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.xwpf.usermodel.XWPFComments;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.*;
 import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
 import org.languagetool.Languages;
@@ -62,6 +57,7 @@ public class DocumentServiceImpl implements DocumentService {
     private static final Logger logger = Logger.getLogger(DocumentServiceImpl.class.getName());
 //    @Value("${documentCheckPatterns.regexp}")
 //    private List<String> patterns; TO be corrected issue with reading "," in properties fole
+
 
     @Override
     public List<DocumentDTO> findAll(Integer pageNo, Integer pageSize, String sortBy, String sortDirection, String keyword, String column) {
@@ -481,16 +477,23 @@ public class DocumentServiceImpl implements DocumentService {
         InputStream inputStream = file.getInputStream();
         XWPFDocument document = new XWPFDocument(inputStream);
 
+//        XWPFParagraph paragraph = document.createParagraph();
+//        paragraph.createRun().setText("This is a new paragraph added to the document.");
+
         // Iterate through all paragraphs
         for (XWPFParagraph paragraph : document.getParagraphs()) {
-//            List<MatchWord> listDate = checkDate(paragraph.getText());
-            List<MatchWord> listDate = checkDate(paragraph.getText());
-            System.out.println(listDate);
-            if (!listDate.isEmpty()) {
-                updateParagraph(paragraph, listDate, document);
+            // Update the text of the first run in the paragraph
+            if (!paragraph.getRuns().isEmpty()) {
+                List<MatchWord> listDate = checkDate(paragraph.getText());
+                if (!listDate.isEmpty()) {
+                    updateParagraph(paragraph, listDate, document);
+                } else {
+                    updateParagraph(paragraph, List.of(new MatchWord(paragraph.getText(),"999",
+                            0,paragraph.getText().length(),paragraph.getText(),0)), document);
+                }
             }
-        }
 
+        }
 
         // Save the modified document to a new file
         File outputFile = new File("src/main/resources/donwloads/updated_document.docx");
@@ -524,7 +527,7 @@ public class DocumentServiceImpl implements DocumentService {
         RevisedWord revisedWord = null;
         int startPoint = 0;
 
-        // Clear existing runs in the paragraph
+//         Clear existing runs in the paragraph
         while (paragraph.getRuns().size() > 0) {
             paragraph.removeRun(0);
         }
@@ -538,6 +541,7 @@ public class DocumentServiceImpl implements DocumentService {
                 r = paragraph.insertNewRun(++runNumber);
                 r.setText(text.substring(startPoint, m.getStartIndex()));
                 r.setFontFamily("Tahoma");
+                r.setFontSize(12);
             }
             if (!revisedWord.getComment().equals("Not changed")) {
                 // Add the new matched data with formatting
@@ -545,6 +549,7 @@ public class DocumentServiceImpl implements DocumentService {
                 r.setText(text.substring(m.getStartIndex(), m.getEndIndex()));
                 r.setFontFamily("Tahoma");
                 r.setColor("DC143C");
+                r.setFontSize(12);
 
                 // Update the starting point
                 // Consider the length of abbreviation definition.
@@ -583,6 +588,7 @@ public class DocumentServiceImpl implements DocumentService {
                 r.setText(text.substring(m.getStartIndex(), m.getEndIndex()));
                 r.setFontFamily("Tahoma");
                 r.setColor("259A0E");
+                r.setFontSize(12);
 
                 // Update the starting point
                 // Consider the length of abbreviation definition.
@@ -597,6 +603,10 @@ public class DocumentServiceImpl implements DocumentService {
             r = paragraph.insertNewRun(++runNumber);
             r.setText(text.substring(startPoint));
             r.setFontFamily("Tahoma");
+//            r.setColor("259A0E");
+            r.setFontSize(12);
+//            System.out.println("COLOR CHANGED@@@@@@@@@@@@@@@@@");
+
         }
     }
 
@@ -641,6 +651,7 @@ public class DocumentServiceImpl implements DocumentService {
                 listDate.add(new MatchWord(matcher.group(), matcherPattern, matcher.start(), matcher.end(), runText, matcher.group().length()));
             }
         }
+
 
         return listDate;
     }

@@ -163,6 +163,8 @@ public class MatchWord {
                 System.out.println("Wrong branch");
                 return revisedWord;
             }
+        } else if (matchPattern.equals("999")) {
+            return new RevisedWord(oldData, "Not changed", 0);
         }
 
         return null;
