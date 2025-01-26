@@ -2,6 +2,7 @@ package com.finalproject.document.management.service.interfaces;
 
 import com.finalproject.document.management.dto.DocumentDTO;
 import com.finalproject.document.management.entity.Document;
+import com.finalproject.document.management.entity.DocumentCSVRecord;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -51,4 +52,7 @@ public interface DocumentService {
 
     ResponseEntity<byte[]> checkWord(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes,
                                       Model model) throws IOException;
+
+    List<Document> importListAsCSV(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes,
+                                           Model model);
 }

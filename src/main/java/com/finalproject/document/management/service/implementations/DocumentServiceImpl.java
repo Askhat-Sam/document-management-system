@@ -2,21 +2,20 @@ package com.finalproject.document.management.service.implementations;
 
 import com.finalproject.document.management.dto.DocumentDTO;
 import com.finalproject.document.management.entity.*;
-import com.finalproject.document.management.entity.Document;
 import com.finalproject.document.management.repository.DocumentRepository;
 import com.finalproject.document.management.repository.DocumentTransactionRepository;
 import com.finalproject.document.management.service.interfaces.DocumentService;
+import com.opencsv.bean.CsvToBeanBuilder;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.xwpf.usermodel.*;
-import org.languagetool.JLanguageTool;
-import org.languagetool.Language;
-import org.languagetool.Languages;
-import org.languagetool.rules.RuleMatch;
+import org.apache.poi.xwpf.usermodel.XWPFComments;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -28,13 +27,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigInteger;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -514,6 +511,50 @@ public class DocumentServiceImpl implements DocumentService {
         headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
 
         return new ResponseEntity<>(documentBytes, headers, HttpStatus.OK);
+    }
+
+    @Override
+    public List<Document> importListAsCSV(MultipartFile file, RedirectAttributes redirectAttributes,
+                                                  Model model) {
+
+
+        try {
+            // Create a temporary file
+            File csvFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
+
+            // Transfer the contents of the MultipartFile to the File
+            file.transferTo(csvFile);
+
+            //Get the list of DocumentCSVRecord
+            List<DocumentCSVRecord> documentCSVRecords = new CsvToBeanBuilder<DocumentCSVRecord>(new FileReader(csvFile))
+                    .withType(DocumentCSVRecord.class)
+                    .build().parse();
+
+            List<Document> documents = documentCSVRecords.stream().map(this::convertDocumentCSVToEntity).toList();
+
+            System.out.println(documents);
+
+
+            return documents;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public Document convertDocumentCSVToEntity(DocumentCSVRecord documentCSVRecord) {
+        Document document = new Document();
+        document.setId(documentCSVRecord.getId());
+        document.setDocumentCode(documentCSVRecord.getDocumentCode());
+        document.setDocumentType(documentCSVRecord.getDocumentType());
+        document.setName(documentCSVRecord.getName());
+        document.setRevisionNumber(documentCSVRecord.getRevisionNumber());
+        document.setStatus(documentCSVRecord.getStatus());
+        document.setCreationDate(documentCSVRecord.getCreationDate());
+        document.setModificationDate(documentCSVRecord.getModificationDate());
+        document.setAuthor(documentCSVRecord.getAuthor());
+
+        return document;
     }
 
     private void countWords(XWPFParagraph paragraph, List<MatchWord> listDate, XWPFDocument document) {

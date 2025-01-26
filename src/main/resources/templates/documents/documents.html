@@ -59,6 +59,11 @@
                 </a>
             </div>
             <div>
+                <a class="" th:href="@{/document-management/documents/importDocumentsCSV}" sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
+                    Import as list
+                </a>
+            </div>
+            <div>
                 <a class="" th:href="@{/document-management/documents/checkDocument}" sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')">
                     Check documents
                 </a>

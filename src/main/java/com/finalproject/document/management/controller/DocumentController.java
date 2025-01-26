@@ -47,6 +47,7 @@ public class DocumentController {
     private static final String DOCUMENTS_VALIDATIONS = "documents/document-validations";
     private static final String VIEW_DOCUMENTS_VALIDATIONS = "documents/view-document-validations";
     private static final String CHECK_DOCUMENTS = "documents/document-check";
+    private static final String IMPORTS_DOCUMENTS_CSV = "documents/import-documents-csv";
     private static final String REDIRECT_CHECK_DOCUMENTS = "redirect:/document-management/documents/checkDocument";
     @Value("${headersDocument}")
     private List<String> headers;
@@ -131,6 +132,21 @@ public class DocumentController {
         return documentService.downloadListAsExcel();
     }
 
+    @GetMapping("/importDocumentsCSV")
+    public String importDocumentsCSV() {
+        return IMPORTS_DOCUMENTS_CSV;
+    }
+
+
+    @PostMapping("/importListAsCSV")
+    public String importListAsCSV(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes,
+                                            Model model) throws IOException {
+        List<Document> documents = documentService.importListAsCSV(file, redirectAttributes, model);
+
+//        documentService.updateDocument(documents.get(1));
+
+        return REDIRECT_DOCUMENTS;
+    }
 
     @GetMapping("/addNewDocumentPage")
     public String addNewDocumentPage(Model model) {
