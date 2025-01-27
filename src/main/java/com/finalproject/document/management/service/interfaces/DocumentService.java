@@ -17,6 +17,7 @@ public interface DocumentService {
     List<DocumentDTO> findAll(Integer page, Integer size, String sortBy, String sortDirection, String keyword, String column);
 
     List<DocumentDTO> findAll();
+    List<Document> findAllDocuments();
 
     DocumentDTO findById(Long id);
 
@@ -55,4 +56,6 @@ public interface DocumentService {
 
     List<Document> importListAsCSV(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes,
                                            Model model);
+
+    Document findByDocumentCode(String documentCode);
 }

@@ -118,6 +118,11 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
+    public List<Document> findAllDocuments() {
+        return documentRepository.findAll();
+    }
+
+    @Override
     public DocumentDTO findById(Long id) {
 //        entityManager.clear();
 
@@ -522,9 +527,11 @@ public class DocumentServiceImpl implements DocumentService {
             // Create a temporary file
             File csvFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
 
+            System.out.println("#Working here 1");
+
             // Transfer the contents of the MultipartFile to the File
             file.transferTo(csvFile);
-
+            System.out.println("#Working here 2");
             //Get the list of DocumentCSVRecord
             List<DocumentCSVRecord> documentCSVRecords = new CsvToBeanBuilder<DocumentCSVRecord>(new FileReader(csvFile))
                     .withType(DocumentCSVRecord.class)
@@ -537,9 +544,15 @@ public class DocumentServiceImpl implements DocumentService {
 
             return documents;
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
 
+    }
+
+    @Override
+    public Document findByDocumentCode(String documentCode) {
+        return documentRepository.findByDocumentCode(documentCode);
     }
 
     public Document convertDocumentCSVToEntity(DocumentCSVRecord documentCSVRecord) {

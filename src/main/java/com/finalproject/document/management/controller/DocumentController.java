@@ -22,9 +22,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("/document-management/documents")
@@ -144,8 +146,22 @@ public class DocumentController {
         // Get the list of documents form CSV file
         List<Document> documents = documentService.importListAsCSV(file, redirectAttributes, model);
 
-        // Save each document from list documents into DB
-        documents.forEach(documentService::update);
+        // Get the list of existing document codes form DB
+        List<Document> documentsFromDB = documentService.findAllDocuments();
+        List<String> documentsCodeList = new ArrayList<>();
+        documentsFromDB.stream().forEach(d->{
+            documentsCodeList.add(d.getDocumentCode());
+        });
+
+
+        // Save each document from list documents into DB if not exist in current database
+        documents.forEach(d->{
+            if (documentService.findByDocumentCode(d.getDocumentCode())==null){
+                documentService.update(d);
+            } else {
+                System.out.println(d + " is already exist in current database");
+            }
+        });
 
         return REDIRECT_DOCUMENTS;
     }

@@ -13,4 +13,5 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
     @Query(value="SELECT * FROM document WHERE document.author = :author", nativeQuery = true)
     List<Document> findByUserId(String author);
 
+    Document findByDocumentCode(String documentCode);
 }
